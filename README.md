@@ -8,7 +8,7 @@ arises.
 Programming is not my main occupation as is probably evident for the more experienced people viewing this repo. I invite every opinion
 as to how this can be structured in a better way.
 
-I think almost every comment and function name is written i Swedish and I am sorry to have done this. From the beginning I didn't plan on
+I think almost every comment and function name is written i Swedish and I regret doing this. From the beginning I didn't plan on
 making this open-source, but realised the project have far worse chances of ever being complete if I don't ask for help. The swedish
 notation is of course to the swapped for english counterparts to increase the availability for everyone who wants to participate.
 
