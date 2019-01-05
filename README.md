@@ -12,7 +12,7 @@ I think almost every comment and function name is written i Swedish and I am sor
 making this open-source, but realised the project have far worse chances of ever being complete if I don't ask for help. The swedish
 notation is of course to the swapped for english counterparts to increase the availability for everyone who wants to participate.
 
-As it stands today the structure is based on the structure of the Eurocode itself in the main calculation area. Many functions are just 
+As it stands today the structure is based on the structure of the Eurocode itself in the main calculation area. A large portion of the pure calculations are functional as a backend, but many functions are still 
 placeholders for the future and is planned to be completed as this project progresses. 
 
 In the future the goal is to expand this to not only calculate according to the wooden code, but to all the main building materials, steel

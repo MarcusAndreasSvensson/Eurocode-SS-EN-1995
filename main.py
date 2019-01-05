@@ -20,3 +20,9 @@ plt.add_object([6,0,-1], [6,7,-1])
 
 plt.add_square_face([0,5,0], [5,5,5])
 plt.show()
+
+
+
+calc = enhet.ULSTrä()
+
+print(calc.beräkna())

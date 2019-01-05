@@ -1,4 +1,3 @@
-import profiler
 import math
 import skapa_laster
 import matplotlib.pyplot as plt
