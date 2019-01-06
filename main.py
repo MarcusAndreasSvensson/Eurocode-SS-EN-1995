@@ -4,6 +4,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 import enhet
 import numpy
+import GUI
 
 
 plt = enhet.plot()
@@ -26,3 +27,6 @@ plt.show()
 calc = enhet.ULSTrä()
 
 print(calc.beräkna())
+
+
+GUI = GUI()
