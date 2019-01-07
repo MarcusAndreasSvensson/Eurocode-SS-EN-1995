@@ -86,15 +86,12 @@ def Berakna():
 
 
 # Visar egenskaper på vald profil #
-def selectProfile(self):
+def select_unit(self):
     selection = profilLista.curselection()
     value = profilLista.get(selection)
 
     egenskapsLista.delete(0, tkinter.END)
-    i = 0
-    for x in Profiles.profiler.get(str.format(value)):
-        egenskapsLista.insert(tkinter.END, Profiles.profiler.get(str.format(value))[i])
-        i = i + 1
+    egenskapsLista.insert(tkinter.END, selection)
 
 
 mainWindow = init()
@@ -131,7 +128,7 @@ egenskapScroll = tkinter.Scrollbar(mainWindow, orient=tkinter.VERTICAL, command=
 egenskapScroll.grid(row=1, column=3, sticky='nsw', rowspan=1)
 profilLista['yscrollcommand'] = egenskapScroll.set
 
-profilLista.bind("<<ListboxSelect>>", selectProfile)
+profilLista.bind("<<ListboxSelect>>", select_unit)
 
 
 
