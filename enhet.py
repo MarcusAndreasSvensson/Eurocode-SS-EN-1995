@@ -2900,3 +2900,23 @@ class plot:
 
     def show(self):
         plt.show()
+
+
+class Database:
+
+  def __init__(self):
+    self.units = []
+    self.count = 0
+
+  def add_units(self):
+    self.units.append([self.count, enhet()])
+    self.units[self.count][1].id = self.count
+
+    self.count += 1
+
+
+if __name__ == "__main__":
+  data = Database()
+
+  data.add_units()
+  data.add_units()
