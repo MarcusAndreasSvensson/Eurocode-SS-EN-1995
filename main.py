@@ -8,12 +8,12 @@ import GUI
 
 
 ### Initiates the list of units ###
-unit_database = enhet.Database()
 
 
 
 
-"""plt = enhet.plot()
+
+plt = enhet.plot()
 
 plt.add_object([0,6,0], [0,0,0])
 plt.add_object([5,0,0], [5,5,0])
@@ -33,4 +33,4 @@ calc = enhet.ULSTrä()
 
 print(calc.beräkna())
 
-"""
+

@@ -107,9 +107,15 @@ profilLista = tkinter.Listbox(mainWindow)
 profilLista.grid(row=1, column=0, sticky='nsew', rowspan=1)
 profilLista.config(border=2, relief='sunken')
 
-#for profile_groups in enhet.Sections.sections.keys(): 	#Get the profiles in a list
-    #profilLista.insert(tkinter.END, profile_groups)
+### Initiates the list of units and creates 10 units ###
+unit_database = enhet.Database()
+for i in range(0, 10):
+	unit_database.add_unit()
 
+for units in unit_database.units: 	#Get the profiles in a list
+    profilLista.insert(tkinter.END, units)
+
+### listscroll for leftmost window ###
 listScroll = tkinter.Scrollbar(mainWindow, orient=tkinter.VERTICAL, command=profilLista.yview)
 listScroll.grid(row=1, column=1, sticky='nsw', rowspan=1)
 profilLista['yscrollcommand'] = listScroll.set
