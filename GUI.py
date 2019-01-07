@@ -85,6 +85,14 @@ def Berakna():
             print("check" + str(i) + "Value")
 
 
+def create_unit():
+	"""
+	Creates a viewable structural unit.
+	"""
+	
+
+
+
 # Visar egenskaper på vald profil #
 def selectProfile(self):
     selection = profilLista.curselection()
@@ -107,8 +115,8 @@ profilLista = tkinter.Listbox(mainWindow)
 profilLista.grid(row=1, column=0, sticky='nsew', rowspan=1)
 profilLista.config(border=2, relief='sunken')
 
-#for profiler in Profiles.profiler.keys():
-#    profilLista.insert(tkinter.END, profiler)
+#for profile_groups in enhet.Sections.sections.keys(): 	#Get the profiles in a list
+    #profilLista.insert(tkinter.END, profile_groups)
 
 listScroll = tkinter.Scrollbar(mainWindow, orient=tkinter.VERTICAL, command=profilLista.yview)
 listScroll.grid(row=1, column=1, sticky='nsw', rowspan=1)

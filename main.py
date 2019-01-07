@@ -28,5 +28,3 @@ calc = enhet.ULSTrä()
 
 print(calc.beräkna())
 
-
-GUI = GUI()
