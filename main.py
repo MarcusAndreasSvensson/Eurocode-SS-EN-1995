@@ -7,7 +7,13 @@ import numpy
 import GUI
 
 
-plt = enhet.plot()
+### Initiates the list of units ###
+unit_database = enhet.Database()
+
+
+
+
+"""plt = enhet.plot()
 
 plt.add_object([0,6,0], [0,0,0])
 plt.add_object([5,0,0], [5,5,0])
@@ -23,8 +29,8 @@ plt.add_square_face([0,5,0], [5,5,5])
 plt.show()
 
 
-
 calc = enhet.ULSTrä()
 
 print(calc.beräkna())
 
+"""

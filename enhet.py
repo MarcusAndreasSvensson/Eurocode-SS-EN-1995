@@ -2908,15 +2908,8 @@ class Database:
     self.units = []
     self.count = 0
 
-  def add_units(self):
+  def add_unit(self):
     self.units.append([self.count, enhet()])
     self.units[self.count][1].id = self.count
 
     self.count += 1
-
-
-if __name__ == "__main__":
-  data = Database()
-
-  data.add_units()
-  data.add_units()

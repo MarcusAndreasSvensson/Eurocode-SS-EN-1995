@@ -85,14 +85,6 @@ def Berakna():
             print("check" + str(i) + "Value")
 
 
-def create_unit():
-	"""
-	Creates a viewable structural unit.
-	"""
-	
-
-
-
 # Visar egenskaper på vald profil #
 def selectProfile(self):
     selection = profilLista.curselection()
