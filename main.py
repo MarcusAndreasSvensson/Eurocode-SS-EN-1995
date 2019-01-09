@@ -9,7 +9,6 @@ import GUI
 
 ### Initiates the list of units ###
 
-print("hej")
 
 
 
