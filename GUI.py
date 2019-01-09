@@ -3,7 +3,7 @@ try:
 except ImportError:  # python 2
     import Tkinter as tkinter
 
-import enhet
+import structural_calculation
 
 
 def init():
@@ -105,7 +105,7 @@ profilLista.grid(row=1, column=0, sticky='nsew', rowspan=1)
 profilLista.config(border=2, relief='sunken')
 
 ### Initiates the list of units and creates 10 units ###
-unit_database = enhet.Database()
+unit_database = structural_calculation.Database()
 for i in range(0, 10):
 	unit_database.add_unit()
 

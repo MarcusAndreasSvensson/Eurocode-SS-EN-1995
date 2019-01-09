@@ -2,7 +2,7 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
-import enhet
+import structural_calculation
 import numpy
 import GUI
 
@@ -13,7 +13,7 @@ import GUI
 
 
 
-plt = enhet.plot()
+"""plt = enhet.plot()
 
 plt.add_object([0,6,0], [0,0,0])
 plt.add_object([5,0,0], [5,5,0])
@@ -27,10 +27,11 @@ plt.add_object([6,0,-1], [6,7,-1])
 
 plt.add_square_face([0,5,0], [5,5,5])
 plt.show()
+"""
 
+calc = structural_calculation.UltimateLimitStateTimber()
 
-calc = enhet.ULSTrä()
-
-print(calc.beräkna())
+for i in range(0, 1000):
+	print(i, calc.beräkna())
 
 

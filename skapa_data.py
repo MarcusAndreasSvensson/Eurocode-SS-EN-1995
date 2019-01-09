@@ -5,20 +5,21 @@ import math
 
 # Skapar de olika punkterna för det kordinatisystem som stomlinjer baseras på
 def skapa_koordinater():
-    koordinater = [[0, 0, 0]]
+	koordinater = [[0, 0, 0]]
 
-    target_x = 81
-    target_y = 81
-    target_z = 51
-    #i = 0
+	target_x = 81
+	target_y = 81
+	target_z = 51
+	#i = 0
 
-    for delta_x in range(1, target_x):
-        for delta_z in range(1, target_z):
-            for delta_y in range(1, target_y):
-                koordinater.append([delta_x, delta_y, delta_z])
-                #print([delta_x, delta_y, delta_z])
-                #i += 1
-                #print(i)
+	for delta_x in range(1, target_x):
+		for delta_z in range(1, target_z):
+			for delta_y in range(1, target_y):
+				koordinater.append([delta_x, delta_y, delta_z])
+				#print([delta_x, delta_y, delta_z])
+				#i += 1
+				#print(i)
+	#print(koordinater)
 
 
 # Allt detta kanske bör hamna i .csv istället för pickle (Filstorlek)
