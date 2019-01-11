@@ -1,4 +1,4 @@
-try:
+"""try:
     import tkinter
 except ImportError:  # python 2
     import Tkinter as tkinter
@@ -211,3 +211,4 @@ cancelButton.grid(row=12, column=15, sticky='we')
 
 if __name__ == "__main__":
     mainWindow.mainloop()
+	"""
