@@ -5,9 +5,9 @@ from scipy.interpolate import interp1d
 import structural_calculation
 import numpy
 import GUI
-
-
-### Initiates the list of units ###
+import mainWindow
+import sys
+import PyQt5
 
 
 
