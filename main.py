@@ -4,13 +4,18 @@ import numpy as np
 from scipy.interpolate import interp1d
 import structural_calculation
 import numpy
-import GUI
 import mainWindow
 import sys
 import PyQt5
 
 
 
+app = PyQt5.QtWidgets.QApplication(sys.argv)
+MainWindow = PyQt5.QtWidgets.QMainWindow()
+ui = mainWindow.Ui_MainWindow()
+ui.setupUi(MainWindow)
+MainWindow.show()
+sys.exit(app.exec_())
 
 """plt = enhet.plot()
 
