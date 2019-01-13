@@ -5,6 +5,7 @@ from scipy.interpolate import interp1d
 import structural_calculation
 import numpy
 import mainWindow
+import editUnitWindow
 import sys
 import PyQt5
 
@@ -12,7 +13,7 @@ import PyQt5
 
 app = PyQt5.QtWidgets.QApplication(sys.argv)
 MainWindow = PyQt5.QtWidgets.QMainWindow()
-ui = mainWindow.Ui_MainWindow()
+ui = editUnitWindow.Ui_editUnitWindow()
 ui.setupUi(MainWindow)
 MainWindow.show()
 sys.exit(app.exec_())

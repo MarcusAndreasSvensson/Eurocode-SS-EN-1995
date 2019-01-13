@@ -6,859 +6,596 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>514</height>
+    <width>539</width>
+    <height>647</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>480</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QWidget" name="verticalLayoutWidget_11">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>541</width>
+     <width>531</width>
      <height>471</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>541</width>
-      <height>471</height>
-     </rect>
+   <layout class="QVBoxLayout" name="verticalLayout_11">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinimumSize</enum>
     </property>
-    <property name="currentIndex">
-     <number>2</number>
-    </property>
-    <widget class="QWidget" name="generalTab">
-     <attribute name="title">
-      <string>General</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="sectionTab">
-     <attribute name="title">
-      <string>Section</string>
-     </attribute>
-     <widget class="QFrame" name="frame_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>410</y>
-        <width>531</width>
-        <height>31</height>
-       </rect>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>2</number>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QPushButton" name="exportButton">
-       <property name="geometry">
-        <rect>
-         <x>250</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Export</string>
-       </property>
+      <widget class="QWidget" name="generalTab">
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
       </widget>
-      <widget class="QPushButton" name="importButton">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Import</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="deleteButton">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Delete</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="modifyButton">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Modify</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="newButton">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>New</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="scrollArea_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>20</y>
-        <width>271</width>
-        <height>391</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>269</width>
-         <height>389</height>
-        </rect>
-       </property>
-       <widget class="QTreeView" name="treeView_2">
+      <widget class="QWidget" name="sectionTab">
+       <attribute name="title">
+        <string>Section</string>
+       </attribute>
+       <widget class="QWidget" name="verticalLayoutWidget_9">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>256</width>
-          <height>391</height>
+          <width>521</width>
+          <height>421</height>
          </rect>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QCheckBox" name="bothEndsCheckBox_2">
+                   <property name="text">
+                    <string>Same at both ends</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="startButton">
+                   <property name="text">
+                    <string>Start</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="endButton">
+                   <property name="text">
+                    <string>End</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout">
+                   <item>
+                    <widget class="QTreeView" name="treeView_2"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <item>
+                    <widget class="QOpenGLWidget" name="openGLWidget"/>
+                   </item>
+                   <item>
+                    <widget class="QListView" name="listView"/>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <item>
+                  <widget class="QPushButton" name="newButton">
+                   <property name="text">
+                    <string>New</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="modifyButton">
+                   <property name="text">
+                    <string>Modify</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="deleteButton">
+                   <property name="text">
+                    <string>Delete</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="importButton">
+                   <property name="text">
+                    <string>Import</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="exportButton">
+                   <property name="text">
+                    <string>Export</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
-     </widget>
-     <widget class="QFrame" name="frame_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>531</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QCheckBox" name="bothEndsCheckBox_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>0</y>
-         <width>101</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Same at both ends</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="endButton">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>0</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>End</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="startButton">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>0</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_4">
-      <property name="geometry">
-       <rect>
-        <x>279</x>
-        <y>20</y>
-        <width>251</width>
-        <height>391</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QOpenGLWidget" name="openGLWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>251</width>
-         <height>200</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QScrollArea" name="scrollArea_4">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>200</y>
-         <width>251</width>
-         <height>191</height>
-        </rect>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents_4">
+      <widget class="QWidget" name="endConditionsTab">
+       <attribute name="title">
+        <string>End Conditions</string>
+       </attribute>
+       <widget class="QWidget" name="gridLayoutWidget">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>249</width>
-          <height>189</height>
+          <width>521</width>
+          <height>421</height>
          </rect>
         </property>
-        <widget class="QListView" name="listView">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>231</width>
-           <height>192</height>
-          </rect>
-         </property>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QLabel" name="eccLabel">
+                 <property name="text">
+                  <string>Eccentricity in analytical model .............</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_5">
+                 <property name="text">
+                  <string>PushButton</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_6">
+                 <property name="text">
+                  <string>PushButton</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="considerEccCheckBox">
+               <property name="text">
+                <string>Consider eccentricity caused by cracking in cracked section analysis</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QCheckBox" name="bothEndsCheckBox">
+               <property name="text">
+                <string>The same at both ends</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="startButton_2">
+               <property name="text">
+                <string>Start</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="endButton_2">
+               <property name="text">
+                <string>End</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QLabel" name="releasesLabel">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="text">
+                  <string>Releases [kN/m, kNm/degree]</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QCheckBox" name="exCheckBox">
+                   <property name="text">
+                    <string>e,x'...............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="exLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QCheckBox" name="eyCheckBox">
+                   <property name="text">
+                    <string>e,y'...............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="eyLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QCheckBox" name="ezCheckBox">
+                   <property name="text">
+                    <string>e,z'...............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="ezLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QCheckBox" name="phixCheckBox">
+                   <property name="text">
+                    <string>phi,x'............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="phixLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QCheckBox" name="phiyCheckBox">
+                   <property name="text">
+                    <string>phi,y'............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="phiyLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QCheckBox" name="phizCheckBox">
+                   <property name="text">
+                    <string>phi,z'............................</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="phizLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_12">
+                 <item>
+                  <widget class="QPushButton" name="fixedButton">
+                   <property name="text">
+                    <string>fixed</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pinnedButton">
+                   <property name="text">
+                    <string>pinned</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QLabel" name="eccentricityLabel">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="text">
+                  <string>Eccentricity [m]</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QLabel" name="yLabel">
+                   <property name="text">
+                    <string>y'......</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="yLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QLabel" name="zLabel">
+                   <property name="text">
+                    <string>z'......</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="zLineEdit"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QOpenGLWidget" name="openGLWidget_2"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="endConditionsTab">
-     <attribute name="title">
-      <string>End Conditions</string>
-     </attribute>
-     <widget class="QOpenGLWidget" name="openGLWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>310</x>
-        <y>189</y>
-        <width>221</width>
-        <height>261</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QFrame" name="frame_5">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>150</y>
-        <width>531</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QCheckBox" name="bothEndsCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>The same at both ends</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="startButton_2">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="endButton_2">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>End</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_6">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>180</y>
-        <width>181</width>
-        <height>261</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QCheckBox" name="exCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>e,x'...............................</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="eyCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>e,y'...............................</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="ezCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>80</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>e,z'...............................</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="phixCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>100</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>phi,x'............................</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="phiyCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>120</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>phi,y'............................</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="phizCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>140</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>phi,z'............................</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="fixedButton">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>220</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>fixed</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pinnedButton">
-       <property name="geometry">
-        <rect>
-         <x>50</x>
-         <y>220</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>pinned</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="releasesLabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>171</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="text">
-        <string>Releases [kN/m, kNm/degree</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="exLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>40</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="eyLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>60</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="ezLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>80</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="phixLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>100</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="phiyLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>120</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="phizLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>140</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_7">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>190</y>
-        <width>101</width>
-        <height>261</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QLabel" name="eccentricityLabel">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="text">
-        <string>Eccentricity [m]</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="yLabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>21</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>y'......</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="zLabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>21</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>z'......</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="yLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>30</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="zLineEdit">
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>50</y>
-         <width>51</width>
-         <height>16</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_8">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>521</width>
-        <height>131</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QLabel" name="eccLabel">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>161</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Eccentricity in analytical model .............</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_5">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_6">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="considerEccCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>271</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Consider eccentricity caused by cracking in cracked section analysis</string>
-       </property>
-      </widget>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="materialTab">
-     <attribute name="title">
-      <string>Material</string>
-     </attribute>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>0</y>
-        <width>251</width>
-        <height>381</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>249</width>
-         <height>379</height>
-        </rect>
-       </property>
-       <widget class="QTableView" name="tableView">
+      <widget class="QWidget" name="materialTab">
+       <attribute name="title">
+        <string>Material</string>
+       </attribute>
+       <widget class="QWidget" name="verticalLayoutWidget_10">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>251</width>
-          <height>381</height>
+          <width>521</width>
+          <height>421</height>
          </rect>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
+           <item>
+            <widget class="QTreeView" name="treeView"/>
+           </item>
+           <item>
+            <widget class="QTableView" name="tableView"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <item>
+            <widget class="QPushButton" name="newButton_2">
+             <property name="text">
+              <string>New</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="modifyButton_2">
+             <property name="text">
+              <string>Modify</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="deleteButton_2">
+             <property name="text">
+              <string>Delete</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="importButton_2">
+             <property name="text">
+              <string>Import</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="exportButton_2">
+             <property name="text">
+              <string>Export</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
      </widget>
-     <widget class="QScrollArea" name="scrollArea_2">
-      <property name="geometry">
-       <rect>
-        <x>-1</x>
-        <y>-1</y>
-        <width>271</width>
-        <height>381</height>
-       </rect>
+    </item>
+    <item>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>269</width>
-         <height>379</height>
-        </rect>
-       </property>
-       <widget class="QTreeView" name="treeView">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>256</width>
-          <height>381</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
+      <property name="centerButtons">
+       <bool>false</bool>
+      </property>
      </widget>
-     <widget class="QFrame" name="frame_9">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>410</y>
-        <width>531</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QPushButton" name="exportButton_2">
-       <property name="geometry">
-        <rect>
-         <x>250</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Export</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="importButton_2">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Import</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="deleteButton_2">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Delete</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="modifyButton_2">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Modify</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="newButton_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>56</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>New</string>
-       </property>
-      </widget>
-     </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
@@ -870,8 +607,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>49</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -886,12 +623,108 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>117</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>exLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>34</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eyCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eyLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>257</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ezCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ezLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>phixCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phixLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>23</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>phiyCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phiyLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>148</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>phizCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phizLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>353</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>362</y>
     </hint>
    </hints>
   </connection>
