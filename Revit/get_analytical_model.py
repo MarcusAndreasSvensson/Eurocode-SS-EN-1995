@@ -17,6 +17,6 @@ from Autodesk.Revit import UI
 doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 
-analytical_model_id = DB.ElementId(DB.Get)
 
-doc.
+element_id = DB.ElementId()
+#analytical_model_id = DB.Eleme
