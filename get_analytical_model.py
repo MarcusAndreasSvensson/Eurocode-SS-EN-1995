@@ -1,0 +1,1 @@
+print(el.GetAnalyticalModel().GetCurve().GetEndPoint(0))
