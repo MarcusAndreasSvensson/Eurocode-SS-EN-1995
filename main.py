@@ -35,7 +35,7 @@ plt.show()
 
 calc = structural_calculation.UltimateLimitStateTimber()
 
-for i in range(1):
+for _ in range(1):
 	print(type(calc.beräkna()))
 	print(calc.beräkna())
 

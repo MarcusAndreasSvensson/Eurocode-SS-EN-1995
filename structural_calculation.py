@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from collections import namedtuple
+from uuid import uuid4
 
 class TableValues:
 	def __init__(self):
@@ -35,8 +36,9 @@ class TableValues:
 		return gamma_M
 
 	def tabell_3_1(self, type, service_class, load_duration_class):
-		#TODO gör klart listan + logik för "fler" än 3 serviceklasser
+		#TODO finish the last + logic for the instances that contain more than 3 service classes
 
+		#TODO maybe a named tuple would be more suitable
 		tabell = {"solid timber" : {"S1" : {"permanent" : 0.6, "long" : 0.7, "medium" : 0.8, "short" : 0.9, "instant" : 1.1},
 									"S2" : {"permanent" : 0.6, "long" : 0.7, "medium" : 0.8, "short" : 0.9, "instant" : 1.1},
 									"S3" : {"permanent" : 0.5, "long" : 0.55, "medium" : 0.65, "short" : 0.7, "instant" : 0.9}},
@@ -608,7 +610,7 @@ class StructuralUnit(TableValues, Sections):
 
 	def __init__(self):
 		super().__init__()
-		self.id = 0
+		self.id = str(uuid4())
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
 		self.type = "solid timber"
@@ -2459,38 +2461,37 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	def __init__(self):
 		super().__init__()
 
-		self.beräkna()
-
 	def beräkna(self):
 		"""
 		Calculates the relevant equations and returns a namedtuple
 		"""
-		resultat = []
-
-		resultat.append(("slankhet pelare", self.slankhet_pelare_kompression()))
-
-		resultat.append(("slankhet balk", self.slankhet_balk_böj()))
 
 		#TODO tryck_90
 
 		if self.N == 0:
-			resultat.append(("böjning", self.böjning()))
+			B = self.böjning()
 		elif self.N > 0:
-			resultat.append(("böjning+drag", self.böjning_och_drag()))
+			B  = self.böjning_och_drag()
 		elif self.N < 0:
-			resultat.append(("böjning+tryck", self.böjning_och_tryck()))
+			B = self.böjning_och_tryck()
 
 		if self.V != 0:
-			resultat.append(("tvärkraft", self.tvärkraft()))
+			V = self.tvärkraft()
+		else:
+			V = 0
 
 		if self.T != 0:
-			resultat.append(("vridning", self.vridning()))
+			self.vridning()
+		else:
+			T = 0
 
 		#TODO kompression i vinkel
 
-		id = self.id
+		resultat_ntuple = namedtuple("Resultat", "id, Bending, Shear, Torsion")
 
-		#resultat = namedtuple(id, "placeholder")
+		resultat = resultat_ntuple(self.id, B, V, T)
+
+		#print(self.beräkna_old())
 
 		return resultat
 
