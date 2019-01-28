@@ -2,13 +2,11 @@
 #import matplotlib.pyplot as plt
 #import numpy as np
 #from scipy.interpolate import interp1d
-import structural_calculation
+from structural_calculation import Database, UltimateLimitStateTimber
 #import mainWindow
 #import editUnitWindow
 #import sys
 #import PyQt5
-
-
 
 """app = PyQt5.QtWidgets.QApplication(sys.argv)
 MainWindow = PyQt5.QtWidgets.QMainWindow()
@@ -32,10 +30,14 @@ plt.add_object([6,0,-1], [6,7,-1])
 plt.add_square_face([0,5,0], [5,5,5])
 plt.show()
 """
-
-calc = structural_calculation.UltimateLimitStateTimber()
+"""
+calc = UltimateLimitStateTimber()
 
 for _ in range(1):
 	print(type(calc.beräkna()))
 	print(calc.beräkna())
+"""
 
+data = Database()
+data.add_unit()
+print(data.members)

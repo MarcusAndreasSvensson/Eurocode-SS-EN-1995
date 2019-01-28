@@ -610,7 +610,7 @@ class StructuralUnit(TableValues, Sections):
 
 	def __init__(self):
 		super().__init__()
-		self.id = str(uuid4())
+		self.id = 666
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
 		self.type = "solid timber"
@@ -2915,15 +2915,13 @@ class plot:
 class Database:
 
 	def __init__(self):
-		self.units = []
-		self.count = 0
-		self.results_deque = deqeue()
+		self.members = deque()
+		self.results_tuple = tuple()
 
 	def add_unit(self):
-		self.units.append([self.count, StructuralUnit()])
-		self.units[self.count][1].id = self.count
-
-		self.count += 1
+		id = uuid4().int
+		self.members.appendleft([id, StructuralUnit()])
+		self.members[0][1].id = id
 
 	def save_results(self, results):
 		""" 
@@ -2932,4 +2930,4 @@ class Database:
 
 		results: Named Tuple
 		"""
-		
+		pass
