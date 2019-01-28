@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-from collections import namedtuple
+from collections import namedtuple, deque
 from uuid import uuid4
 
 class TableValues:
@@ -633,7 +633,6 @@ class StructuralUnit(TableValues, Sections):
 
 		self.M_y = 0 #Nm
 		self.M_z = 1.5*2000*pow(self.l,2)/8 #Nm
-		#print("mz", self.M_z)
 		#self.M_z = 0
 		self.N = -0.000000001
 		self.V = 1.5*2000/2
@@ -876,11 +875,12 @@ class StructuralUnit(TableValues, Sections):
 
 	def save_results(self, results):
 		""" 
-		This function stores all results of the calculated member and stores them in a dictionary.
+		Collects results of the calculated member and stores them in a deque 
+		for good performance from noth ends.
 
-		results: Tuple
+		results: Named Tuple
 		"""
-		pass
+
 
 
 class SS_EN_1995_1_1(StructuralUnit):
@@ -2914,12 +2914,22 @@ class plot:
 
 class Database:
 
-  def __init__(self):
-    self.units = []
-    self.count = 0
+	def __init__(self):
+		self.units = []
+		self.count = 0
+		self.results_deque = deqeue()
 
-  def add_unit(self):
-    self.units.append([self.count, StructuralUnit()])
-    self.units[self.count][1].id = self.count
+	def add_unit(self):
+		self.units.append([self.count, StructuralUnit()])
+		self.units[self.count][1].id = self.count
 
-    self.count += 1
+		self.count += 1
+
+	def save_results(self, results):
+		""" 
+		Collects results of the calculated member and stores them in a deque 
+		for good performance from noth ends.
+
+		results: Named Tuple
+		"""
+		
