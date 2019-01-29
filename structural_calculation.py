@@ -882,7 +882,6 @@ class StructuralUnit(TableValues, Sections):
 		"""
 
 
-
 class SS_EN_1995_1_1(StructuralUnit):
 
     def __init__(self):
@@ -2915,19 +2914,24 @@ class plot:
 class Database:
 
 	def __init__(self):
-		self.members = deque()
+		self.members = dict()
 		self.results_tuple = tuple()
 
+		resultat_ntuple = namedtuple("Resultat", "id, Bending, Shear, Torsion")
+
+		resultat = resultat_ntuple(self.id, B, V, T)
+
 	def add_unit(self):
-		id = uuid4().int
-		self.members.appendleft([id, StructuralUnit()])
-		self.members[0][1].id = id
+		"""
+		Creates structuralUnit instance and assigns an unique id to it.
+		"""
+		id = str(uuid4())
+		self.members[id] = namedtuple(StructuralUnit())
+		self.members[id].id = id
 
 	def save_results(self, results):
 		""" 
 		Collects results of the calculated member and stores them in a deque 
 		for good performance from noth ends.
-
-		results: Named Tuple
 		"""
 		pass
