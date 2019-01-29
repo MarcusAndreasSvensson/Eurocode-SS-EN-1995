@@ -873,13 +873,8 @@ class StructuralUnit(TableValues, Sections):
 		self.psi_2 = float()
 		self.xi = float()
 
-	def save_results(self, results):
-		""" 
-		Collects results of the calculated member and stores them in a deque 
-		for good performance from noth ends.
-
-		results: Named Tuple
-		"""
+	def calculate(self, results):
+		pass
 
 
 class SS_EN_1995_1_1(StructuralUnit):
@@ -2487,11 +2482,10 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		#TODO kompression i vinkel
 
 		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
-
 		resultat = resultat_ntuple(B, V, T)
 
-		#print(self.beräkna_old())
-
+		
+		
 		return resultat
 
 	# 1 Stress one direction ===============
@@ -2917,21 +2911,17 @@ class Database:
 		self.members = {}
 
 	def add_unit(self):
-		"""
-		Creates structuralUnit instance and assigns an unique id to it.
-		"""
+		"""Creates structuralUnit instance and assigns an unique id to it."""
 		id = str(uuid4())
 		self.id = id
-		self.members[id] = {"unit_instance": StructuralUnit(), "result": None}
+		self.members[id] = {"unit_instance": UltimateLimitStateTimber(), "result": None}
 		self.members[id]["unit_instance"].id = id
 
-	def save_results(self, id, result):
-		""" 
-		Collects results of the calculated member and stores them in a deque 
+	def save_result(self, id, result):
+		"""Collects results of the calculated member and stores them in a deque 
 		for good performance from noth ends.
 
 		id: String; Objects UUID
 		result: namedtuple; results of calculation
 		"""
 		self.members[id]["result"] = result
-		print(self.members)

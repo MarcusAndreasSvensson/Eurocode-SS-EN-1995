@@ -7,6 +7,7 @@ from structural_calculation import Database, UltimateLimitStateTimber
 #import editUnitWindow
 #import sys
 #import PyQt5
+from random import random
 
 """app = PyQt5.QtWidgets.QApplication(sys.argv)
 MainWindow = PyQt5.QtWidgets.QMainWindow()
@@ -30,16 +31,18 @@ plt.add_object([6,0,-1], [6,7,-1])
 plt.add_square_face([0,5,0], [5,5,5])
 plt.show()
 """
-"""
-calc = UltimateLimitStateTimber()
-
-for _ in range(1):
-	print(type(calc.beräkna()))
-	print(calc.beräkna())
-"""
 
 data = Database()
 
+for _ in range(10):
+    data.add_unit()
+    data.members[data.id]["unit_instance"].N = random()*100000
+    data.members[data.id]["unit_instance"].V = random()*30000
+    #data.members[data.id]["unit_instance"].T = random()*30000
+    data.save_result(data.id, data.members[data.id]["unit_instance"].beräkna())
+
+for member in data.members:
+    print(member, data.members[member], "\n")
 
 
 
