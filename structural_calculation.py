@@ -2486,9 +2486,9 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
 		#TODO kompression i vinkel
 
-		resultat_ntuple = namedtuple("Resultat", "id, Bending, Shear, Torsion")
+		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
 
-		resultat = resultat_ntuple(self.id, B, V, T)
+		resultat = resultat_ntuple(B, V, T)
 
 		#print(self.beräkna_old())
 
@@ -2914,24 +2914,24 @@ class plot:
 class Database:
 
 	def __init__(self):
-		self.members = dict()
-		self.results_tuple = tuple()
-
-		resultat_ntuple = namedtuple("Resultat", "id, Bending, Shear, Torsion")
-
-		resultat = resultat_ntuple(self.id, B, V, T)
+		self.members = {}
 
 	def add_unit(self):
 		"""
 		Creates structuralUnit instance and assigns an unique id to it.
 		"""
 		id = str(uuid4())
-		self.members[id] = namedtuple(StructuralUnit())
-		self.members[id].id = id
+		self.id = id
+		self.members[id] = {"unit_instance": StructuralUnit(), "result": None}
+		self.members[id]["unit_instance"].id = id
 
-	def save_results(self, results):
+	def save_results(self, id, result):
 		""" 
 		Collects results of the calculated member and stores them in a deque 
 		for good performance from noth ends.
+
+		id: String; Objects UUID
+		result: namedtuple; results of calculation
 		"""
-		pass
+		self.members[id]["result"] = result
+		print(self.members)
