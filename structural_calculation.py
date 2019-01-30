@@ -631,13 +631,11 @@ class StructuralUnit(TableValues, Sections):
 		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
 		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
 
-		self.M_y = 0 #Nm
-		self.M_z = 1.5*2000*pow(self.l,2)/8 #Nm
-		#self.M_z = 0
-		self.N = -0.000000001
-		self.V = 1.5*2000/2
-
-		self.T = 0
+		self.M_y = 10000 #Nm
+		self.M_z = 10000 #Nm
+		self.N = 10000
+		self.V = 10000
+		self.T = 10000
 		#TODO, fixa en funktion till längsta ände
 		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
 
@@ -650,7 +648,6 @@ class StructuralUnit(TableValues, Sections):
 		self.releases = {"e_x": False, "e_y": False, "e_z": False, 
 						 "phi_x": False, "phi_y": True, "phi_z": True
 						 }
-
 
 
 	def variables(self):
@@ -2466,29 +2463,28 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		#TODO tryck_90
 
 		if self.N == 0:
-			B = self.böjning()
+			_B = self.böjning()
 		elif self.N > 0:
-			B  = self.böjning_och_drag()
+			_B  = self.böjning_och_drag()
 		elif self.N < 0:
-			B = self.böjning_och_tryck()
+			_B = self.böjning_och_tryck()
 
+		#TODO Correct result for negative values of V
 		if self.V != 0:
-			V = self.tvärkraft()
+			_V = self.tvärkraft()
 		else:
-			V = 0
+			_V = 0
 
 		if self.T != 0:
-			self.vridning()
+			_T = self.vridning()
 		else:
-			T = 0
+			_T = 0
 
 		#TODO kompression i vinkel
 
 		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
-		resultat = resultat_ntuple(B, V, T)
+		resultat = resultat_ntuple(_B, _V, _T)
 
-		
-		
 		return resultat
 
 	# 1 Stress one direction ===============
