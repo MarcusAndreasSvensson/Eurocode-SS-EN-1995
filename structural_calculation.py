@@ -633,9 +633,9 @@ class StructuralUnit(TableValues, Sections):
 
 		self.M_y = 10000 #Nm
 		self.M_z = 10000 #Nm
-		self.N = 10000
-		self.V = 10000
-		self.T = 10000
+		self.N = 10000 #Nm
+		self.V = 10000 #Nm
+		self.T = 10000 #Nm
 		#TODO, fixa en funktion till längsta ände
 		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
 
