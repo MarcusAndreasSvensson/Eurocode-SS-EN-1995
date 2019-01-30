@@ -647,6 +647,12 @@ class StructuralUnit(TableValues, Sections):
 
 		#TODO värden om typ, material osv måste matas in
 
+		self.releases = {"e_x": False, "e_y": False, "e_z": False, 
+						 "phi_x": False, "phi_y": True, "phi_z": True
+						 }
+
+
+
 	def variables(self):
 		self.A = float()
 		self.A_ef = float()
@@ -872,9 +878,6 @@ class StructuralUnit(TableValues, Sections):
 		self.psi_0 = float()
 		self.psi_2 = float()
 		self.xi = float()
-
-	def calculate(self, results):
-		pass
 
 
 class SS_EN_1995_1_1(StructuralUnit):
@@ -2918,8 +2921,7 @@ class Database:
 		self.members[id]["unit_instance"].id = id
 
 	def save_result(self, id, result):
-		"""Collects results of the calculated member and stores them in a deque 
-		for good performance from noth ends.
+		"""Collects results of the calculated member and stores them in a dictionary.
 
 		id: String; Objects UUID
 		result: namedtuple; results of calculation
