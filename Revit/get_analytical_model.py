@@ -20,3 +20,6 @@ uidoc = __revit__.ActiveUIDocument
 
 element_id = DB.ElementId()
 #analytical_model_id = DB.Eleme
+
+
+print(el.GetAnalyticalModel().GetCurve().GetEndPoint(0))
