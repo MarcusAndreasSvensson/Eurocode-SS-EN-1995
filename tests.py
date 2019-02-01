@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     
     #calc_func_test(10)
-    print(bar_unit._prepare_for_xml())
-    #create_xml_test()
+    #print(bar_unit._prepare_for_xml())
+    create_xml_test()
 
 

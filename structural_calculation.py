@@ -653,27 +653,46 @@ class StructuralUnit(TableValues, Sections):
 		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
 
 		#TODO Add function for calculating the effective buckling lengths and store them here
-		self.buckling_length = ("co_x", "co_y", "co_z")
+		self.buckling_type = "placeholder"
+		self.start_buckling_length = ("co_x", "co_y", "co_z")
+		self.end_buckling_length = ("co_x", "co_y", "co_z")
 
 		self.start_analytical_eccentricity = (0, 0, 0)
 		self.end_analytical_eccentricity = (0, 0, 0)
+
+		self.use_default_physical_alignment = False
 		self.start_physical_eccentricity = (0, 0, 0)
 		self.end_physical_eccentricity = (0, 0, 0)
 
 
 	def _prepare_for_xml(self):
-		xml_array = {"bar": {"bar_part": {"curve": {"start_point": {"x": self.start_point[0],
-															        "y": self.start_point[1],
-															        "z": self.start_point[2]},
+		xml_array = {"bar": [{"name": "placeholder",
+							  "type": self.enhetstyp,
+							  "uuid": self.id,
+							  "last_change": "placeholder",
+							  "action": "placeholder"}, 
+							 {"bar_part": [{"uuid": "placeholder",
+										   "last_change": "placeholder",
+										   "action": "placeholder",
+										   "name": "placeholder",
+										   "complex_material": "placeholder",
+										   "made": "placeholder",
+										   "complex_section": "placeholder",
+										   "ecc_calc": "placeholder"}, 
+										  {"curve": [{"type": "placeholder"}, 
+													{"start_point": {"x": self.start_point[0],
+															         "y": self.start_point[1],
+															         "z": self.start_point[2]},
 													"end_point": {"x": self.start_point[0],
 																  "y": self.start_point[1],
-																  "z": self.start_point[2]}},
+																  "z": self.start_point[2]}}],
 										  "local-y": {"x": "placeholder",
 										  			  "y": "placeholder",
 										  			  "z": "placeholder"},
 										  "start_connectivity": self.start_connectivity,
 										  "end_connectivity": self.end_connectivity,
-										  "eccentricity": {"start_analytical": {"x": self.start_analytical_eccentricity[0],
+										  "eccentricity": [{"use_default_physical_alignment": self.use_default_physical_alignment}, 
+										  				   {"start_analytical": {"x": self.start_analytical_eccentricity[0],
 										  										"y": self.start_analytical_eccentricity[1],
 										  										"z": self.start_analytical_eccentricity[2]},
 										  				   "end_analytical": {"x": self.end_analytical_eccentricity[0],
@@ -684,8 +703,25 @@ class StructuralUnit(TableValues, Sections):
 										  									  "z": self.start_physical_eccentricity[2]},
 										  				   "end_physical": {"x": self.end_physical_eccentricity[0],
 										  									"y": self.end_physical_eccentricity[1],
-										  									"z": self.end_physical_eccentricity[2]}},
-										  "buckling_data": {}}}}
+										  									"z": self.end_physical_eccentricity[2]
+										  									}
+										  					}
+										  				   ],
+										  "buckling_data": {"buckling_length": [{"type": self.buckling_type}, 
+										  										{"start_point": {"x": self.start_buckling_length[0],
+										  														 "y": self.start_buckling_length[1],
+										  														 "z": self.start_buckling_length[2]},
+															  					"end_point": {"x": self.end_buckling_length[0],
+															  								  "y": self.end_buckling_length[1],
+															  								  "z": self.end_buckling_length[2]
+															  								  }
+															  					}
+															  				   ]
+														   }
+										  }
+										 ]
+							}]
+					}
 
 		return xml_array
 
@@ -2979,7 +3015,7 @@ class Database:
 		# Adds all available entites
 		self._add_entity(entities)
 
-		print(tostring(root))
+		print("\n", tostring(root))
 
 		with open("test.xml", "w") as f:
 			tree.write("test.xml")
@@ -2987,17 +3023,24 @@ class Database:
 	def _add_entity(self, parent):
 		"""Adds all available entities, appends them to the parent and set its values."""
 		#TODO fetch the actual entities
-		for new_entity in range(3):
-			entity = Element(str("type_placeholder"))
-			parent.append(entity)
+		#for new_entity in :
 
-			#TODO add all attributes in unit object
-			for attribute in range(1):
-				entity.set("name", "placeholder")
-				entity.set("type", "placeholder")
-				entity.set("uuid", "placeholder")
-				entity.set("last_change", "placeholder")
-				entity.set("action", "placeholder")
+		#placeholder for future correct indentation
+		for placeholder in range(1):
+			struc_unit = StructuralUnit()
+
+			new_entity = struc_unit._prepare_for_xml()
+			print(new_entity, "\n")
+
+			for layer1 in new_entity:
+				print(layer1, "\n")
+				entity = Element(layer1)
+				parent.append(entity)
+
+				for layer2 in new_entity[layer1]:
+					print(layer2, "\n")
+
+
 
 
 
