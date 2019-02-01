@@ -1,12 +1,12 @@
 from random import random, uniform
 import timeit
-from structural_calculation import Database
+from structural_calculation import Database, StructuralUnit
 from xml.etree.ElementTree import ElementTree, Element
 import xml.etree.ElementTree as etree
 
 
 
-data = Database()
+
 
 def calc_func_test(i):
     """Creates i number of members and calculates."""
@@ -40,9 +40,13 @@ def create_xml_test():
 
 
 
-
 if __name__ == "__main__":
+    data = Database()
+    bar_unit = StructuralUnit()
+
+    
     #calc_func_test(10)
-    create_xml_test()
+    print(bar_unit._prepare_for_xml())
+    #create_xml_test()
 
 

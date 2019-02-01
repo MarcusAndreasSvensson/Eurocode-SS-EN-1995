@@ -1,7 +1,1 @@
-<database country="SWE" standard="EC" version="0.1">
-	<entities>
-		<type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" />
-		<type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" />
-		<type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" />
-	</entities>
-</database>
+<database country="SWE" standard="EC" version="version_placeholder"><entities><type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" /><type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" /><type_placeholder action="placeholder" last_change="placeholder" name="placeholder" type="placeholder" uuid="placeholder" /></entities></database>

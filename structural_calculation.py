@@ -609,6 +609,9 @@ class StructuralUnit(TableValues, Sections):
 
 	def __init__(self):
 		super().__init__()
+		#TODO should this maybe be represented by a dict for easier transcode to XML?
+		#TODO I think I should keep them as vars for faster execution. 
+		#TODO Prepare for XML func?
 		self.id = 666
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
@@ -624,7 +627,9 @@ class StructuralUnit(TableValues, Sections):
 		self.h = self.dimensioner[1]
 		self.b = self.dimensioner[0]
 
-		self.koordinater = np.array([[0,0,0], [0,5,0]])
+		self.start_point = [0,0,0]
+		self.end_point = [0,5,0]
+		self.koordinater = np.array([self.start_point, self.end_point])
 		#TODO förmodligen kommer längden läsas fel iom att den inte uppdateras vid skapandet av objektet
 		self.l = math.sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
 		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
@@ -644,9 +649,45 @@ class StructuralUnit(TableValues, Sections):
 
 		#TODO värden om typ, material osv måste matas in
 
-		self.releases = {"e_x": False, "e_y": False, "e_z": False, 
-						 "phi_x": False, "phi_y": True, "phi_z": True
-						 }
+		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+
+		#TODO Add function for calculating the effective buckling lengths and store them here
+		self.buckling_length = ("co_x", "co_y", "co_z")
+
+		self.start_analytical_eccentricity = (0, 0, 0)
+		self.end_analytical_eccentricity = (0, 0, 0)
+		self.start_physical_eccentricity = (0, 0, 0)
+		self.end_physical_eccentricity = (0, 0, 0)
+
+
+	def _prepare_for_xml(self):
+		xml_array = {"bar": {"bar_part": {"curve": {"start_point": {"x": self.start_point[0],
+															        "y": self.start_point[1],
+															        "z": self.start_point[2]},
+													"end_point": {"x": self.start_point[0],
+																  "y": self.start_point[1],
+																  "z": self.start_point[2]}},
+										  "local-y": {"x": "placeholder",
+										  			  "y": "placeholder",
+										  			  "z": "placeholder"},
+										  "start_connectivity": self.start_connectivity,
+										  "end_connectivity": self.end_connectivity,
+										  "eccentricity": {"start_analytical": {"x": self.start_analytical_eccentricity[0],
+										  										"y": self.start_analytical_eccentricity[1],
+										  										"z": self.start_analytical_eccentricity[2]},
+										  				   "end_analytical": {"x": self.end_analytical_eccentricity[0],
+										  									  "y": self.end_analytical_eccentricity[1],
+										  									  "z": self.end_analytical_eccentricity[2]},
+										  				   "start_physical": {"x": self.start_physical_eccentricity[0],
+										  									  "y": self.start_physical_eccentricity[1],
+										  									  "z": self.start_physical_eccentricity[2]},
+										  				   "end_physical": {"x": self.end_physical_eccentricity[0],
+										  									"y": self.end_physical_eccentricity[1],
+										  									"z": self.end_physical_eccentricity[2]}},
+										  "buckling_data": {}}}}
+
+		return xml_array
 
 
 	def variables(self):
@@ -2950,11 +2991,15 @@ class Database:
 			entity = Element(str("type_placeholder"))
 			parent.append(entity)
 
-			entity.set("name", "placeholder")
-			entity.set("type", "placeholder")
-			entity.set("uuid", "placeholder")
-			entity.set("last_change", "placeholder")
-			entity.set("action", "placeholder")
+			#TODO add all attributes in unit object
+			for attribute in range(1):
+				entity.set("name", "placeholder")
+				entity.set("type", "placeholder")
+				entity.set("uuid", "placeholder")
+				entity.set("last_change", "placeholder")
+				entity.set("action", "placeholder")
+
+
 
 
 
