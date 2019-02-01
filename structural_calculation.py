@@ -16,7 +16,7 @@ class TableValues:
 					"instantaneous" : "0"}
 
 	def tabell_2_3(self, type):
-		#TODO lägg till så stora eller små bokstäver inte har betydelse
+		#TODO add upper- or lowercase independency
 		tabell = {"solid timber" : 1.3,
 					"glued laminated timber" : 1.25,
 					"LVL" : 1.2,
@@ -38,7 +38,6 @@ class TableValues:
 	def tabell_3_1(self, type, service_class, load_duration_class):
 		#TODO finish the last + logic for the instances that contain more than 3 service classes
 
-		#TODO maybe a named tuple would be more suitable
 		tabell = {"solid timber" : {"S1" : {"permanent" : 0.6, "long" : 0.7, "medium" : 0.8, "short" : 0.9, "instant" : 1.1},
 									"S2" : {"permanent" : 0.6, "long" : 0.7, "medium" : 0.8, "short" : 0.9, "instant" : 1.1},
 									"S3" : {"permanent" : 0.5, "long" : 0.55, "medium" : 0.65, "short" : 0.7, "instant" : 0.9}},
@@ -83,10 +82,10 @@ class TableValues:
 		return k_mod
 	
 	def tabell_3_2(self, type, service_class):
-		#TODO gör klart tabell + logik, typ if type == True
+		#TODO Finish table + logic, e.g. type if type == true
 		tabell = {"solid timber": {"S1": 0.6, "S2": 0.8, "S3": 2},
 				  "glued laminated timber": {"S1": 0.6, "S2": 0.8, "S3": 2},
-                  "LVL": {"S1": 0.6, "S2": 0.8, "S3": 2},  #ej klart nedåt
+                  "LVL": {"S1": 0.6, "S2": 0.8, "S3": 2}, #TODO finished to here, finish the rest
                   "plywood": {"S1": 6, "S2": 6, "S3": 6},
                   "OSB": {"S1": 6, "S2": 6, "S3": 6},
                   "particleboard": {"S1": 6, "S2": 6, "S3": 6},
@@ -120,10 +119,7 @@ class TableValues:
 		return l_ef
 
 
-
-	#TODO hitta rätt på denna info i EC, inte i femdesign
-	# http://download.strusoft.com/FEM-Design/inst130x/theory.pdf
-	# TODO gör detta för D-klasser och limträ
+	# TODO Make material values table for D-classes and Glulam
 	def material_values_timber(self, material, konst):
 		tabell = {#                N/mm2                                                                            kN/mm2                                                           kg/m3
 			"C14": {"f_m_k": 14, "f_t_0_k": 8, "f_t_90_k": 0.4, "f_c_0_k": 16, "f_c_90_k": 2.0, "f_v_k": 1.7, "E_0_mean": 7, "E_0_05": 4.7, "E_90_mean": 0.23, "G_mean": 0.44, "rho_k": 290, "rho_mean": 350},
@@ -165,15 +161,15 @@ class TableValues:
 		return k_c_90
 
 	def effektiv_längd_placeholder(self, typ, längd):
-		# Todo det finns två värden på dessa, men vet inte varför
+		# TODO There are two of these values, but I don't know why
 		tabell = {"ledadx2": 1,
 					"ledadx1": 2,
 					"fast+ledad": 0.7,
 					"fastx2": 0.5}
 
-		värde = tabell.get(typ) * längd
+		value = tabell.get(typ) * längd
 
-		return värde
+		return value
 
 
 class Sections:
