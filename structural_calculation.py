@@ -4,6 +4,9 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from collections import namedtuple
 from uuid import uuid4
+from xml.etree.ElementTree import ElementTree, Element, tostring
+import xml.etree.ElementTree as ET
+
 
 class TableValues:
 	def __init__(self):
@@ -2451,7 +2454,7 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	def __init__(self):
 		super().__init__()
 
-	def beräkna(self):
+	def start_calculation(self):
 		"""
 		Calculates the relevant equations and returns a namedtuple
 		"""
@@ -2919,3 +2922,48 @@ class Database:
 		result: namedtuple; results of calculation
 		"""
 		self.members[id]["result"] = result
+
+
+	def create_xml(self):
+		#X.set, X.text
+		root = Element("database")
+		tree = ElementTree(root)
+		root.set("version", "version_placeholder")
+		root.set("standard", "EC")
+		root.set("country", "SWE")
+
+		entities = Element("entities")
+		root.append(entities)
+
+		# Adds all available entites
+		self._add_entity(entities)
+
+		print(tostring(root))
+
+		with open("test.xml", "w") as f:
+			tree.write("test.xml")
+
+	def _add_entity(self, parent):
+		"""Adds all available entities, appends them to the parent and set its values."""
+		#TODO fetch the actual entities
+		for new_entity in range(3):
+			entity = Element(str("type_placeholder"))
+			parent.append(entity)
+
+			entity.set("name", "placeholder")
+			entity.set("type", "placeholder")
+			entity.set("uuid", "placeholder")
+			entity.set("last_change", "placeholder")
+			entity.set("action", "placeholder")
+
+
+
+
+
+
+
+
+
+
+
+
