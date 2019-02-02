@@ -3030,15 +3030,18 @@ class Database:
 			struc_unit = StructuralUnit()
 
 			new_entity = struc_unit._prepare_for_xml()
-			print(new_entity, "\n")
+			#print(new_entity, "\n")
 
 			for layer1 in new_entity:
-				print(layer1, "\n")
+				print("layer1", layer1, "\n")
 				entity = Element(layer1)
 				parent.append(entity)
 
 				for layer2 in new_entity[layer1]:
-					print(layer2, "\n")
+					print("layer2", layer2, "\n")
+
+					for layer3 in new_entity[layer1][layer2]:
+						print("layer3", layer3, "\n")
 
 
 
