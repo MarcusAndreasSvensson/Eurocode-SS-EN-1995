@@ -6,6 +6,7 @@ from collections import namedtuple
 from uuid import uuid4
 from xml.etree.ElementTree import ElementTree, Element, tostring
 import xml.etree.ElementTree as ET
+from xml.dom.minidom import parseString
 
 
 class TableValues:
@@ -666,6 +667,7 @@ class StructuralUnit(TableValues, Sections):
 
 
 	def _prepare_for_xml(self):
+		#TODO have to be ordered
 		xml_array = {"bar": [{"name": "placeholder",
 							  "type": self.enhetstyp,
 							  "uuid": self.id,
@@ -3015,10 +3017,15 @@ class Database:
 		# Adds all available entites
 		self._add_entity(entities)
 
-		print("\n", tostring(root))
+		dom = parseString(tostring(root))
+		print("\n", dom.toprettyxml())
 
 		with open("test.xml", "w") as f:
-			tree.write("test.xml")
+			#TODO Don't know if it's best to keep the raw output or the pretty
+			#tree.write("test.xml")
+			f.write(dom.toprettyxml())
+			
+
 
 	def _add_entity(self, parent):
 		"""Adds all available entities, appends them to the parent and set its values."""
@@ -3032,16 +3039,39 @@ class Database:
 			new_entity = struc_unit._prepare_for_xml()
 			#print(new_entity, "\n")
 
-			for layer1 in new_entity:
-				print("layer1", layer1, "\n")
-				entity = Element(layer1)
-				parent.append(entity)
+			#Appends the new entity (layer 1) to it's parent
+			for layer1 in new_entity.keys():
+				ent1 = Element(layer1)
+				parent.append(ent1)
 
-				for layer2 in new_entity[layer1]:
-					print("layer2", layer2, "\n")
+				#Sets attributes for layer 1
+				for atrr_key, atrr_val in zip(new_entity[layer1][0].keys(), new_entity[layer1][0].values()):
+					ent1.set(str(atrr_key), str(atrr_val))
 
-					for layer3 in new_entity[layer1][layer2]:
-						print("layer3", layer3, "\n")
+				#Appends layer2 to layer 1
+				for layer2 in new_entity[layer1][1].keys():
+					ent2 = Element(layer2)
+					ent1.append(ent2)
+
+					#Sets attributes for layer 2
+					for atrr_key, atrr_val in zip(new_entity[layer1][1][layer2][0].keys(), new_entity[layer1][1][layer2][0].values()):
+						ent2.set(str(atrr_key), str(atrr_val))
+
+					#Appends layer2 to layer 1
+					for layer3 in new_entity[layer1][1].keys():
+						ent3 = Element(layer3)
+						ent2.append(ent3)
+
+
+					print("layer3", new_entity[layer1][1][layer2][0])
+					print()
+					print("layer3", new_entity[layer1][1][layer2][1])
+					print()
+				#for layer2 in new_entity[layer1]:
+					#print("layer2", layer2, "\n")
+
+					#for layer3 in new_entity[layer2]:
+						#print("layer3", layer3, "\n")
 
 
 

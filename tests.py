@@ -1,8 +1,10 @@
 from random import random, uniform
 import timeit
 from structural_calculation import Database, StructuralUnit
-from xml.etree.ElementTree import ElementTree, Element
-import xml.etree.ElementTree as etree
+from xml.etree.ElementTree import ElementTree, Element, XMLParser
+import xml.etree.ElementTree as ET
+from dicttoxml import dicttoxml
+from xml.dom.minidom import parseString
 
 
 
@@ -36,6 +38,12 @@ def create_xml_test():
     data.create_xml()
 
 
+def parse_xml_test():
+    tree = ElementTree()
+    tree.parse(r"C:\Users\Marcus Svensson\Documents\Eurocode-SS-EN-1995\Datasets\rst_basic_sample_project.struxml")
+
+    return tree
+
 
 
 
@@ -44,9 +52,13 @@ if __name__ == "__main__":
     data = Database()
     bar_unit = StructuralUnit()
 
-    
+    #xml = dicttoxml(bar_unit._prepare_for_xml(), attr_type=False)
+    #dom = parseString(xml)
+    #print(dom.toprettyxml())
+        
     #calc_func_test(10)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
+    #parser = parse_xml_test()
 
 

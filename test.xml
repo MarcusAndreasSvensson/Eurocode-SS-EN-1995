@@ -1,1 +1,8 @@
-<database country="SWE" standard="EC" version="version_placeholder"><entities><bar /></entities></database>
+<?xml version="1.0" ?>
+<database country="SWE" standard="EC" version="version_placeholder">
+	<entities>
+		<bar action="placeholder" last_change="placeholder" name="placeholder" type="beam" uuid="666">
+			<bar_part action="placeholder" complex_material="placeholder" complex_section="placeholder" ecc_calc="placeholder" last_change="placeholder" made="placeholder" name="placeholder" uuid="placeholder"/>
+		</bar>
+	</entities>
+</database>
