@@ -35,7 +35,7 @@ def calc_func_test(i):
 
 
 def create_xml_test():
-    data.create_xml()
+    bar_unit._prepare_for_xml("large")
 
 
 def parse_xml_test():

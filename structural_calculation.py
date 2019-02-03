@@ -610,9 +610,7 @@ class StructuralUnit(TableValues, Sections):
 
 	def __init__(self):
 		super().__init__()
-		#TODO should this maybe be represented by a dict for easier transcode to XML?
-		#TODO I think I should keep them as vars for faster execution. 
-		#TODO Prepare for XML func?
+		#TODO the UUID should be genrated when the instance is created, not assigned from database
 		self.id = 666
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
@@ -624,6 +622,7 @@ class StructuralUnit(TableValues, Sections):
 		self.cover_contact_points = []
 
 		self.section = self.set_section("Dressed Lumber", "95x220")
+		#TODO refactor redundant variables
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
 		self.b = self.dimensioner[0]
@@ -638,8 +637,8 @@ class StructuralUnit(TableValues, Sections):
 
 		self.M_y = 10000 #Nm
 		self.M_z = 10000 #Nm
-		self.N = 10000 #Nm
-		self.V = 10000 #Nm
+		self.N = 10000 #N
+		self.V = 10000 #N
 		self.T = 10000 #Nm
 		#TODO, fixa en funktion till längsta ände
 		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
@@ -666,66 +665,142 @@ class StructuralUnit(TableValues, Sections):
 		self.end_physical_eccentricity = (0, 0, 0)
 
 
-	def _prepare_for_xml(self):
-		#TODO have to be ordered
-		xml_array = {"bar": [{"name": "placeholder",
-							  "type": self.enhetstyp,
-							  "uuid": self.id,
-							  "last_change": "placeholder",
-							  "action": "placeholder"}, 
-							 {"bar_part": [{"uuid": "placeholder",
-										   "last_change": "placeholder",
-										   "action": "placeholder",
-										   "name": "placeholder",
-										   "complex_material": "placeholder",
-										   "made": "placeholder",
-										   "complex_section": "placeholder",
-										   "ecc_calc": "placeholder"}, 
-										  {"curve": [{"type": "placeholder"}, 
-													{"start_point": {"x": self.start_point[0],
-															         "y": self.start_point[1],
-															         "z": self.start_point[2]},
-													"end_point": {"x": self.start_point[0],
-																  "y": self.start_point[1],
-																  "z": self.start_point[2]}}],
-										  "local-y": {"x": "placeholder",
-										  			  "y": "placeholder",
-										  			  "z": "placeholder"},
-										  "start_connectivity": self.start_connectivity,
-										  "end_connectivity": self.end_connectivity,
-										  "eccentricity": [{"use_default_physical_alignment": self.use_default_physical_alignment}, 
-										  				   {"start_analytical": {"x": self.start_analytical_eccentricity[0],
-										  										"y": self.start_analytical_eccentricity[1],
-										  										"z": self.start_analytical_eccentricity[2]},
-										  				   "end_analytical": {"x": self.end_analytical_eccentricity[0],
-										  									  "y": self.end_analytical_eccentricity[1],
-										  									  "z": self.end_analytical_eccentricity[2]},
-										  				   "start_physical": {"x": self.start_physical_eccentricity[0],
-										  									  "y": self.start_physical_eccentricity[1],
-										  									  "z": self.start_physical_eccentricity[2]},
-										  				   "end_physical": {"x": self.end_physical_eccentricity[0],
-										  									"y": self.end_physical_eccentricity[1],
-										  									"z": self.end_physical_eccentricity[2]
-										  									}
-										  					}
-										  				   ],
-										  "buckling_data": {"buckling_length": [{"type": self.buckling_type}, 
-										  										{"start_point": {"x": self.start_buckling_length[0],
-										  														 "y": self.start_buckling_length[1],
-										  														 "z": self.start_buckling_length[2]},
-															  					"end_point": {"x": self.end_buckling_length[0],
-															  								  "y": self.end_buckling_length[1],
-															  								  "z": self.end_buckling_length[2]
-															  								  }
-															  					}
-															  				   ]
-														   }
-										  }
-										 ]
-							}]
-					}
+	def _prepare_for_xml(self, file_size):
+		"""Rerturns -xml formatted string.
 
-		return xml_array
+		File_size: String; Whether complete information about the cross section 
+						   or a compressed representation is to exported.
+
+		Return: String; 
+		"""
+		root = Element("database")
+		tree = ElementTree(root)
+		root.set("xmlns:xsd", "placeholder")
+		root.set("xmlns:xsi", "placeholder")
+		root.set("version", "version_placeholder")
+		root.set("source_software", "placeholder")
+		root.set("start_time", "time_placeholder")
+		root.set("end_time", "time_placeholder")
+		root.set("uuid", "uuid_placeholder")
+		root.set("hash", "hash_placeholder")
+		root.set("country", "SWE")
+		root.set("xmlns", "urn:placeholder")
+
+		entities = Element("entities")
+		root.append(entities)
+
+		bar = Element("bar")
+		entities.append(bar)
+		bar.set("uuid", str(self.id))
+		bar.set("last_change", "value")
+		bar.set("action", "value")
+		bar.set("type", str(self.enhetstyp))
+
+		bar_part = Element("bar_part")
+		bar.append(bar_part)
+		bar_part.set("uuid", "value")
+		bar_part.set("last_change", "value")
+		bar_part.set("action", "value")
+		bar_part.set("name", "value")
+
+		if file_size == "small":
+			bar_part.set("complex_material", "value")
+			bar_part.set("complex_section", "value")
+
+		elif file_size == "large":
+			bar_part.set("cross_section_type", str(self.tvärsnitt))
+			bar_part.set("material", str(self.material))
+			bar_part.set("material_type", str(self.type))
+			bar_part.set("service_class", str(self.service_class))
+			bar_part.set("load_duration_class", str(self.load_duration_class))
+			bar_part.set("cross_section", str(self.section))
+			bar_part.set("cross_section_area", str(self.A))
+			bar_part.set("moment_of_inertia_y", str(self.I_y))
+			bar_part.set("moment_of_inertia_z", str(self.I_z))
+			bar_part.set("length", str(self.l))
+
+		bar_part.set("ecc_calc", "value")
+
+		curve = Element("curve")
+		bar_part.append(curve)
+		curve.set("type", "value")
+
+		point = Element("point")
+		curve.append(point)
+		point.set("x", str(self.start_point[0]))
+		point.set("y", str(self.start_point[1]))
+		point.set("z", str(self.start_point[2]))
+		curve.append(point)
+		point.set("x", str(self.end_point[0]))
+		point.set("y", str(self.end_point[1]))
+		point.set("z", str(self.end_point[2]))
+
+		local_y = Element("local_y")
+		bar_part.append(local_y)
+		local_y.set("x", "value")
+		local_y.set("y", "value")
+		local_y.set("z", "value")
+
+		connectivity = Element("connectivity")
+		bar_part.append(connectivity)
+		connectivity.set("e_x", "value")
+		connectivity.set("e_y", "value")
+		connectivity.set("e_z", "value")
+		connectivity.set("m_x", "value")
+		connectivity.set("m_y", "value")
+		connectivity.set("m_z", "value")
+		bar_part.append(connectivity)
+		connectivity.set("e_x", "value")
+		connectivity.set("e_y", "value")
+		connectivity.set("e_z", "value")
+		connectivity.set("m_x", "value")
+		connectivity.set("m_y", "value")
+		connectivity.set("m_z", "value")
+
+		eccentricity = Element("eccentricity")
+		bar_part.append(eccentricity)
+		eccentricity.set("use_default_physical_alignment", str(self.use_default_physical_alignment))
+
+		analytical = Element("analytical")
+		eccentricity.append(analytical)
+		analytical.set("x", str(self.start_analytical_eccentricity[0]))
+		analytical.set("y", str(self.start_analytical_eccentricity[1]))
+		analytical.set("z", str(self.start_analytical_eccentricity[2]))
+		eccentricity.append(analytical)
+		analytical.set("x", str(self.end_analytical_eccentricity[0]))
+		analytical.set("y", str(self.end_analytical_eccentricity[1]))
+		analytical.set("z", str(self.end_analytical_eccentricity[2]))
+
+		physical = Element("physical")
+		eccentricity.append(physical)
+		physical.set("x", "value")
+		physical.set("y", "value")
+		physical.set("z", "value")
+		eccentricity.append(physical)
+		physical.set("x", "value")
+		physical.set("y", "value")
+		physical.set("z", "value")
+
+		#if bar has more than 2 supports:
+			#include buckling data
+
+		loads_part = Element("loads_part")
+		bar.append(loads_part)
+		loads_part.set("N", str(self.N))
+		loads_part.set("V", str(self.V))
+		loads_part.set("M_y", str(self.M_y))
+		loads_part.set("M_z", str(self.M_z))
+		loads_part.set("T", str(self.T))
+		loads_part.set("uuid", "placeholder")
+
+
+		dom = parseString(tostring(root))
+		print()
+		print(dom.toprettyxml())
+
+		
+
+		return "placeholder"
 
 
 	def variables(self):
@@ -3004,87 +3079,11 @@ class Database:
 
 
 	def create_xml(self):
-		#X.set, X.text
-		root = Element("database")
-		tree = ElementTree(root)
-		root.set("version", "version_placeholder")
-		root.set("standard", "EC")
-		root.set("country", "SWE")
-
-		entities = Element("entities")
-		root.append(entities)
-
-		# Adds all available entites
-		self._add_entity(entities)
-
-		dom = parseString(tostring(root))
-		print("\n", dom.toprettyxml())
-
+		"""Combines the .xml strings from each objects to an -xml file."""
 		with open("test.xml", "w") as f:
 			#TODO Don't know if it's best to keep the raw output or the pretty
 			#tree.write("test.xml")
-			f.write(dom.toprettyxml())
+			f.write(dom.toprettyxml(), encoding="utf-8")
+		#for object in database:
+			#"add the xml string"
 			
-
-
-	def _add_entity(self, parent):
-		"""Adds all available entities, appends them to the parent and set its values."""
-		#TODO fetch the actual entities
-		#for new_entity in :
-
-		#placeholder for future correct indentation
-		for placeholder in range(1):
-			struc_unit = StructuralUnit()
-
-			new_entity = struc_unit._prepare_for_xml()
-			#print(new_entity, "\n")
-
-			#Appends the new entity (layer 1) to it's parent
-			for layer1 in new_entity.keys():
-				ent1 = Element(layer1)
-				parent.append(ent1)
-
-				#Sets attributes for layer 1
-				for atrr_key, atrr_val in zip(new_entity[layer1][0].keys(), new_entity[layer1][0].values()):
-					ent1.set(str(atrr_key), str(atrr_val))
-
-				#Appends layer2 to layer 1
-				for layer2 in new_entity[layer1][1].keys():
-					ent2 = Element(layer2)
-					ent1.append(ent2)
-
-					#Sets attributes for layer 2
-					for atrr_key, atrr_val in zip(new_entity[layer1][1][layer2][0].keys(), new_entity[layer1][1][layer2][0].values()):
-						ent2.set(str(atrr_key), str(atrr_val))
-
-					#Appends layer2 to layer 1
-					for layer3 in new_entity[layer1][1].keys():
-						ent3 = Element(layer3)
-						ent2.append(ent3)
-
-
-					print("layer3", new_entity[layer1][1][layer2][0])
-					print()
-					print("layer3", new_entity[layer1][1][layer2][1])
-					print()
-				#for layer2 in new_entity[layer1]:
-					#print("layer2", layer2, "\n")
-
-					#for layer3 in new_entity[layer2]:
-						#print("layer3", layer3, "\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
