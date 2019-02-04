@@ -665,7 +665,7 @@ class StructuralUnit(TableValues, Sections):
 		self.end_physical_eccentricity = (0, 0, 0)
 
 
-	def _prepare_for_xml(self, file_size):
+	def _prepare_for_xml(self, root, file_size="large"):
 		"""Rerturns -xml formatted string.
 
 		File_size: String; Whether complete information about the cross section 
@@ -673,19 +673,6 @@ class StructuralUnit(TableValues, Sections):
 
 		Return: String; 
 		"""
-		root = Element("database")
-		tree = ElementTree(root)
-		root.set("xmlns:xsd", "placeholder")
-		root.set("xmlns:xsi", "placeholder")
-		root.set("version", "version_placeholder")
-		root.set("source_software", "placeholder")
-		root.set("start_time", "time_placeholder")
-		root.set("end_time", "time_placeholder")
-		root.set("uuid", "uuid_placeholder")
-		root.set("hash", "hash_placeholder")
-		root.set("country", "SWE")
-		root.set("xmlns", "urn:placeholder")
-
 		entities = Element("entities")
 		root.append(entities)
 
@@ -793,14 +780,13 @@ class StructuralUnit(TableValues, Sections):
 		loads_part.set("T", str(self.T))
 		loads_part.set("uuid", "placeholder")
 
-
-		dom = parseString(tostring(root))
-		print()
-		print(dom.toprettyxml())
-
 		
-
-		return "placeholder"
+		dom = parseString(tostring(root)).toprettyxml()
+		#print()
+		#print(dom)
+		
+		#tostring(root)
+		return dom
 
 
 	def variables(self):
@@ -3066,8 +3052,8 @@ class Database:
 		"""Creates structuralUnit instance and assigns an unique id to it."""
 		id = str(uuid4())
 		self.id = id
-		self.members[id] = {"unit_instance": UltimateLimitStateTimber(), "result": None}
-		self.members[id]["unit_instance"].id = id
+		self.members[id] = {"object_instance": UltimateLimitStateTimber(), "result": None}
+		self.members[id]["object_instance"].id = id
 
 	def save_result(self, id, result):
 		"""Collects results of the calculated member and stores them in a dictionary.
@@ -3080,10 +3066,23 @@ class Database:
 
 	def create_xml(self):
 		"""Combines the .xml strings from each objects to an -xml file."""
+		root = Element("database")
+		tree = ElementTree(root)
+		root.set("xmlns:xsd", "placeholder")
+		root.set("xmlns:xsi", "placeholder")
+		root.set("version", "version_placeholder")
+		root.set("source_software", "placeholder")
+		root.set("start_time", "time_placeholder")
+		root.set("end_time", "time_placeholder")
+		root.set("uuid", "uuid_placeholder")
+		root.set("hash", "hash_placeholder")
+		root.set("country", "SWE")
+		root.set("xmlns", "urn:placeholder")
+
 		with open("test.xml", "w") as f:
 			#TODO Don't know if it's best to keep the raw output or the pretty
 			#tree.write("test.xml")
-			f.write(dom.toprettyxml(), encoding="utf-8")
-		#for object in database:
-			#"add the xml string"
-			
+			#print(self.members)
+			for id in self.members:
+				print(self.members[id]["object_instance"]._prepare_for_xml(root))
+				#f.write(dom.toprettyxml(object._prepare_for_xml()))

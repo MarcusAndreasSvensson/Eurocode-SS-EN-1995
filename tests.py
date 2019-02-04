@@ -16,18 +16,18 @@ def calc_func_test(i):
     for _ in range(i):
         try:
             data.add_unit()
-            data.members[data.id]["unit_instance"].M_y = uniform(-1, 1)*100000
-            data.members[data.id]["unit_instance"].M_z = uniform(-1, 1)*100000
-            data.members[data.id]["unit_instance"].N = uniform(-1, 1)*100000
-            data.members[data.id]["unit_instance"].V = uniform(-1, 1)*100000
-            data.members[data.id]["unit_instance"].T = uniform(-1, 1)*100000
-            data.save_result(data.id, data.members[data.id]["unit_instance"].start_calculation())
+            data.members[data.id]["object_instance"].M_y = uniform(-1, 1)*100000
+            data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*100000
+            data.members[data.id]["object_instance"].N = uniform(-1, 1)*100000
+            data.members[data.id]["object_instance"].V = uniform(-1, 1)*100000
+            data.members[data.id]["object_instance"].T = uniform(-1, 1)*100000
+            data.save_result(data.id, data.members[data.id]["object_instance"].start_calculation())
         except TypeError:
-            assert (type(data.members[data.id]["unit_instance"].M_y) == int() or float()
-                    and type(data.members[data.id]["unit_instance"].M_z) == int() or float()
-                    and type(data.members[data.id]["unit_instance"].N) == int() or float()
-                    and type(data.members[data.id]["unit_instance"].V) == int() or float()
-                    and type(data.members[data.id]["unit_instance"].T) == int() or float()),\
+            assert (type(data.members[data.id]["object_instance"].M_y) == int() or float()
+                    and type(data.members[data.id]["object_instance"].M_z) == int() or float()
+                    and type(data.members[data.id]["object_instance"].N) == int() or float()
+                    and type(data.members[data.id]["object_instance"].V) == int() or float()
+                    and type(data.members[data.id]["object_instance"].T) == int() or float()),\
                     "All values must be of type int() or float()"
 
     for member in data.members:
@@ -35,7 +35,8 @@ def calc_func_test(i):
 
 
 def create_xml_test():
-    bar_unit._prepare_for_xml("large")
+    #bar_unit._prepare_for_xml("large")
+    data.create_xml()
 
 
 def parse_xml_test():
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
         
-    #calc_func_test(10)
+    calc_func_test(10)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()
