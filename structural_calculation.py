@@ -621,7 +621,7 @@ class StructuralUnit(TableValues, Sections):
 		self.cover_contact_points = []
 
 		#TODO All values that are set by a function must be called when a value is changed.
-		#Find better solution
+		#Find better solution, (Maybe a "update all values function?")
 		self.section = self.set_section("Dressed Lumber", "95x220")
 		#TODO refactor redundant variables
 		self.dimensioner = self.get_dimensions(self.section[1])
