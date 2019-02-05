@@ -9,7 +9,7 @@ from xml.dom.minidom import parseString
 
 def calc_func_test(i):
     """Creates i number of members and calculates."""
-    table_2_1 = ["permanent", "long term", "meadium term", "instantaneous"]
+    table_2_1 = ["permanent", "long", "medium", "instant"]
     material = ["C14", "C16", "C18", "C20", "C22", "C24", "C27", "C30", "C35", "C40", "C45", "C50"]
     section = ["22x22","22x28","22x34","22x45","22x58","22x70","22x95","22x120","22x145","22x170","22x195","22x220",
                     "34x22","34x28","34x34","34x45","34x58","34x70","34x95","34x120","34x145","34x170","34x195","34x220",
@@ -30,10 +30,10 @@ def calc_func_test(i):
             data.members[data.id]["object_instance"].material = choice(material)
             data.members[data.id]["object_instance"].service_class = choice(service_class)
             data.members[data.id]["object_instance"].load_duration_class = choice(table_2_1)
-            data.members[data.id]["object_instance"].cross_section = choice(section)
+            data.members[data.id]["object_instance"].section = choice(section)
 
             data.save_result(data.id, data.members[data.id]["object_instance"].start_calculation())
-            
+
         except TypeError:
             assert (type(data.members[data.id]["object_instance"].M_y) == int() or float()
                     and type(data.members[data.id]["object_instance"].M_z) == int() or float()
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
         
-    calc_func_test(5)
+    calc_func_test(10)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()

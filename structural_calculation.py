@@ -16,7 +16,7 @@ class TableValues:
 	def tabell_2_1(self, duration):
 		tabell = {"permanent" : "more than 10 years",
 					"long term" : "6 months - 10 years",
-					"meadium term" : "1 week - 6 months",
+					"medium term" : "1 week - 6 months",
 					"instantaneous" : "0"}
 
 	def tabell_2_3(self, type):
@@ -620,8 +620,9 @@ class StructuralUnit(TableValues, Sections):
 		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
 		self.cover_contact_points = []
 
-		self.cross_section = "95x220"
-		self.section = self.set_section("Dressed Lumber", self.cross_section)
+		#TODO All values that are set by a function must be called when a value is changed.
+		#Find better solution
+		self.section = self.set_section("Dressed Lumber", "95x220")
 		#TODO refactor redundant variables
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
@@ -1511,7 +1512,7 @@ class SS_EN_1995_1_1(StructuralUnit):
 
         self.gamma_M = self.tabell_2_3(self.type)
 
-
+        #print("dself.k_mod", self.k_mod, "self.k_h", self.k_h, "elf.f_m_k", self.f_m_k, "self.gamma_M)", self.gamma_M)
         self.f_m_y_d = self.k_mod * self.k_h * self.f_m_k / self.gamma_M
         #print("fmyd", self.f_m_y_d)
 
