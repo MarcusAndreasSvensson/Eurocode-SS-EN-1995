@@ -122,7 +122,6 @@ class TableValues:
 
 		return l_ef
 
-
 	# TODO Make material values table for D-classes and Glulam
 	def material_values_timber(self, material, konst):
 		tabell = {#                N/mm2                                                                            kN/mm2                                                           kg/m3
@@ -621,7 +620,8 @@ class StructuralUnit(TableValues, Sections):
 		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
 		self.cover_contact_points = []
 
-		self.section = self.set_section("Dressed Lumber", "95x220")
+		self.cross_section = "95x220"
+		self.section = self.set_section("Dressed Lumber", self.cross_section)
 		#TODO refactor redundant variables
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
