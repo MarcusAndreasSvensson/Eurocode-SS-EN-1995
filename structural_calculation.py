@@ -665,7 +665,7 @@ class StructuralUnit(TableValues, Sections):
 		self.end_physical_eccentricity = (0, 0, 0)
 
 
-	def _prepare_for_xml(self, root, file_size="large"):
+	def _prepare_for_xml(self, attach_point, file_size="large"):
 		"""Rerturns -xml formatted string.
 
 		File_size: String; Whether complete information about the cross section 
@@ -673,11 +673,8 @@ class StructuralUnit(TableValues, Sections):
 
 		Return: String; 
 		"""
-		entities = Element("entities")
-		root.append(entities)
-
 		bar = Element("bar")
-		entities.append(bar)
+		#attach_point.append(bar)
 		bar.set("uuid", str(self.id))
 		bar.set("last_change", "value")
 		bar.set("action", "value")
@@ -780,13 +777,19 @@ class StructuralUnit(TableValues, Sections):
 		loads_part.set("T", str(self.T))
 		loads_part.set("uuid", "placeholder")
 
-		
-		dom = parseString(tostring(root)).toprettyxml()
-		#print()
-		#print(dom)
-		
-		#tostring(root)
-		return dom
+
+		result_part = Element("result_part")
+		bar.append(result_part)
+		result_part.set("N", str(self.N))
+		result_part.set("V", str(self.V))
+		result_part.set("M_y", str(self.M_y))
+		result_part.set("M_z", str(self.M_z))
+		result_part.set("T", str(self.T))
+		result_part.set("uuid", "placeholder")
+
+		#TODO must add results to string
+
+		return bar
 
 
 	def variables(self):
@@ -3079,10 +3082,12 @@ class Database:
 		root.set("country", "SWE")
 		root.set("xmlns", "urn:placeholder")
 
+		entities = Element("entities")
+		root.append(entities)
+
 		with open("test.xml", "w") as f:
-			#TODO Don't know if it's best to keep the raw output or the pretty
-			#tree.write("test.xml")
-			#print(self.members)
 			for id in self.members:
-				print(self.members[id]["object_instance"]._prepare_for_xml(root))
-				#f.write(dom.toprettyxml(object._prepare_for_xml()))
+				#TODO Results must be added to each xml string
+				entities.append(self.members[id]["object_instance"]._prepare_for_xml(entities))
+				
+			f.write(parseString(tostring(root)).toprettyxml())

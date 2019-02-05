@@ -7,9 +7,6 @@ from dicttoxml import dicttoxml
 from xml.dom.minidom import parseString
 
 
-
-
-
 def calc_func_test(i):
     """Creates i number of members and calculates."""
     
@@ -31,8 +28,12 @@ def calc_func_test(i):
                     "All values must be of type int() or float()"
 
     for member in data.members:
-        print(data.members[member], "\n")
+        #print(data.members[member], "\n")
+        pass
 
+def generate_random_values():
+    pass
+        
 
 def create_xml_test():
     #bar_unit._prepare_for_xml("large")
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
         
-    calc_func_test(10)
+    calc_func_test(5)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()
