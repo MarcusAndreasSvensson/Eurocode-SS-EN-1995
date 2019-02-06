@@ -22,21 +22,18 @@ def calc_func_test(i):
     for _ in range(i):
         try:
             data.add_unit()
-            data.members[data.id]["object_instance"].M_y = uniform(-1, 1)*100000
-            data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*100000
-            data.members[data.id]["object_instance"].N = uniform(-1, 1)*100000
-            data.members[data.id]["object_instance"].V = uniform(-1, 1)*100000
-            data.members[data.id]["object_instance"].T = uniform(-1, 1)*100000
+            data.members[data.id]["object_instance"].M_y = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].N = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].V = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].T = uniform(-1, 1)*10000
             data.members[data.id]["object_instance"].material = choice(material)
             data.members[data.id]["object_instance"].service_class = choice(service_class)
             data.members[data.id]["object_instance"].load_duration_class = choice(table_2_1)
-
-            print(data.members[data.id]["object_instance"].section)
-            data.members[data.id]["object_instance"].section = data.members[data.id]["object_instance"].set_section("Dressed Lumber", choice(section))
-            print(data.members[data.id]["object_instance"].section)
-            print()
-
-
+            data.members[data.id]["object_instance"].section = data.members[data.id]["object_instance"].cross_section = choice(section)
+            
+            #Prepares and calculates the instances equations
+            data.members[data.id]["object_instance"].prepare_for_calculation()
             data.save_result(data.id, data.members[data.id]["object_instance"].start_calculation())
 
         except TypeError:

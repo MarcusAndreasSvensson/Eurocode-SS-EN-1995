@@ -620,9 +620,9 @@ class StructuralUnit(TableValues, Sections):
 		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
 		self.cover_contact_points = []
 
-		#TODO All values that are set by a function must be called when a value is changed.
-		#Find better solution, (Maybe a "update all values function?")
-		self.section = self.set_section("Dressed Lumber", "95x220")
+		self.timber_type = "Dressed Lumber"
+		self.cross_section = "95x220"
+		self.section = self.set_section(self.timber_type, self.cross_section)
 		#TODO refactor redundant variables
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
@@ -636,11 +636,11 @@ class StructuralUnit(TableValues, Sections):
 		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
 		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
 
-		self.M_y = 10000 #Nm
-		self.M_z = 10000 #Nm
-		self.N = 10000 #N
-		self.V = 10000 #N
-		self.T = 10000 #Nm
+		self.M_y = 1000 #Nm
+		self.M_z = 1000 #Nm
+		self.N = 1000 #N
+		self.V = 1000 #N
+		self.T = 1000 #Nm
 		#TODO, fixa en funktion till längsta ände
 		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
 
@@ -792,6 +792,23 @@ class StructuralUnit(TableValues, Sections):
 
 		return bar
 
+
+	def prepare_for_calculation(self):
+		"""Saves all changes made to the instances variables that are governed by a function."""
+		self.section = self.set_section(self.timber_type, self.cross_section)
+		self.dimensioner = self.get_dimensions(self.section[1])
+		self.h = self.dimensioner[1]
+		self.b = self.dimensioner[0]
+		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
+		self.A = self.dimensioner[0] * self.dimensioner[1]
+		self.I_y = pow(self.dimensioner[0], 3) * self.dimensioner[1] / 12
+		self.I_z = pow(self.dimensioner[1], 3) * self.dimensioner[0] / 12
+
+		self.koordinater = np.array([self.start_point, self.end_point])
+		self.l = math.sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
+		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
+		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
+		
 
 	def variables(self):
 		self.A = float()
