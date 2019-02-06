@@ -22,16 +22,18 @@ def calc_func_test(i):
     for _ in range(i):
         try:
             data.add_unit()
-            data.members[data.id]["object_instance"].M_y = uniform(-1, 1)*10000
-            data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].M_y = uniform(-1, 1)*800
+            data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*800
             data.members[data.id]["object_instance"].N = uniform(-1, 1)*10000
             data.members[data.id]["object_instance"].V = uniform(-1, 1)*10000
-            data.members[data.id]["object_instance"].T = uniform(-1, 1)*10000
+            data.members[data.id]["object_instance"].T = uniform(-1, 1)*300000
             data.members[data.id]["object_instance"].material = choice(material)
             data.members[data.id]["object_instance"].service_class = choice(service_class)
             data.members[data.id]["object_instance"].load_duration_class = choice(table_2_1)
             data.members[data.id]["object_instance"].section = data.members[data.id]["object_instance"].cross_section = choice(section)
-            
+            data.members[data.id]["object_instance"].start_point = [0,0,0]
+            data.members[data.id]["object_instance"].end_point = [uniform(0.2, 15),0,0]
+
             #Prepares and calculates the instances equations
             data.members[data.id]["object_instance"].prepare_for_calculation()
             data.save_result(data.id, data.members[data.id]["object_instance"].start_calculation())
@@ -48,11 +50,10 @@ def calc_func_test(i):
 
         
     for member in data.members:
-        print(data.members[member], "\n")
+        print(data.members[member])
         
 
 def create_xml_test():
-    #bar_unit._prepare_for_xml("large")
     data.create_xml()
 
 
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
         
-    calc_func_test(10)
+    calc_func_test(100)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()

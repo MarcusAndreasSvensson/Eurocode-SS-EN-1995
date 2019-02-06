@@ -629,12 +629,12 @@ class StructuralUnit(TableValues, Sections):
 		self.b = self.dimensioner[0]
 
 		self.start_point = [0,0,0]
-		self.end_point = [0,5,0]
+		self.end_point = [5,0,0]
 		self.koordinater = np.array([self.start_point, self.end_point])
 		#TODO förmodligen kommer längden läsas fel iom att den inte uppdateras vid skapandet av objektet
-		self.l = math.sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
-		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
-		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
+		self.l = math.sqrt(pow(self.end_point[0] - self.start_point[0], 2) +
+		                   pow(self.end_point[1] - self.start_point[1], 2) +
+		                   pow(self.end_point[2] - self.start_point[2], 2))
 
 		self.M_y = 1000 #Nm
 		self.M_z = 1000 #Nm
@@ -665,8 +665,10 @@ class StructuralUnit(TableValues, Sections):
 		self.start_physical_eccentricity = (0, 0, 0)
 		self.end_physical_eccentricity = (0, 0, 0)
 
+		self.results = None
 
-	def _prepare_for_xml(self, attach_point, file_size="large"):
+
+	def _prepare_for_xml(self, file_size="large"):
 		"""Rerturns -xml formatted string.
 
 		File_size: String; Whether complete information about the cross section 
@@ -675,7 +677,6 @@ class StructuralUnit(TableValues, Sections):
 		Return: String; 
 		"""
 		bar = Element("bar")
-		#attach_point.append(bar)
 		bar.set("uuid", str(self.id))
 		bar.set("last_change", "value")
 		bar.set("action", "value")
@@ -708,17 +709,22 @@ class StructuralUnit(TableValues, Sections):
 
 		curve = Element("curve")
 		bar_part.append(curve)
-		curve.set("type", "value")
+		curve.set("type", "placeholder")
 
-		point = Element("point")
-		curve.append(point)
-		point.set("x", str(self.start_point[0]))
-		point.set("y", str(self.start_point[1]))
-		point.set("z", str(self.start_point[2]))
-		curve.append(point)
-		point.set("x", str(self.end_point[0]))
-		point.set("y", str(self.end_point[1]))
-		point.set("z", str(self.end_point[2]))
+		_start_point = Element("start_point")
+		curve.append(_start_point)
+		_start_point.set("x", str(self.start_point[0]))
+		_start_point.set("y", str(self.start_point[1]))
+		_start_point.set("z", str(self.start_point[2]))
+		_end_point = Element("end_point")
+		curve.append(_end_point)
+		_end_point.set("x", str(self.end_point[0]))
+		_end_point.set("y", str(self.end_point[1]))
+		_end_point.set("z", str(self.end_point[2]))
+
+		#print(self.start_point[0], self.end_point[0])
+
+		#print(tostring(bar))
 
 		local_y = Element("local_y")
 		bar_part.append(local_y)
@@ -781,15 +787,10 @@ class StructuralUnit(TableValues, Sections):
 
 		result_part = Element("result_part")
 		bar.append(result_part)
-		result_part.set("N", str(self.N))
-		result_part.set("V", str(self.V))
-		result_part.set("M_y", str(self.M_y))
-		result_part.set("M_z", str(self.M_z))
-		result_part.set("T", str(self.T))
+		result_part.set("results", str(self.results))
 		result_part.set("uuid", "placeholder")
 
 		#TODO must add results to string
-
 		return bar
 
 
@@ -1367,7 +1368,7 @@ class SS_EN_1995_1_1(StructuralUnit):
         #print("taod", self.tao_d)
 
         ##############################
-        kontroll = self.tao_d / self.f_v_d
+        kontroll = abs(self.tao_d / self.f_v_d)
 
         #TODO det finns en klausul (3) om supports som inte är i koden
 
@@ -1410,7 +1411,7 @@ class SS_EN_1995_1_1(StructuralUnit):
         self.tao_tor_d = self.T * self.r / self.I_tor
 
         ####################
-        kontroll = self.tao_tor_d / (self.k_shape * self.f_v_d)
+        kontroll = abs(self.tao_tor_d / (self.k_shape * self.f_v_d))
 
         return kontroll
 
@@ -3106,6 +3107,6 @@ class Database:
 		with open("test.xml", "w") as f:
 			for id in self.members:
 				#TODO Results must be added to each xml string
-				entities.append(self.members[id]["object_instance"]._prepare_for_xml(entities))
+				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
 				
 			f.write(parseString(tostring(root)).toprettyxml())
