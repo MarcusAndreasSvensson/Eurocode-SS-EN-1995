@@ -3084,10 +3084,11 @@ class Database:
 		result: namedtuple; results of calculation
 		"""
 		self.members[id]["result"] = result
+		self.members[id]["object_instance"].results = result
 
 
 	def create_xml(self):
-		"""Combines the .xml strings from each objects to an -xml file."""
+		"""Combines the .xml strings from each objects to an .xml file."""
 		root = Element("database")
 		tree = ElementTree(root)
 		root.set("xmlns:xsd", "placeholder")
@@ -3106,7 +3107,6 @@ class Database:
 
 		with open("test.xml", "w") as f:
 			for id in self.members:
-				#TODO Results must be added to each xml string
 				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
 				
 			f.write(parseString(tostring(root)).toprettyxml())
