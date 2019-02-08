@@ -76,7 +76,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
 
-    calc_func_test(10)
+    calc_func_test(2)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()

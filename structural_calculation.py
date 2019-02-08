@@ -699,7 +699,8 @@ class StructuralUnit(TableValues, Sections):
 			bar_part.set("material_type", str(self.type))
 			bar_part.set("service_class", str(self.service_class))
 			bar_part.set("load_duration_class", str(self.load_duration_class))
-			bar_part.set("cross_section", str(self.section))
+			bar_part.set("cross_section_b", str(self.section[0][0]))
+			bar_part.set("cross_section_h", str(self.section[0][1]))
 			bar_part.set("cross_section_area", str(self.A))
 			bar_part.set("moment_of_inertia_y", str(self.I_y))
 			bar_part.set("moment_of_inertia_z", str(self.I_z))
@@ -787,7 +788,10 @@ class StructuralUnit(TableValues, Sections):
 
 		result_part = Element("result_part")
 		bar.append(result_part)
-		result_part.set("results", str(self.results))
+		result_part.set("bending_1", str(self.results.bending[0]))
+		result_part.set("bending_2", str(self.results.bending[1]))
+		result_part.set("shear", str(self.results.shear))
+		result_part.set("torsion", str(self.results.torsion))
 		result_part.set("uuid", "placeholder")
 
 		#TODO must add results to string
