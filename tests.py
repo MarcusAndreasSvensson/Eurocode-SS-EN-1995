@@ -5,6 +5,7 @@ from xml.etree.ElementTree import ElementTree, Element, XMLParser
 import xml.etree.ElementTree as ET
 from dicttoxml import dicttoxml
 from xml.dom.minidom import parseString
+import threading
 
 
 def calc_func_test(i):
@@ -26,7 +27,7 @@ def calc_func_test(i):
             data.members[data.id]["object_instance"].M_z = uniform(-1, 1)*800
             data.members[data.id]["object_instance"].N = uniform(-1, 1)*10000
             data.members[data.id]["object_instance"].V = uniform(-1, 1)*10000
-            data.members[data.id]["object_instance"].T = uniform(-1, 1)*300000
+            data.members[data.id]["object_instance"].T = uniform(-1, 1)*200000
             data.members[data.id]["object_instance"].material = choice(material)
             data.members[data.id]["object_instance"].service_class = choice(service_class)
             data.members[data.id]["object_instance"].load_duration_class = choice(table_2_1)
@@ -74,8 +75,8 @@ if __name__ == "__main__":
     #xml = dicttoxml(bar_unit._prepare_for_xml(), attr_type=False)
     #dom = parseString(xml)
     #print(dom.toprettyxml())
-        
-    calc_func_test(100)
+
+    calc_func_test(100000)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()
