@@ -49,8 +49,8 @@ def calc_func_test(i):
         
 
         
-    for member in data.members:
-        print(data.members[member])
+    #for member in data.members:
+        #print(data.members[member])
         
 
 def create_xml_test():
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     #dom = parseString(xml)
     #print(dom.toprettyxml())
 
-    calc_func_test(20)
+    calc_func_test(100000)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()
