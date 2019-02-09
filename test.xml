@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <database country="SWE" end_time="time_placeholder" hash="hash_placeholder" source_software="placeholder" start_time="time_placeholder" uuid="uuid_placeholder" version="version_placeholder" xmlns="urn:placeholder" xmlns:xsd="placeholder" xmlns:xsi="placeholder">
 	<entities>
-		<bar action="value" last_change="value" type="beam" uuid="cce2c87a-15b9-4f46-887c-27b4a045c6b8">
-			<bar_part action="value" cross_section_area="11310" cross_section_b="58" cross_section_h="195" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="7.067931833313313" load_duration_class="instant" material="C16" material_type="solid timber" moment_of_inertia_y="3170570.0" moment_of_inertia_z="35838562.5" name="value" service_class="S3" uuid="value">
+		<bar action="value" last_change="value" type="beam" uuid="a5d6bf63-37ff-441f-97c8-d59ce4018daf">
+			<bar_part action="value" cross_section_area="11400" cross_section_b="95" cross_section_h="120" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="13.067614174455315" load_duration_class="permanent" material="C30" material_type="solid timber" moment_of_inertia_y="8573750.0" moment_of_inertia_z="13680000.0" name="value" service_class="S1" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
-					<end_point x="7.067931833313313" y="0" z="0"/>
+					<end_point x="13.067614174455315" y="0" z="0"/>
 				</curve>
 				<local_y x="value" y="value" z="value"/>
 				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
@@ -17,14 +17,14 @@
 					<physical x="value" y="value" z="value"/>
 				</eccentricity>
 			</bar_part>
-			<loads_part M_y="100.86447263464518" M_z="571.7140985273952" N="-452.4365027345434" T="186548.21507446168" V="848.377381673353" uuid="placeholder"/>
-			<result_part bending_1="0.1815896014437306" bending_2="0.19872788506878156" shear="0.08984212416772598" torsion="0.5189890179156663" uuid="placeholder"/>
+			<loads_part M_y="424.93415041645494" M_z="-206.7457248543999" N="5005.837532880586" T="3451.18500511834" V="7651.801090129038" uuid="placeholder"/>
+			<result_part bending_1="0.25699522916919504" bending_2="0.22700315052228565" shear="0.7235272044141682" torsion="0.01441188688348288" uuid="placeholder"/>
 		</bar>
-		<bar action="value" last_change="value" type="beam" uuid="c3ce9fd5-7ce5-4605-aedf-6e46bf53aac8">
-			<bar_part action="value" cross_section_area="2640" cross_section_b="22" cross_section_h="120" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="13.327971954839057" load_duration_class="instant" material="C24" material_type="solid timber" moment_of_inertia_y="106480.0" moment_of_inertia_z="3168000.0" name="value" service_class="S2" uuid="value">
+		<bar action="value" last_change="value" type="beam" uuid="0cf3ea63-b8c0-4903-be3b-d4a63ed03ea6">
+			<bar_part action="value" cross_section_area="4290" cross_section_b="22" cross_section_h="195" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="14.482408355493527" load_duration_class="long" material="C40" material_type="solid timber" moment_of_inertia_y="173030.0" moment_of_inertia_z="13593937.5" name="value" service_class="S3" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
-					<end_point x="13.327971954839057" y="0" z="0"/>
+					<end_point x="14.482408355493527" y="0" z="0"/>
 				</curve>
 				<local_y x="value" y="value" z="value"/>
 				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
@@ -36,8 +36,350 @@
 					<physical x="value" y="value" z="value"/>
 				</eccentricity>
 			</bar_part>
-			<loads_part M_y="-228.27212326309228" M_z="391.3522940882011" N="7253.2101876762335" T="145335.99306792454" V="-8714.550265490341" uuid="placeholder"/>
-			<result_part bending_1="6.5236410793205915" bending_2="4.811106620229486" shear="2.3290397897161803" torsion="1.4078747465596264" uuid="placeholder"/>
+			<loads_part M_y="-108.95132203810985" M_z="-597.9894270045147" N="7654.994982180588" T="22772.06771934086" V="3290.985307179302" uuid="placeholder"/>
+			<result_part bending_1="3.9808837582474683" bending_2="2.968592894910857" shear="0.7121818716723693" torsion="0.1009514056668499" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="cd83b232-4d0f-44e0-8a2e-677bbbdb848a">
+			<bar_part action="value" cross_section_area="4275" cross_section_b="45" cross_section_h="95" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="14.1824519049377" load_duration_class="medium" material="C22" material_type="solid timber" moment_of_inertia_y="721406.25" moment_of_inertia_z="3215156.25" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="14.1824519049377" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="264.0323629492263" M_z="408.15251548122137" N="388.4336665773014" T="-27316.127830394875" V="-1398.9404015945483" uuid="placeholder"/>
+			<result_part bending_1="0.8500815171182983" bending_2="0.8054869686689465" shear="0.33069712149648556" torsion="0.3751020235877243" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="f20141cc-3a6b-46b0-9a73-2042756133fc">
+			<bar_part action="value" cross_section_area="8400" cross_section_b="70" cross_section_h="120" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="6.075686626765927" load_duration_class="permanent" material="C35" material_type="solid timber" moment_of_inertia_y="3430000.0" moment_of_inertia_z="10080000.0" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="6.075686626765927" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-631.6364817753532" M_z="452.3544951759495" N="-3950.4189007224745" T="-72212.07065894695" V="-6664.911600330054" uuid="placeholder"/>
+			<result_part bending_1="0.9210513190951279" bending_2="0.7429503466251368" shear="0.9055965007346741" torsion="0.4516925241365908" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="45107084-ef8d-4987-ad0e-2962ef51e79d">
+			<bar_part action="value" cross_section_area="990" cross_section_b="45" cross_section_h="22" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.2835034783830923" load_duration_class="medium" material="C40" material_type="solid timber" moment_of_inertia_y="167062.5" moment_of_inertia_z="39930.0" name="value" service_class="S1" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="3.2835034783830923" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="209.80119888082953" M_z="-327.9418986324446" N="592.1359961244632" T="70063.31419319408" V="6696.809414702416" uuid="placeholder"/>
+			<result_part bending_1="2.890387507888445" bending_2="3.472444387082761" shear="4.317453918164927" torsion="6.754940832725257" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="d718fa24-66cf-44ef-bdea-2784a51aff40">
+			<bar_part action="value" cross_section_area="1156" cross_section_b="34" cross_section_h="34" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="8.061196459996868" load_duration_class="medium" material="C40" material_type="solid timber" moment_of_inertia_y="111361.33333333333" moment_of_inertia_z="111361.33333333333" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="8.061196459996868" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-45.7439694115747" M_z="82.65880885677231" N="-6250.59211891497" T="187551.68197721383" V="-6540.971021528934" uuid="placeholder"/>
+			<result_part bending_1="0.7106718817061838" bending_2="0.7756943407643299" shear="4.444838515623215" torsion="18.53100695567833" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="903d8aec-755a-4d5d-8930-7bb1246d1420">
+			<bar_part action="value" cross_section_area="16150" cross_section_b="95" cross_section_h="170" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.9098885967914234" load_duration_class="medium" material="C24" material_type="solid timber" moment_of_inertia_y="12146145.833333334" moment_of_inertia_z="38894583.333333336" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="3.9098885967914234" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-231.77054428957325" M_z="371.8589733046111" N="-2899.1859955861933" T="-44424.079981664465" V="9041.096375104356" uuid="placeholder"/>
+			<result_part bending_1="0.14852942712967263" bending_2="0.13209060097447237" shear="0.5431091579703184" torsion="0.08685889139701088" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="1147a805-da62-4802-a616-c3c5bab17bca">
+			<bar_part action="value" cross_section_area="4275" cross_section_b="95" cross_section_h="45" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="12.506949620662876" load_duration_class="permanent" material="C50" material_type="solid timber" moment_of_inertia_y="3215156.25" moment_of_inertia_z="721406.25" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="12.506949620662876" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="607.1843769405502" M_z="782.490100647874" N="739.1291055771809" T="32876.60723489698" V="409.17498699376773" uuid="placeholder"/>
+			<result_part bending_1="1.0766614127417167" bending_2="1.265916800839627" shear="0.097743504654364" torsion="0.5608282994325469" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="40307be7-ba38-402c-93aa-a1da30aa18df">
+			<bar_part action="value" cross_section_area="3740" cross_section_b="22" cross_section_h="170" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.342761251751491" load_duration_class="long" material="C35" material_type="solid timber" moment_of_inertia_y="150846.66666666666" moment_of_inertia_z="9007166.666666666" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="3.342761251751491" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="301.05107808374834" M_z="229.85432580076247" N="-5676.1230901619" T="80219.20932211599" V="4413.827398621446" uuid="placeholder"/>
+			<result_part bending_1="1.2581398779125217" bending_2="0.9432101583256345" shear="0.962133500398048" torsion="0.41008035313117064" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="b5e302ac-b360-4f16-bea2-a4a2a021198c">
+			<bar_part action="value" cross_section_area="1972" cross_section_b="58" cross_section_h="34" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="4.447303545620745" load_duration_class="medium" material="C45" material_type="solid timber" moment_of_inertia_y="552817.3333333334" moment_of_inertia_z="189969.33333333334" name="value" service_class="S1" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="4.447303545620745" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="374.0230726906068" M_z="-49.42198674344418" N="4660.385198537247" T="-4216.40997378323" V="1855.396767557176" uuid="placeholder"/>
+			<result_part bending_1="0.7404273667084469" bending_2="0.6137771176799476" shear="0.6005163704431584" torsion="0.150008667400207" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="96c64f71-ca22-4360-aaad-e8919550b387">
+			<bar_part action="value" cross_section_area="9900" cross_section_b="45" cross_section_h="220" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="14.061668561715491" load_duration_class="long" material="C50" material_type="solid timber" moment_of_inertia_y="1670625.0" moment_of_inertia_z="39930000.0" name="value" service_class="S1" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="14.061668561715491" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-172.4317710640129" M_z="458.653195783363" N="-9128.576696842598" T="47098.6138137063" V="6366.645317137056" uuid="placeholder"/>
+			<result_part bending_1="0.45804064637146413" bending_2="0.34560894118163815" shear="0.4690966965286448" torsion="0.07168212148620204" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="487db974-08b4-4223-af69-3ebdfe3875fe">
+			<bar_part action="value" cross_section_area="2380" cross_section_b="70" cross_section_h="34" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="8.981464919445234" load_duration_class="long" material="C24" material_type="solid timber" moment_of_inertia_y="971833.3333333334" moment_of_inertia_z="229273.33333333334" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="8.981464919445234" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="480.15180006503454" M_z="75.56876171294266" N="-1210.6702929178903" T="25693.51278360581" V="-6322.704166804112" uuid="placeholder"/>
+			<result_part bending_1="1.609109077523301" bending_2="1.343446312575753" shear="3.748795556295837" torsion="1.4670117671177405" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="aabb9358-8d33-4f02-a3b6-398b7508d4d2">
+			<bar_part action="value" cross_section_area="5780" cross_section_b="34" cross_section_h="170" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="8.528826503507561" load_duration_class="medium" material="C20" material_type="solid timber" moment_of_inertia_y="556806.6666666666" moment_of_inertia_z="13920166.666666666" name="value" service_class="S1" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="8.528826503507561" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="112.90300806198329" M_z="-591.8562189079965" N="-7357.377183019194" T="-65794.4155608527" V="-3854.7667041525833" uuid="placeholder"/>
+			<result_part bending_1="0.4974737890930313" bending_2="0.501543244995707" shear="0.735234948360738" torsion="0.3325595975462205" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="0b3962fa-45d2-43a7-b15f-e164ad5eaf12">
+			<bar_part action="value" cross_section_area="8400" cross_section_b="70" cross_section_h="120" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="11.106733473098043" load_duration_class="instant" material="C45" material_type="solid timber" moment_of_inertia_y="3430000.0" moment_of_inertia_z="10080000.0" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="11.106733473098043" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="148.04278303699368" M_z="-561.7897915683939" N="-7891.536600525746" T="-76053.03739035936" V="-7738.383145620775" uuid="placeholder"/>
+			<result_part bending_1="0.09828040350432389" bending_2="0.1120944810913131" shear="0.4276251215431305" torsion="0.19347386490761767" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="fa51bb37-da05-40ef-a95f-9690ba46c20e">
+			<bar_part action="value" cross_section_area="2610" cross_section_b="58" cross_section_h="45" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="5.3958786375684085" load_duration_class="long" material="C35" material_type="solid timber" moment_of_inertia_y="731670.0" moment_of_inertia_z="440437.5" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="5.3958786375684085" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="219.88756510414493" M_z="-771.0892383512105" N="-6602.295663029873" T="-24059.488371227024" V="-6645.914269245043" uuid="placeholder"/>
+			<result_part bending_1="1.535311496042339" bending_2="1.9191287380357436" shear="2.0758970889824413" torsion="0.7372718473568561" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="0b6bcdef-61b2-4c19-9c18-b99099299811">
+			<bar_part action="value" cross_section_area="1530" cross_section_b="45" cross_section_h="34" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="6.293434869336967" load_duration_class="long" material="C14" material_type="solid timber" moment_of_inertia_y="258187.5" moment_of_inertia_z="147390.0" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="6.293434869336967" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="371.3655316013098" M_z="-792.156362136532" N="-6634.141378413525" T="-132080.97863891805" V="-2776.222394223453" uuid="placeholder"/>
+			<result_part bending_1="9.978481381750742" bending_2="11.784741785653432" shear="2.9585874487264525" torsion="18.022682735759417" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="91b2f9e7-469d-411f-9d5d-a330416b1fc8">
+			<bar_part action="value" cross_section_area="1972" cross_section_b="34" cross_section_h="58" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="9.620695805909785" load_duration_class="long" material="C35" material_type="solid timber" moment_of_inertia_y="189969.33333333334" moment_of_inertia_z="552817.3333333334" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="9.620695805909785" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="345.6969704727806" M_z="541.019551677584" N="6694.923017020711" T="8480.540306570461" V="-1984.4148132067207" uuid="placeholder"/>
+			<result_part bending_1="3.1530257077439265" bending_2="3.110226481977918" shear="1.0441249960006524" torsion="0.4248948120918581" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="9cd64d66-7494-4f0f-b565-8a4280ccca15">
+			<bar_part action="value" cross_section_area="1960" cross_section_b="70" cross_section_h="28" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="14.700590478352055" load_duration_class="instant" material="C27" material_type="solid timber" moment_of_inertia_y="800333.3333333334" moment_of_inertia_z="128053.33333333333" name="value" service_class="S2" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="14.700590478352055" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-457.23408936733387" M_z="760.5540713397886" N="4879.2675627196095" T="199772.96311678976" V="1106.7223402146897" uuid="placeholder"/>
+			<result_part bending_1="2.370533087040383" bending_2="3.12965118166117" shear="0.3557135742271027" torsion="6.459837925947965" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="b59d55f6-5203-4a92-b3b5-58e77ba2aa57">
+			<bar_part action="value" cross_section_area="4275" cross_section_b="45" cross_section_h="95" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="2.6531024779975896" load_duration_class="permanent" material="C27" material_type="solid timber" moment_of_inertia_y="721406.25" moment_of_inertia_z="3215156.25" name="value" service_class="S1" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="2.6531024779975896" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="705.9367923457888" M_z="350.7967113490489" N="-7713.113235742179" T="-192652.11815861575" V="4267.6137110309755" uuid="placeholder"/>
+			<result_part bending_1="1.9045938276295187" bending_2="1.5346912434551572" shear="1.1529440982930519" torsion="3.0234027654053066" uuid="placeholder"/>
+		</bar>
+		<bar action="value" last_change="value" type="beam" uuid="e619b5ae-dff1-493b-a06a-8ecc4806fccc">
+			<bar_part action="value" cross_section_area="4060" cross_section_b="58" cross_section_h="70" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="11.131995140238969" load_duration_class="instant" material="C22" material_type="solid timber" moment_of_inertia_y="1138153.3333333333" moment_of_inertia_z="1657833.3333333333" name="value" service_class="S3" uuid="value">
+				<curve type="placeholder">
+					<start_point x="0" y="0" z="0"/>
+					<end_point x="11.131995140238969" y="0" z="0"/>
+				</curve>
+				<local_y x="value" y="value" z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
+				<eccentricity use_default_physical_alignment="False">
+					<analytical x="0" y="0" z="0"/>
+					<analytical x="0" y="0" z="0"/>
+					<physical x="value" y="value" z="value"/>
+					<physical x="value" y="value" z="value"/>
+				</eccentricity>
+			</bar_part>
+			<loads_part M_y="-573.7146087939342" M_z="-131.91045121298544" N="5621.566137502138" T="-124366.67666863004" V="-7040.884713484747" uuid="placeholder"/>
+			<result_part bending_1="1.2365794761291102" bending_2="0.9853019409488791" shear="1.5578154192655653" torsion="2.0605877359173843" uuid="placeholder"/>
 		</bar>
 	</entities>
 </database>
