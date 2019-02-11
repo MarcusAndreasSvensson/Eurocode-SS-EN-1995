@@ -610,8 +610,7 @@ class StructuralUnit(TableValues, Sections):
 	def __init__(self):
 		super().__init__()
 		#TODO the UUID should be genrated when the instance is created, not assigned from database
-		#TODO I think a @classmethod ís very well suited for this
-		self.id = 666
+		self.id = "uuid from class call"
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
 		self.type = "solid timber"
