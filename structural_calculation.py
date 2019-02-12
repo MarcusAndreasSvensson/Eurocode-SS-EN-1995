@@ -605,10 +605,11 @@ class CoverUnit:
         self.contact_points = [] # [id, unit type (e.g. beam), coordinates]
 
 
-class StructuralUnit(TableValues, Sections):
+class StructuralUnit(Sections):
 
 	def __init__(self, uuid):
 		super().__init__()
+		self.table_values = TableValues()
 		
 		self.A = float()
 		self.A_ef = float()
@@ -1039,6 +1040,8 @@ class StructuralUnit(TableValues, Sections):
 		self.l = math.sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
 		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
 		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
+		self.k_mod = self.table_values.tabell_3_1(self.type, self.service_class, self.load_duration_class)
+		self.rho_k = self.table_values.material_values_timber(self.material, "rho_k")
 
 
 class SS_EN_1995_1_1():
@@ -1138,9 +1141,13 @@ class SS_EN_1995_1_1():
 
 	# Gäller solitt trä (f_m_k + f_t_0_k)
 	def ekv_3_1(self):
-		self.unit.rho_k = self.table_values.material_values_timber(self.unit.material, "rho_k")
-		self.unit.h = self.unit.dimensioner[1]
-
+		"""
+		Input variables:
+			self.unit.rho_k
+			self.unit.h
+		Output:
+			self.unit.k_h
+		"""
 		if self.unit.rho_k <= 700 and self.unit.h < 150:
 			self.unit.k_h = min(math.pow(150 / self.unit.h, 0.2), 1.3)
 		else:
@@ -1150,8 +1157,12 @@ class SS_EN_1995_1_1():
 
 	# Limträ (f_m_k + f_t_0_k)
 	def ekv_3_2(self):
-		self.unit.h = self.unit.dimensioner[1]
-
+		"""
+		Input variables:
+			self.unit.h
+		Output:
+			self.unit.k_h
+		"""
 		if self.unit.h < 600:
 			self.unit.k_h = min(math.pow(600 / self.unit.h, 0.1), 1.1)
 		else:
@@ -1161,8 +1172,13 @@ class SS_EN_1995_1_1():
 
     # LVL (f_m_k + f_t_0_k)
 	def ekv_3_3(self):
-		self.unit.h = self.unit.dimensioner[1]
-
+		"""
+		Input variables:
+			self.unit.h
+			self.unit.s
+		Output:
+			self.unit.k_h
+		"""
 		self.unit.s = "placeholder" #TODO fixa exponeneten
 
 		if self.unit.h < 300:
@@ -1174,7 +1190,13 @@ class SS_EN_1995_1_1():
 
 		# LVL, längd (f_m_k + f_t_0_k)
 	def ekv_3_4(self):
-
+		"""
+		Input variables:
+			self.unit.h
+			self.unit.s
+		Output:
+			self.unit.k_l
+		"""
 		if self.unit.l < 3000:
 			self.unit.k_l = min(math.pow(3000 / self.unit.l, (self.unit.s / 2)), 1.1)
 		else:
@@ -1183,6 +1205,12 @@ class SS_EN_1995_1_1():
 		return self.unit.k_l
 
 	def ekv_5_1(self):
+		"""
+		Input variables:
+			self.unit.h
+		Output:
+			self.unit.theta
+		"""
 		#TODO spåra upp var theta går in (finns inte i variabellistan)
 		if self.unit.h <= 5:
 			self.unit.theta = 0.0005
@@ -1192,13 +1220,24 @@ class SS_EN_1995_1_1():
 		return self.unit.theta
 
 	def ekv_5_2(self):
+		"""
+		Input variables:
+			self.unit.l
+		Output:
+			self.unit.e
+		"""
 		#TODO self.e finns inte i variabellistan
 		self.unit.e = 0.0025 * self.unit.l
 
-		return self.e
+		return self.unit.e
 
 	def ekv_6_1(self):
-		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		"""
+		Input variables:
+			self.unit.k_mod
+		Output:
+		"""
+		
 
 		self.unit.k_h = self.ekv_3_1()
 
