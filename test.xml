@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <database country="SWE" end_time="time_placeholder" hash="hash_placeholder" source_software="placeholder" start_time="time_placeholder" uuid="uuid_placeholder" version="version_placeholder" xmlns="urn:placeholder" xmlns:xsd="placeholder" xmlns:xsi="placeholder">
 	<entities>
-		<bar action="value" last_change="value" type="beam" uuid="0006f9c4-684c-47fa-8bfa-286f2fb35cb8">
-			<bar_part action="value" cross_section_area="748" cross_section_b="22" cross_section_h="34" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="0.7208800854612594" load_duration_class="medium" material="C27" material_type="solid timber" moment_of_inertia_y="30169.333333333332" moment_of_inertia_z="72057.33333333333" name="value" service_class="S2" uuid="value">
+		<bar action="value" last_change="value" type="beam" uuid="4f46571a-8d0e-4edb-ad2f-ee3d93d8e5dc">
+			<bar_part action="value" cross_section_area="990" cross_section_b="22" cross_section_h="45" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.360185362654211" load_duration_class="instant" material="C27" material_type="solid timber" moment_of_inertia_y="39930.0" moment_of_inertia_z="167062.5" name="value" service_class="S3" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
-					<end_point x="0.7208800854612594" y="0" z="0"/>
+					<end_point x="3.360185362654211" y="0" z="0"/>
 				</curve>
 				<local_y x="value" y="value" z="value"/>
 				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
@@ -17,14 +17,14 @@
 					<physical x="value" y="value" z="value"/>
 				</eccentricity>
 			</bar_part>
-			<loads_part M_y="578.2122561420307" M_z="-216.1236875531696" N="9129.338000017553" T="-4542.5700336161335" V="2683.9919905060115" uuid="placeholder"/>
-			<result_part bending_1="12.366164187338523" bending_2="10.14626710250098" shear="3.1081369683564617" torsion="0.8478286333257954" uuid="placeholder"/>
+			<loads_part M_y="321.58565522303826" M_z="-59.43193960845843" N="-3102.5610767951607" T="-70617.95800598252" V="-8904.086494685413" uuid="placeholder"/>
+			<result_part bending_1="3.9869755684088344" bending_2="2.9703841709304264" shear="6.925038374201047" torsion="6.745878571227003" uuid="placeholder"/>
 		</bar>
-		<bar action="value" last_change="value" type="beam" uuid="b944e307-df76-489c-bdd6-bdaade3f1425">
-			<bar_part action="value" cross_section_area="11900" cross_section_b="70" cross_section_h="170" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="4.352555599674091" load_duration_class="permanent" material="C22" material_type="solid timber" moment_of_inertia_y="4859166.666666667" moment_of_inertia_z="28659166.666666668" name="value" service_class="S3" uuid="value">
+		<bar action="value" last_change="value" type="beam" uuid="a1b52edd-f96d-46da-b88c-0c1591bb295a">
+			<bar_part action="value" cross_section_area="6960" cross_section_b="58" cross_section_h="120" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="10.280348281355376" load_duration_class="long" material="C20" material_type="solid timber" moment_of_inertia_y="1951120.0" moment_of_inertia_z="8352000.0" name="value" service_class="S1" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
-					<end_point x="4.352555599674091" y="0" z="0"/>
+					<end_point x="10.280348281355376" y="0" z="0"/>
 				</curve>
 				<local_y x="value" y="value" z="value"/>
 				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
@@ -36,8 +36,8 @@
 					<physical x="value" y="value" z="value"/>
 				</eccentricity>
 			</bar_part>
-			<loads_part M_y="688.6034744427699" M_z="185.04036154138905" N="-4848.019721615784" T="-54138.90440718596" V="1092.9442746597106" uuid="placeholder"/>
-			<result_part bending_1="0.634379888344973" bending_2="0.4779856616192961" shear="0.14850407176905636" torsion="0.23579911569036932" uuid="placeholder"/>
+			<loads_part M_y="-217.66741714086902" M_z="-674.3574006666117" N="5809.230840681148" T="-59160.3502215706" V="4623.674532944619" uuid="placeholder"/>
+			<result_part bending_1="1.0191057921931206" bending_2="0.9698436494194802" shear="0.8370007459383565" torsion="0.4930255125262011" uuid="placeholder"/>
 		</bar>
 	</entities>
 </database>

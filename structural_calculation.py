@@ -1041,10 +1041,11 @@ class StructuralUnit(TableValues, Sections):
 		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
 
 
-class SS_EN_1995_1_1(TableValues):
+class SS_EN_1995_1_1():
 
 	def __init__(self):
 		super().__init__()
+		self.table_values = TableValues()
 
 	def ekv_2_1(self, K_u, K_ser):
 		K_u = 2/3 * K_ser
@@ -1137,7 +1138,7 @@ class SS_EN_1995_1_1(TableValues):
 
 	# Gäller solitt trä (f_m_k + f_t_0_k)
 	def ekv_3_1(self):
-		self.unit.rho_k = self.material_values_timber(self.unit.material, "rho_k")
+		self.unit.rho_k = self.table_values.material_values_timber(self.unit.material, "rho_k")
 		self.unit.h = self.unit.dimensioner[1]
 
 		if self.unit.rho_k <= 700 and self.unit.h < 150:
@@ -1197,13 +1198,13 @@ class SS_EN_1995_1_1(TableValues):
 		return self.e
 
 	def ekv_6_1(self):
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
-		self.unit.f_t_0_k = self.material_values_timber(self.unit.material, "f_t_0_k")
+		self.unit.f_t_0_k = self.table_values.material_values_timber(self.unit.material, "f_t_0_k")
 
 
 		self.unit.sigma_t_0_d = self.ekv_6_36()
@@ -1216,11 +1217,11 @@ class SS_EN_1995_1_1(TableValues):
 		return kontroll
 
 	def ekv_6_2(self):
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
 
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.f_c_0_k / self.unit.gamma_M
@@ -1239,11 +1240,11 @@ class SS_EN_1995_1_1(TableValues):
 		#TODO self.f_c_90_k finns, men inte d
 		#TODO sigma_c_90_d finns inte i varibaellistan, men i ekv 6.4
 		#TODO self.k_c_90 finns inte
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
-		self.unit.f_c_90_k = self.material_values_timber(self.unit.material, "f_c_90_k")
+		self.unit.f_c_90_k = self.table_values.material_values_timber(self.unit.material, "f_c_90_k")
 
 		self.unit.f_c_90_d = self.unit.k_mod * self.unit.f_c_90_k / self.unit.gamma_M
 
@@ -1251,7 +1252,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_c_90_d = self.ekv_6_4()
 
 		#TODO skapa logik till detta val
-		self.unit.k_c_90_d = self.avsnitt_6_1_5("continuous support", "Solid softwood")
+		self.unit.k_c_90_d = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood")
 
 
 		kontroll = self.unit.sigma_c_90_d / (self.unit.k_c_90_d * self.unit.f_c_90_d)
@@ -1290,15 +1291,15 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_11(self):
 		#TODO slutkontroll
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
-		self.unit.k_h = self.ekv_3_1()
+		self.unit.k_h = self.table_values.ekv_3_1()
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		#print("fmyd", self.f_m_y_d)
@@ -1316,7 +1317,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
 		#print("sigmamzd", self.sigma_m_z_d)
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
@@ -1326,11 +1327,11 @@ class SS_EN_1995_1_1(TableValues):
 		#TODO slutkontroll
 
 		# Declaring necessary variables
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 		self.unit.k_h = self.ekv_3_1()
 		#TODO add k_sys (I don't understand excactly)
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		# 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1341,7 +1342,7 @@ class SS_EN_1995_1_1(TableValues):
 
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.dimensioner[1]/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.dimensioner[1]/-2 * 10e2 / self.unit.I_z)
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		
@@ -1349,13 +1350,13 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_13(self):
 		#TODO det verkar vara andra värden för fvk i femdesign
-		self.unit.f_v_k = self.material_values_timber(self.unit.material, "f_v_k")
+		self.unit.f_v_k = self.table_values.material_values_timber(self.unit.material, "f_v_k")
 		#print("fvk", self.f_v_k)
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 		#print("gammam", self.gamma_M)
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 		#print("fvd", self.f_v_d)
@@ -1391,11 +1392,11 @@ class SS_EN_1995_1_1(TableValues):
 		return self.unit.b_ef
 
 	def ekv_6_14(self):
-		self.unit.f_v_k = self.material_values_timber(self.unit.material, "f_v_k")
+		self.unit.f_v_k = self.table_values.material_values_timber(self.unit.material, "f_v_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 
@@ -1439,18 +1440,18 @@ class SS_EN_1995_1_1(TableValues):
 	def ekv_6_17(self):
 		#TODO kontrollera ekvation
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_t_0_k = self.material_values_timber(self.unit.material, "f_t_0_k")
+		self.unit.f_t_0_k = self.table_values.material_values_timber(self.unit.material, "f_t_0_k")
 
 
 
@@ -1469,7 +1470,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.dimensioner[1]/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.dimensioner[1]/-2 * 10e2 / self.unit.I_z)
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
@@ -1478,18 +1479,18 @@ class SS_EN_1995_1_1(TableValues):
 	def ekv_6_18(self):
 		#TODO kontrollera ekvation
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_t_0_k = self.material_values_timber(self.unit.material, "f_t_0_k")
+		self.unit.f_t_0_k = self.table_values.material_values_timber(self.unit.material, "f_t_0_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1507,7 +1508,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_t_0_d = self.ekv_6_36()
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
@@ -1518,18 +1519,18 @@ class SS_EN_1995_1_1(TableValues):
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		#print("dself.k_mod", self.k_mod, "self.k_h", self.k_h, "elf.f_m_k", self.f_m_k, "self.gamma_M)", self.gamma_M)
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1549,7 +1550,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1560,18 +1561,18 @@ class SS_EN_1995_1_1(TableValues):
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1589,7 +1590,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 
 		kontroll = math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
@@ -1599,14 +1600,14 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_21(self):
 		#TODO self.f_c_0_k finns inte i varibellistan
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.E_0_05 = self.material_values_timber(self.unit.material, "E_0_05")
+		self.unit.E_0_05 = self.table_values.material_values_timber(self.unit.material, "E_0_05")
 
 		#####################################
 		i_y = math.sqrt(self.unit.A / self.unit.I_y)
 
-		self.unit.l_c = self.effektiv_längd_placeholder("ledadx2", self.unit.l) #TODO implementera funktion när den skapas
+		self.unit.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.unit.l) #TODO implementera funktion när den skapas
 
 		self.unit.lambda_y = self.unit.l_c / i_y
 
@@ -1618,14 +1619,14 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_22(self):
 		#TODO self.f_c_0_k finns inte i varibellistan
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.E_0_05 = self.material_values_timber(self.unit.material, "E_0_05")
+		self.unit.E_0_05 = self.table_values.material_values_timber(self.unit.material, "E_0_05")
 
 		#####################################
 		i_z = math.sqrt(self.unit.A / self.unit.I_z)
 
-		self.unit.l_c = self.effektiv_längd_placeholder("ledadx2", self.unit.l) #TODO implementera funktion när den skapas
+		self.unit.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.unit.l) #TODO implementera funktion när den skapas
 
 		self.unit.lambda_z = self.unit.l_c / i_z
 
@@ -1639,7 +1640,7 @@ class SS_EN_1995_1_1(TableValues):
 		#TODO kontrollera ekvation
 		#print("ekv623")
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
@@ -1648,11 +1649,11 @@ class SS_EN_1995_1_1(TableValues):
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1670,7 +1671,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 		kontroll = math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.sunit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1680,18 +1681,18 @@ class SS_EN_1995_1_1(TableValues):
 	def ekv_6_24(self):
 		#TODO kontrollera ekvation
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
 
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.f_c_0_k = self.material_values_timber(self.unit.material, "f_c_0_k")
+		self.unit.f_c_0_k = self.table_values.material_values_timber(self.unit.material, "f_c_0_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		self.unit.k_c_z = self.ekv_6_26()
 
@@ -1711,7 +1712,7 @@ class SS_EN_1995_1_1(TableValues):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 
-		self.unit.k_m = self.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
+		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
 
 
 		kontroll = math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
@@ -1763,7 +1764,7 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_30(self):
 		#TODO self.lambda_rel_m finns inte i varibaellistan
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
 		self.unit.sigma_m_crit = self.ekv_6_31()
 
@@ -1775,14 +1776,14 @@ class SS_EN_1995_1_1(TableValues):
 
 	def ekv_6_31(self):
 		#TODO self.M_y_crit finns inte i varibalellistan
-		self.unit.E_0_05 = self.material_values_timber(self.unit.material, "E_0_05")
+		self.unit.E_0_05 = self.table_values.material_values_timber(self.unit.material, "E_0_05")
 
 		#TODO ändra till G,005 ist för gmean
-		self.unit.G_0_05 = self.material_values_timber(self.unit.material, "G_mean")
+		self.unit.G_0_05 = self.table_values.material_values_timber(self.unit.material, "G_mean")
 
 		self.unit.I_tor = self.unit.I_z + self.unit.I_y
 
-		self.unit.l_ef = self.tabell_6_1(self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
+		self.unit.l_ef = self.table_values.tabell_6_1(self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
 
 		################################
 
@@ -1808,13 +1809,13 @@ class SS_EN_1995_1_1(TableValues):
 	def ekv_6_33(self):
 		#TODO self.sigma_m_d finns inte i variabellistan
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		#print("fmzd", self.f_m_z_d)
@@ -1860,13 +1861,13 @@ class SS_EN_1995_1_1(TableValues):
 
 		#TODO self.sigma_m_d finns inte i variabellistan
 
-		self.unit.k_mod = self.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
+		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 
 		self.unit.k_h = self.ekv_3_1()
 
-		self.unit.f_m_k = self.material_values_timber(self.unit.material, "f_m_k")
+		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
 
-		self.unit.gamma_M = self.tabell_2_3(self.unit.type)
+		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
 
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		#print("fmzd", self.f_m_z_d)
