@@ -36,7 +36,8 @@ def calc_func_test(i):
 
             #Prepares and calculates the instances equations
             data.members[data.id]["object_instance"].prepare_for_calculation()
-            data.save_result(data.id, data.members[data.id]["object_instance"].start_calculation())
+            data.ULS_timber.set_unit(data.members[data.id]["object_instance"])
+            data.save_result(data.id, data.ULS_timber.start_calculation())
 
         except TypeError:
             assert (type(data.members[data.id]["object_instance"].M_y) == int() or float()
@@ -69,13 +70,12 @@ def parse_xml_test():
 
 if __name__ == "__main__":
     data = Database()
-    bar_unit = StructuralUnit()
 
     #xml = dicttoxml(bar_unit._prepare_for_xml(), attr_type=False)
     #dom = parseString(xml)
     #print(dom.toprettyxml())
 
-    calc_func_test(1)
+    calc_func_test(2)
     #print(bar_unit._prepare_for_xml())
     create_xml_test()
     #parser = parse_xml_test()
