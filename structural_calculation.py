@@ -1050,6 +1050,7 @@ class StructuralUnit(Sections):
 		self.A_ef = 100 * 100 # TODO placeholder. Lägg in geometri från anliggande element + logik
 		self.f_m_k = self.table_values.material_values_timber(self.material, "f_m_k")
 		self.k_m = self.table_values.avsnitt_6_1_6_2(self.tvärsnitt, self.type)
+		self.f_v_k = self.table_values.material_values_timber(self.material, "f_v_k")
 		
 
 
@@ -1329,9 +1330,9 @@ class SS_EN_1995_1_1():
 			self.unit.f_m_z_d
 			self.unit.sigma_m_y_d
 			self.unit.M_y
-			self.unit.dimensioner[0]
+			self.unit.b
 			self.unit.I_y
-			self.unit.dimensioner[1]
+			self.unit.h
 			self.unit.I_y
 			self.unit.sigma_m_z_d
 			self.unit.M_z
@@ -1346,104 +1347,109 @@ class SS_EN_1995_1_1():
 		#TODO lägga in k_sys (Jag förstår inte riktigt)
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.dimensioner[0]/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.dimensioner[1]/-2) * 10e2 / self.unit.I_y)
+		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
 
 		return self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_12(self):
+		"""
+		Variables used:
+			self.unit.k_mod
+			self.unit.f_m_k
+			self.unit.gamma_M
+			self.unit.k_h
+			self.unit.f_m_y_d
+			self.unit.f_m_z_d
+			self.unit.sigma_m_y_d
+			self.unit.M_y
+			self.unit.b
+			self.unit.I_y
+			self.unit.h
+			self.unit.sigma_m_z_d
+			self.unit.M_z
+			self.unit.I_z
+			self.unit.k_m
+		Output:
+			self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
+		"""
 		#TODO slutkontroll
-
-		# Declaring necessary variables
-		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
 		self.unit.k_h = self.ekv_3_1()
 		#TODO add k_sys (I don't understand excactly)
-		self.unit.f_m_k = self.table_values.material_values_timber(self.unit.material, "f_m_k")
-		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
-
-		# 
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-
 		#TODO fattar inte varför 10e2 och inte 10e3
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.dimensioner[0]/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.dimensioner[1]/-2) * 10e2 / self.unit.I_y)
+		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
+		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.dimensioner[1]/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.dimensioner[1]/-2 * 10e2 / self.unit.I_z)
-
-		self.unit.k_m = self.table_values.avsnitt_6_1_6_2(self.unit.tvärsnitt, self.unit.type)
-
-		kontroll = self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
-		
-		return kontroll
+		return self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_13(self):
-		#TODO det verkar vara andra värden för fvk i femdesign
-		self.unit.f_v_k = self.table_values.material_values_timber(self.unit.material, "f_v_k")
-		#print("fvk", self.f_v_k)
-
-		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
-		#print("gammam", self.gamma_M)
-
-		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
-
+		"""
+		Variables used:
+			self.unit.f_v_k
+			self.unit.gamma_M
+			self.unit.k_mod
+			self.unit.f_v_d
+			self.unit.b_ef
+			A_ef
+			self.unit.h
+			self.unit.tao_d
+			self.unit.V
+		Output:
+			abs(self.unit.tao_d / self.unit.f_v_d)
+		"""
+		#TODO seems to be different values for fvk in FEMDesign
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
-		#print("fvd", self.f_v_d)
-
-		#############################
 		self.unit.b_ef = self.ekv_6_13_a()
-
-		A_ef = self.unit.b_ef * self.unit.dimensioner[1]
-
+		A_ef = self.unit.b_ef * self.unit.h
 		self.unit.tao_d = self.unit.V / A_ef
-		#print("taod", self.tao_d)
+		#TODO there's a clause (3) about support that's not in the Eurocode (I Guess it's in FEMDesign)
 
-		##############################
-		kontroll = abs(self.unit.tao_d / self.unit.f_v_d)
-
-		#TODO det finns en klausul (3) om supports som inte är i koden
-
-		return kontroll
+		return abs(self.unit.tao_d / self.unit.f_v_d)
 
 	def ekv_6_13_a(self):
+		"""
+		Variables used:
+			self.unit.type
+			self.unit.k_cr
+		Output:
+			self.unit.b_ef
+		"""
 		#TODO self.b_ef finns inte i variabellistan
-
-		# k_cr kan ha nationellt annex
+		# k_cr is subject to national annexes
 		if self.unit.type == "solid timber" or self.unit.type == "glued laminated timber":
 		    self.unit.k_cr = 0.67
 		else:
 		    self.unit.k_cr = 1
-
-		self.unit.b = self.unit.dimensioner[0]
 
 		self.unit.b_ef = self.unit.k_cr * self.unit.b
 
 		return self.unit.b_ef
 
 	def ekv_6_14(self):
-		self.unit.f_v_k = self.table_values.material_values_timber(self.unit.material, "f_v_k")
-
-		self.unit.gamma_M = self.table_values.tabell_2_3(self.unit.type)
-
-		self.unit.k_mod = self.table_values.tabell_3_1(self.unit.type, self.unit.service_class, self.unit.load_duration_class)
-
+		"""
+		Variables used:
+			self.unit.f_v_k
+			self.unit.gamma_M
+			self.unit.k_mod
+			self.unit.f_v_d
+			self.unit.k_shape
+			self.unit.I_tor
+			self.unit.I_y
+			self.unit.I_z
+			self.unit.tao_tor_d
+			self.unit.T
+			self.unit.r
+		Output:
+			abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
+		"""
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
-
-		###################################
-
 		self.unit.k_shape = self.ekv_6_15()
-
-		####################
-
 		self.unit.I_tor = self.unit.I_y + self.unit.I_z
-
-		#print("r", self.r)
-
 		self.unit.tao_tor_d = self.unit.T * self.unit.r / self.unit.I_tor
 
-		####################
-		kontroll = abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
-
-		return kontroll
+		return abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 
 	def ekv_6_15(self):
 		#TODO gör en allmän formel för alla geometrier
