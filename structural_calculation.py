@@ -1,6 +1,8 @@
 import math
+from math import sqrt
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy import array
 from mpl_toolkits.mplot3d import Axes3D
 from collections import namedtuple
 from uuid import uuid4
@@ -924,10 +926,10 @@ class StructuralUnit(Sections):
 
 
 	def _prepare_for_xml(self, file_size="large"):
-		"""Rerturns -xml formatted string.
+		"""Returns .xml formatted string.
 
 		File_size: String; Whether complete information about the cross section 
-						   or a compressed representation is to exported.
+						   or a compressed representation is to be exported.
 
 		Return: String; 
 		"""
@@ -1059,15 +1061,15 @@ class StructuralUnit(Sections):
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
 		self.b = self.dimensioner[0]
-		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
+		self.r = sqrt(pow(self.h,2) + pow(self.b,2))
 		self.A = self.dimensioner[0] * self.dimensioner[1]
 		self.I_y = pow(self.dimensioner[0], 3) * self.dimensioner[1] / 12
 		self.I_z = pow(self.dimensioner[1], 3) * self.dimensioner[0] / 12
 
-		self.koordinater = np.array([self.start_point, self.end_point])
-		self.l = math.sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
-		                   pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
-		                   pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
+		self.koordinater = array([self.start_point, self.end_point])
+		self.l = sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
+		              pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
+		              pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
 		self.k_mod = self.table_values.tabell_3_1(self.type, self.service_class, self.load_duration_class)
 		self.rho_k = self.table_values.material_values_timber(self.material, "rho_k")
 		self.gamma_M = self.table_values.tabell_2_3(self.type)
@@ -2963,9 +2965,7 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		"""
 		Calculates the relevant equations and returns a namedtuple
 		"""
-
 		#TODO tryck_90
-
 		if self.unit.N == 0:
 			_B = self.böjning()
 		elif self.unit.N > 0:
@@ -2985,19 +2985,15 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_T = 0
 
 		#TODO kompression i vinkel
-
 		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
-		resultat = resultat_ntuple(_B, _V, _T)
 
-		return resultat
+		return resultat_ntuple(_B, _V, _T)
 
 	# 1 Stress one direction ===============
 
 	# 6.1.2
 	def drag_0(self):
-		res_6_1 = self.ekv_6_1()
-
-		return res_6_1
+		return self.ekv_6_1()
 
 	# 6.1.3
 	def drag_90(self):
@@ -3005,86 +3001,56 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
 	# 6.1.4
 	def tryck_0(self):
-		res_6_2 = self.ekv_6_2()
-
+		return self.ekv_6_2()
 		#TODO lägg in modul för stabilitet (6.3.2), om column
-
-		return res_6_2
 
 	# 6.1.5
 	def tryck_90(self):
-		res_6_3 = self.ekv_6_3()
-
+		return self.ekv_6_3()
 		#TODO lägg in modul för stabilitet (6.3.2), om column
-
-
-		return res_6_3
 
 	# 6.1.6
 	def böjning(self):
-		res_6_11 = self.ekv_6_11()
-		res_6_12 = self.ekv_6_12()
-
+		return self.ekv_6_11(), self.ekv_6_12()
 		#TODO lägg in modul för stabilitet (6.3.3), om beam
-
-		return res_6_11, res_6_12
 
 	# 6.1.7
 	def tvärkraft(self):
-		#TODO tvärkrfaft verkar vara fel
-		res_6_13 = self.ekv_6_13()
-
-		return res_6_13
+		#TODO tvärkraft verkar vara fel
+		return self.ekv_6_13()
 
 	# 6.1.8
 	def vridning(self):
-		res_6_14 = self.ekv_6_14()
-
-		return res_6_14
+		return self.ekv_6_14()
 
 	# 2 Combined stresses ===================
 
 	# 6.2.2
 	def kompression_i_vinkel(self):
 		#TODO lägg in modul för stabilitet (6.3.2), om column
-
 		pass
 
 	# 6.2.3
 	def böjning_och_drag(self):
-		res_6_17 = self.ekv_6_17()
-		res_6_18 = self.ekv_6_18()
-
 		#TODO lägg in modul för stabilitet (6.3.3), om beam
-
-		return res_6_17, res_6_18
+		return self.ekv_6_17(), self.ekv_6_18()
 
 	# 6.2.4
 	def böjning_och_tryck(self):
-		res_6_19 = self.ekv_6_19()
-		res_6_20 = self.ekv_6_20()
-
 		#TODO lägg in modul för stabilitet (6.3.2), om column
 		#TODO lägg in modul för stabilitet (6.3.3), om beam
-
-		return res_6_19, res_6_20
+		return self.ekv_6_19(), self.ekv_6_20()
 
 	# 3 Stability of members ================
 
 	# 6.3.2
 	def slankhet_pelare_kompression(self):
-		self.lambda_rel_y = self.ekv_6_21()
-		self.lambda_rel_z = self.ekv_6_22()
+		self.lambda_rel_y, self.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
 
 		if self.lambda_rel_z <= 0.3 and self.lambda_rel_y <= 0.3:
-			res_1 = self.ekv_6_19()
-			res_2 = self.ekv_6_20()
+			return self.ekv_6_19(), self.ekv_6_20()
 		else:
-			res_1 = self.ekv_6_23()
-			res_2 = self.ekv_6_24()
-
-
-		return res_1, res_2
+			return self.ekv_6_23(), self.ekv_6_24()
 
 	# 6.3.3
 	def slankhet_balk_böj(self):
