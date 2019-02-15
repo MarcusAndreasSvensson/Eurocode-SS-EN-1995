@@ -616,6 +616,7 @@ class StructuralUnit(Sections):
 		self.A_f = float()
 		self.A_net_v = float()
 		self.C = float()
+		self.E = float()
 		self.E_0_05 = float()
 		self.E_d = float()
 		self.E_mean = float()
@@ -627,6 +628,7 @@ class StructuralUnit(Sections):
 		self.F_ax_Rd = float()
 		self.F_ax_Rk = float()
 		self.F_c = float()
+		self.F_c_90_d = float()
 		self.F_d = float()
 		self.F_d_ser = float()
 		self.F_Rd = float()
@@ -654,6 +656,7 @@ class StructuralUnit(Sections):
 		self.G_mean = float()
 		self.G_mean_fin = float()
 		self.H = float()
+		self.I = float()
 		self.I_f = float()
 		self.I_tor = float()
 		self.I_z = float()
@@ -665,6 +668,7 @@ class StructuralUnit(Sections):
 		self.M_A_Ed = float()
 		self.M_ap_d = float()
 		self.M_d = float()
+		self.M_y_crit = float()
 		self.M_y_Rk = float()
 		self.N = float()
 		self.R_90_d = float()
@@ -680,11 +684,13 @@ class StructuralUnit(Sections):
 		self.R_to_k = float()
 		self.R_v_d = float()
 		self.V = float()
+		self.V_0 = float()
 		self.V_u = float()
 		self.V_I = float()
 		self.W_y = float()
 		self.X_d = float()
 		self.X_k = float()
+		# Lowercase
 		self.a = float()
 		self.a_1 = float()
 		self.a_1_CG = float()
@@ -697,6 +703,7 @@ class StructuralUnit(Sections):
 		self.a_bow = float()
 		self.a_bow_perm = float()
 		self.b = float()
+		self.b_ef = float()
 		self.b_i = float()
 		self.b_net = float()
 		self.b_w = float()
@@ -705,11 +712,14 @@ class StructuralUnit(Sections):
 		self.d_c = float()
 		self.d_ef = float()
 		self.d_h = float()
+		self.e = float()
+		self.f_1 = float()
 		self.f_h_i_k = float()
 		self.f_a_0_0 = float()
 		self.f_a_90_90 = float()
 		self.f_a_alpha_beta_k = float()
 		self.f_ax_k = float()
+		self.f_c_0_k = float()
 		self.f_c_0_d = float()
 		self.f_c_w_d = float()
 		self.f_f_c_d = float()
@@ -720,6 +730,7 @@ class StructuralUnit(Sections):
 		self.f_head_k = float()
 		self.f_I = float()
 		self.f_m_k = float()
+		self.f_m_d = float()
 		self.f_m_y_d = float()
 		self.f_m_z_d = float()
 		self.f_m_alpha_d = float()
@@ -736,7 +747,6 @@ class StructuralUnit(Sections):
 		self.h_ap = float()
 		self.h_d = float()
 		self.h_e = float()
-		#self.h = float(), det var två som hette h (?)
 		self.h_ef = float()
 		self.h_f_c = float()
 		self.h_f_t = float()
@@ -744,6 +754,10 @@ class StructuralUnit(Sections):
 		self.h_ru = float()
 		self.h_w = float()
 		self.i = float()
+		self.k_5 = float()
+		self.k_6 = float()
+		self.k_7 = float()
+		self.k_c_90 = float()
 		self.k_c_y = float()
 		self.k_c_z = float()
 		self.k_cr = float()
@@ -757,8 +771,10 @@ class StructuralUnit(Sections):
 		self.k_h = float()
 		self.k_i_q = float()
 		self.k_m = float()
+		self.k_m_alpha = float()
 		self.k_mod = float()
 		self.k_n = float()
+		self.k_p = float()
 		self.k_r = float()
 		self.k_R_red = float()
 		self.k_s = float()
@@ -802,24 +818,33 @@ class StructuralUnit(Sections):
 		self.w_net_fin = float()
 		self.v = float()
 		self.alpha = float()
+		self.alpha_ap = float()
 		self.beta = float()
 		self.beta_c = float()
 		self.gamma = float()
 		self.gamma_M = float()
 		self.lambda_y = float()
 		self.lambda_z = float()
+		self.lambda_rel_m = float()
 		self.lambda_rel_y = float()
 		self.lambda_rel_z = float()
 		self.rho_a = float()
 		self.rho_k = float()
 		self.rho_m = float()
 		self.sigma_c_0_d = float()
+		self.sigma_c_90_d = float()
 		self.sigma_c_alpha_d = float()
 		self.sigma_f_c_d = float()
 		self.sigma_f_c_max_d = float()
 		self.sigma_f_t_d = float()
 		self.sigma_f_t_max_d = float()
+		self.sigma_k_1 = float()
+		self.sigma_k_2 = float()
+		self.sigma_k_3 = float()
+		self.sigma_k_4 = float()
 		self.sigma_m_crit = float()
+		self.sigma_m_d = float()
+		self.sigma_m_0_d = float()
 		self.sigma_m_y_d = float()
 		self.sigma_m_z_d = float()
 		self.sigma_m_alpha_d = float()
@@ -832,8 +857,11 @@ class StructuralUnit(Sections):
 		self.tao_F_d = float()
 		self.tao_M_d = float()
 		self.tao_tor_d = float()
+		self.theta = float()
 		self.psi_0 = float()
 		self.psi_2 = float()
+		self.w = float()
+		self.x = float()
 		self.xi = float()
 
 		#TODO the UUID should be genrated when the instance is created, not assigned from database
@@ -1055,8 +1083,6 @@ class StructuralUnit(Sections):
 		self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
 
-		
-
 
 class SS_EN_1995_1_1():
 
@@ -1151,8 +1177,7 @@ class SS_EN_1995_1_1():
 
 	def ekv_2_17(self):
 		self.R_d = self.k_mod * self.R_k / self.gamma_M
-
-	# Gäller solitt trä (f_m_k + f_t_0_k)
+	
 	def ekv_3_1(self):
 		"""
 		Input variables:
@@ -1161,6 +1186,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_h
 		"""
+		# Gäller solitt trä (f_m_k + f_t_0_k)
 		if self.unit.rho_k <= 700 and self.unit.h < 150:
 			self.unit.k_h = min(math.pow(150 / self.unit.h, 0.2), 1.3)
 		else:
@@ -1168,7 +1194,6 @@ class SS_EN_1995_1_1():
 
 		return self.unit.k_h
 
-	# Limträ (f_m_k + f_t_0_k)
 	def ekv_3_2(self):
 		"""
 		Input variables:
@@ -1176,6 +1201,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_h
 		"""
+		# Limträ (f_m_k + f_t_0_k)
 		if self.unit.h < 600:
 			self.unit.k_h = min(math.pow(600 / self.unit.h, 0.1), 1.1)
 		else:
@@ -1183,7 +1209,6 @@ class SS_EN_1995_1_1():
 
 		return self.unit.k_h
 
-    # LVL (f_m_k + f_t_0_k)
 	def ekv_3_3(self):
 		"""
 		Input variables:
@@ -1192,6 +1217,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_h
 		"""
+		# LVL (f_m_k + f_t_0_k)
 		self.unit.s = "placeholder" #TODO fixa exponeneten
 
 		if self.unit.h < 300:
@@ -1201,7 +1227,6 @@ class SS_EN_1995_1_1():
 
 		return self.unit.k_h
 
-		# LVL, längd (f_m_k + f_t_0_k)
 	def ekv_3_4(self):
 		"""
 		Input variables:
@@ -1210,6 +1235,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_l
 		"""
+		# LVL, längd (f_m_k + f_t_0_k)
 		if self.unit.l < 3000:
 			self.unit.k_l = min(math.pow(3000 / self.unit.l, (self.unit.s / 2)), 1.1)
 		else:
@@ -1224,7 +1250,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.theta
 		"""
-		#TODO spåra upp var theta går in (finns inte i variabellistan)
+		#TODO spåra upp var theta går in 
 		if self.unit.h <= 5:
 			self.unit.theta = 0.0005
 		elif self.unit.h > 5:
@@ -1239,7 +1265,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.e
 		"""
-		#TODO self.e finns inte i variabellistan
 		self.unit.e = 0.0025 * self.unit.l
 
 		return self.unit.e
@@ -1283,9 +1308,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.sigma_c_90_d / (self.unit.k_c_90_d * self.unit.f_c_90_d)
 		"""
-		#TODO self.f_c_90_k finns, men inte d
-		#TODO sigma_c_90_d finns inte i varibaellistan, men i ekv 6.4
-		#TODO self.k_c_90 finns inte
 		self.unit.f_c_90_d = self.unit.k_mod * self.unit.f_c_90_k / self.unit.gamma_M
 		self.unit.sigma_c_90_d = self.ekv_6_4()
 		
@@ -1298,7 +1320,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.sigma_c_90_d
 		"""
-		#TODO self.F_c_90_d finns inte i variabellistan
 		self.F_c_90_d = 19000 # TODO placeholder. Lägg in krafer från andra element + logik
 		self.unit.sigma_c_90_d = self.unit.F_c_90_d / self.unit.A_ef
 
@@ -1419,7 +1440,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.b_ef
 		"""
-		#TODO self.b_ef finns inte i variabellistan
 		# k_cr is subject to national annexes
 		if self.unit.type == "solid timber" or self.unit.type == "glued laminated timber":
 		    self.unit.k_cr = 0.67
@@ -1481,8 +1501,6 @@ class SS_EN_1995_1_1():
 		Output:
 			Bool
 		"""
-		#TODO self.k_c_90 finns inte i variabellistan
-		#TODO self.f_c_90_d finns inte i variabellistan, men i en annan funktion tror jag
 		#TODO kontrollera ekvationen
 		if self.unit.sigma_c_alpha_d <= self.unit.f_c_0_d / ((self.unit.f_c_0_d / (self.unit.k_c_90 * self.unit.f_c_90_d)) * (math.pow(math.sin(self.unit.alpha), 2) + math.pow(math.cos(self.unit.alpha), 2))):
 			return True
@@ -1652,7 +1670,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.lambda_rel_y
 		"""
-		#TODO self.f_c_0_k finns inte i variabellistan
 		self.i_y = math.sqrt(self.A / self.I_y)
 		self.lambda_y = self.l_c / self.i_y
 		self.unit.lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
@@ -1669,7 +1686,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.lambda_rel_z
 		"""
-		#TODO self.f_c_0_k finns inte i varibellistan
 		self.unit.i_z = math.sqrt(self.unit.A / self.unit.I_z)
 		self.unit.lambda_z = self.unit.l_c / self.unit.i_z
 		self.unit.lambda_rel_z = self.unit.lambda_z / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
@@ -1830,7 +1846,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.lambda_rel_m
 		"""
-		#TODO self.lambda_rel_m finns inte i varibaellistan
 		self.unit.sigma_m_crit = self.ekv_6_31()
 		self.unit.lambda_rel_m = math.sqrt(self.unit.f_m_k / self.unit.sigma_m_crit)
 
@@ -1851,7 +1866,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.sigma_m_crit
 		"""
-		#TODO self.M_y_crit finns inte i varibalellistan
 		self.unit.I_tor = self.unit.I_z + self.unit.I_y
 		#TODO function must be created to take in to account the different load sides (currently "compression")
 		self.unit.l_ef = self.table_values.tabell_6_1(self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
@@ -1893,7 +1907,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		"""
-		#TODO self.sigma_m_d finns inte i variabellistan
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.k_crit = self.ekv_6_34()
@@ -1945,10 +1958,7 @@ class SS_EN_1995_1_1():
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		#TODO self.sigma_m_d finns inte i varibellistan
-		#TODO self.f_m_d finns inte i varibaellistan
 		#TODO kontrollera ekvation
-		#TODO self.sigma_m_d finns inte i variabellistan
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.k_crit = self.ekv_6_34()
@@ -1980,7 +1990,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.sigma_m_alpha_d or self.unit.sigma_m_0_d ((?) TODO)
 		"""
-		#TODO self.sigma_m_0_d finns inte i varibellistan
 		self.unit.sigma_m_alpha_d = self.unit.sigma_m_0_d = 6 * self.unit.M_d / (self.unit.b * pow(self.unit.h, 2))
 		#TODO vilken ska returneras? logik
 		return self.unit.sigma_m_alpha_d
@@ -1994,8 +2003,6 @@ class SS_EN_1995_1_1():
 		Output:
 			Bool
 		"""
-		#TODO self.k_m_alpha finns inte i variabellistan, men i ekv 6.39 eller 6.40
-		#TODO self.f_m_d finns inte i variabellistan
 		if self.unit.sigma_m_alpha_d <= self.unit.k_m_alpha * self.unit.f_m_d:
 			return True
 		else:
@@ -2011,7 +2018,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_m_alpha
 		"""
-		#TODO self.f_m_d finns inte i varibellistan
 		#TODO kontrollera ekvation
 		self.unit.k_m_alpha = 1 / math.sqrt(1 + math.pow(( self.unit.f_m_d / (0.75 * self.unit.f_v_d) * math.tan(self.unit.alpha)), 2) +
 										math.pow(self.unit.f_m_d / self.unit.f_t_90_d * pow(math.tan(self.unit.alpha), 2), 2))
@@ -2028,7 +2034,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_m_alpha
 		"""
-		#TODO self.f_m_d finns inte i varibellistan
 		#TODO kontrollera ekvation
 		self.unit.k_m_alpha = 1 / math.sqrt(1 + math.pow(( self.unit.f_m_d / (1.5 * self.unit.f_v_d) * math.tan(self.unit.alpha)), 2) +
 										math.pow(self.unit.f_m_d / self.unit.f_t_90_d * pow(math.tan(self.unit.alpha), 2), 2))
@@ -2044,8 +2049,6 @@ class SS_EN_1995_1_1():
 		Output:
 			Bool
 		"""
-		#TODO self.sigma_m_d finns inte i varibellistan, men i ekv 6.42
-		#TODO self.f_m_d finns inte i varibellistan
 		if self.unit.sigma_m_d <= self.unit.k_r * self.unit.f_m_d:
 			return True
 		else:
@@ -2078,7 +2081,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_l
 		"""
-		#TODO self.sigma_k_1 - 4 finns inte i varibellistan, men i ekv nedan
 		self.unit.k_l = self.unit.k_1 + self.unit.k_2 * (self.unit.h_ap / self.unit.r) + self.unit.k_3 * math.pow((self.unit.h_ap / self.unit.r), 2) + self.unit.k_4 * math.pow((self.unit.h_ap / self.unit.r), 3)
 
 		return self.unit.k_l
@@ -2090,7 +2092,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_1	
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		#TODO kontrollera ekvation
 		self.unit.k_1 = 1 + 1.4 * math.tan(self.unit.alpha_ap) + 5.4 * math.pow(math.tan(self.unit.alpha_ap), 2)
 
@@ -2103,7 +2104,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_2	
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		self.unit.k_2 = 0.35 - 8 * math.tan(self.unit.alpha_ap)
 
 		return self.unit.k_2
@@ -2115,7 +2115,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_3	
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		#TODO kontrollera ekvation
 		self.unit.k_3 = 0.6 + 8.3 * math.tan(self.unit.alpha_ap) - 7.8 * math.pow(math.tan(self.unit.alpha_ap), 2)
 
@@ -2128,7 +2127,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_4	
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		self.unit.k_4 = 6 * math.pow(math.tan(self.unit.alpha_ap), 2)
 
 		return self.unit.k_4
@@ -2185,7 +2183,6 @@ class SS_EN_1995_1_1():
 			self.unit.k_vol
 		"""
 		#TODO fixa wood_type()
-		#TODO self.V_0 finns inte i variabellistan
 		if self.unit.wood_type() == "solid timber":
 			self.unit.k_vol = 1
 		elif self.unit.wood_type() == "glued laminated timber" or "LVL":
@@ -2245,7 +2242,6 @@ class SS_EN_1995_1_1():
 			self.unit.sigma_t_90_d
 		"""
 		#TODO kontrollera ekvation
-		#TODO self.k_p finns inte i variabellistan, men i ekv 6.56
 		self.unit.sigma_t_90_d = self.unit.k_p * 6 * self.unit.M_ap_d / (self.unit.b * math.pow(self.unit.h_ap, 2))
 
 		return self.unit.sigma_t_90_d
@@ -2262,7 +2258,6 @@ class SS_EN_1995_1_1():
 			self.unit.sigma_t_90_d
 		"""
 		#TODO kontrollera ekvation
-		#TODO self.k_p finns inte i variabellistan, men i ekv 6.56
 		self.unit.sigma_t_90_d = self.unit.k_p * 6 * self.unit.M_ap_d / (self.unit.b * math.pow(self.unit.h_ap, 2)) - 0.6 * self.unit.p_d / self.unit.b
 
 		return self.unit.sigma_t_90_d
@@ -2280,7 +2275,6 @@ class SS_EN_1995_1_1():
 			self.unit.k_p
 		"""
 		#TODO kotnrollera ekvation
-		#TODO self.K_5 - 7 finns i ekv nedan
 		self.unit.k_p = self.unit.k_5 + self.unit.k_6 * (self.unit.h_ap / self.unit.r) + self.unit.k_7 * (math.pow((self.unit.h_ap / self.unit.r), 2))
 
 		return self.unit.k_p
@@ -2292,7 +2286,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_5
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		self.unit.k_5 = 0.2 * math.tan(self.unit.alpha_ap)
 
 		return self.unit.k_5
@@ -2304,7 +2297,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_6
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		#TODO kontrollera ekvation
 		self.unit.k_6 = 0.25 - 1.5 * math.tan(self.unit.alpha_ap) + 2.6 * math.pow(math.tan(self.unit.alpha_ap), 2)
 
@@ -2317,7 +2309,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_7
 		"""
-		#TODO self.alpha_ap finns inte i variabellistan
 		#TODO kontrollera ekvation
 		self.unit.k_7 = 2.1 * math.tan(self.unit.alpha_ap) - 4 * math.pow(math.tan(self.unit.alpha_ap), 2)
 
@@ -2356,9 +2347,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_v
 		"""
-		#TODO self.k_n finns inte i varibaellistan
 		#TODO kontrollera ekvationer
-		#TODO self.x finns inte i variabellistan
 		if self.beam_notch_side() == "opposite":
 			self.unit.k_v = 1
 
@@ -2376,9 +2365,7 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_v
 		"""
-		#TODO self.k_n finns inte i varibaellistan
 		#TODO kontrollera ekvationer
-		#TODO self.x finns inte i variabellistan
 		if self.beam_notch_side() == "same":
 			self.unit.k_v = min((self.unit.k_n * (1 + 1.1 * math.pow(self.unit.i, 1.5) / math.sqrt(self.unit.h)) /
 							(math.sqrt(self.unit.h) * (math.sqrt(self.unit.alpha * (1 - self.unit.alpha)) + 0.8 * (self.unit.x / self.unit.h) * math.sqrt(1 / self.unit.alpha - pow(self.unit.alpha, 2))))),
@@ -2393,7 +2380,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.k_n
 		"""
-		#TODO self.k_n finns inte i variabellistan
 		if self.unit.wood_type() == "LVL":
 			self.unit.k_n = 4.5
 		elif self.unit.wood_type() == "solid timber":
@@ -2412,7 +2398,6 @@ class SS_EN_1995_1_1():
 			self.unit.rho_m
 		"""
 		#TODO add rho_i function (kwargs?)
-		#TODO räknar ihop olika members, rho_1 - 2 finns inte i variabellistan
 		self.unit.rho_m = math.sqrt(self.unit.rho_m_1 * self.unit.rho_m_2)
 
 		return self.unit.rho_m
@@ -2442,7 +2427,6 @@ class SS_EN_1995_1_1():
 		Output:
 			Bool
 		"""
-		#TODO self.w finns inte i variabellistan
 		if self.unit.w / self.unit.F <= self.unit.a:
 			return True
 		else:
@@ -2458,7 +2442,6 @@ class SS_EN_1995_1_1():
 		Output:
 			Bool
 		"""
-		#TODO self.f_1 finns inte i variabellistan, men i ekv 7.5
 		#TODO kontrollera ekvation
 		if self.unit.v <= math.pow(self.unit.b, (self.unit.f_1 * math.pow(self.unit.xi, -1))):
 			return True
@@ -2475,8 +2458,6 @@ class SS_EN_1995_1_1():
 		Output:
 			self.unit.f_1
 		"""
-		#TODO self.E finns inte i variabellistan
-		#TODO self.I finns inte i variabellistan
 		#TODO (EI)nedsänskt till l (?)
 		self.unit.f_1 = (math.pi / (2 * math.pow(self.unit.l, 2))) * math.sqrt(self.unit.E * self.unit.I / self.unit.m)
 
