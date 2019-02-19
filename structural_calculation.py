@@ -3386,6 +3386,10 @@ class Database:
 		self.id = id
 		self.members[id] = {"object_instance": StructuralUnit(id), "result": None}
 
+	def remove_all_units(self):
+		"""Removes every unit listed."""
+		self.members.clear()
+
 	def save_result(self, id, result):
 		"""Collects results of the calculated member and stores them in a dictionary.
 

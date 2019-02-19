@@ -8,6 +8,7 @@ import threading
 
 def define_unit(M_y=2000, M_z=2000, N=10000, V=10000, T=200000, material="C24", service_class="S2", 
                 load_duration_class="medium", section="45x220", start_point=[0,0,0], end_point=[3,0,0]):
+    """Defines a member."""
     data.members[data.id]["object_instance"].M_y = M_y
     data.members[data.id]["object_instance"].M_z = M_z
     data.members[data.id]["object_instance"].N = N
@@ -68,20 +69,24 @@ def parse_xml_test():
 
     return tree
 
+def clear_database_test():
+    data.remove_all_units()
+    if data.members == {}:
+        print("Database is empty") #TODO add assert statement
 
+def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=True, clear_members=True):
+    if random_memeber_calc == True:
+        calc_func_test(1000, random=True)
 
+    if specific_member_calc == True:
+        calc_func_test(1, random=False)
 
+    if xml_test == True:
+        create_xml_test()
+
+    if clear_members == True:
+        clear_database_test()
 
 if __name__ == "__main__":
     data = Database()
-
-    #xml = dicttoxml(bar_unit._prepare_for_xml(), attr_type=False)
-    #dom = parseString(xml)
-    #print(dom.toprettyxml())
-
-    calc_func_test(1000, random=False)
-    #print(bar_unit._prepare_for_xml())
-    create_xml_test()
-    #parser = parse_xml_test()
-
-
+    test_chooser(True, False, False, True)
