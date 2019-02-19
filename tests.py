@@ -48,7 +48,7 @@ def calc_func_test(i, random=True):
         for _ in range(i):
             data.add_unit()
             define_unit()
-            #Prepares and calculates the instances equations
+            #Prepares and calculates the instances' equations
             data.members[data.id]["object_instance"].prepare_for_calculation()
             data.ULS_timber.set_unit(data.members[data.id]["object_instance"])
             data.save_result(data.id, data.ULS_timber.start_calculation())
@@ -89,4 +89,4 @@ def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=T
 
 if __name__ == "__main__":
     data = Database()
-    test_chooser(True, False, False, True)
+    test_chooser(False, True, False, False)

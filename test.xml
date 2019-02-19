@@ -1,26 +1,7 @@
 <?xml version="1.0" ?>
 <database country="SWE" end_time="time_placeholder" hash="hash_placeholder" source_software="placeholder" start_time="time_placeholder" uuid="uuid_placeholder" version="version_placeholder" xmlns="urn:placeholder" xmlns:xsd="placeholder" xmlns:xsi="placeholder">
 	<entities>
-		<bar action="value" last_change="value" type="beam" uuid="644960d7-1971-4d9c-9378-b7ba3226f65b">
-			<bar_part action="value" cross_section_area="2610" cross_section_b="45" cross_section_h="58" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="8.307211502186533" load_duration_class="permanent" material="C20" material_type="solid timber" moment_of_inertia_y="440437.5" moment_of_inertia_z="731670.0" name="value" service_class="S3" uuid="value">
-				<curve type="placeholder">
-					<start_point x="0" y="0" z="0"/>
-					<end_point x="8.307211502186533" y="0" z="0"/>
-				</curve>
-				<local_y x="value" y="value" z="value"/>
-				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
-				<connectivity e_x="value" e_y="value" e_z="value" m_x="value" m_y="value" m_z="value"/>
-				<eccentricity use_default_physical_alignment="False">
-					<analytical x="0" y="0" z="0"/>
-					<analytical x="0" y="0" z="0"/>
-					<physical x="value" y="value" z="value"/>
-					<physical x="value" y="value" z="value"/>
-				</eccentricity>
-			</bar_part>
-			<loads_part M_y="-500.2674281705799" M_z="-73.05765739532752" N="1426.716910778494" T="9979.60087576648" V="6748.542937643478" uuid="placeholder"/>
-			<result_part bending_1="3.063171315820974" bending_2="2.3323574090758443" shear="4.560845625028733" torsion="0.6189972428676955" uuid="placeholder"/>
-		</bar>
-		<bar action="value" last_change="value" type="beam" uuid="3511a624-3edd-4fb8-9b6f-736977663b20">
+		<bar action="value" last_change="value" type="beam" uuid="e4fec85b-54bd-44b0-890a-884f058c9c3a">
 			<bar_part action="value" cross_section_area="9900" cross_section_b="45" cross_section_h="220" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.0" load_duration_class="medium" material="C24" material_type="solid timber" moment_of_inertia_y="1670625.0" moment_of_inertia_z="39930000.0" name="value" service_class="S2" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>

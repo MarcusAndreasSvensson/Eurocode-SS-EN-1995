@@ -610,7 +610,6 @@ class CoverUnit:
 class StructuralUnit(Sections):
 
 	def __init__(self, uuid):
-		super().__init__()
 		self.table_values = TableValues()
 		
 		self.A = float()
@@ -866,7 +865,7 @@ class StructuralUnit(Sections):
 		self.x = float()
 		self.xi = float()
 
-		#TODO the UUID should be genrated when the instance is created, not assigned from database
+		#TODO the UUID should be generated when the instance is created, not assigned from database
 		self.id = uuid
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
@@ -881,9 +880,7 @@ class StructuralUnit(Sections):
 		self.cross_section = "95x220"
 		self.section = self.set_section(self.timber_type, self.cross_section)
 		#TODO refactor redundant variables
-		self.dimensioner = self.get_dimensions(self.section[1])
-		self.h = self.dimensioner[1]
-		self.b = self.dimensioner[0]
+		self.b, self.h = self.get_dimensions(self.section[1])
 
 		self.start_point = [0,0,0]
 		self.end_point = [5,0,0]
@@ -901,9 +898,9 @@ class StructuralUnit(Sections):
 		#TODO, fixa en funktion till längsta ände
 		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
 
-		self.A = self.dimensioner[0] * self.dimensioner[1]
-		self.I_y = pow(self.dimensioner[0], 3) * self.dimensioner[1] / 12
-		self.I_z = pow(self.dimensioner[1], 3) * self.dimensioner[0] / 12
+		self.A = self.b * self.h
+		self.I_y = pow(self.b, 3) * self.h / 12
+		self.I_z = pow(self.h, 3) * self.b / 12
 
 		#TODO värden om typ, material osv måste matas in
 
@@ -1056,7 +1053,7 @@ class StructuralUnit(Sections):
 
 
 	def prepare_for_calculation(self):
-		"""Saves all changes made to the instances variables that are governed by a function."""
+		"""Saves all changes made to the instances variables."""
 		self.section = self.set_section(self.timber_type, self.cross_section)
 		self.dimensioner = self.get_dimensions(self.section[1])
 		self.h = self.dimensioner[1]
