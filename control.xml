@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <database country="SWE" end_time="time_placeholder" hash="hash_placeholder" source_software="placeholder" start_time="time_placeholder" uuid="uuid_placeholder" version="version_placeholder" xmlns="urn:placeholder" xmlns:xsd="placeholder" xmlns:xsi="placeholder">
 	<entities>
-		<bar action="value" last_change="value" type="beam" uuid="ab2d8d4c-9d62-4488-b415-613006efa559">
-			<bar_part action="value" cross_section_area="9900.0" cross_section_b="45" cross_section_h="220" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.0" load_duration_class="medium" material="C24" material_type="solid timber" moment_of_inertia_y="1670625.0" moment_of_inertia_z="39930000.0" name="value" service_class="S2" uuid="value">
+		<bar action="value" last_change="value" type="beam" uuid="e4fec85b-54bd-44b0-890a-884f058c9c3a">
+			<bar_part action="value" cross_section_area="9900" cross_section_b="45" cross_section_h="220" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.0" load_duration_class="medium" material="C24" material_type="solid timber" moment_of_inertia_y="1670625.0" moment_of_inertia_z="39930000.0" name="value" service_class="S2" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
 					<end_point x="3" y="0" z="0"/>

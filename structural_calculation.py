@@ -531,7 +531,7 @@ class Sections:
                 area += (polygon[i][0] * polygon[0][1] - polygon[0][0] * polygon[i][1])
                 break
 
-        area = abs(area) * 1/2
+        area = abs(area) / 2
 
         return area
 
@@ -875,13 +875,11 @@ class StructuralUnit(Sections):
 		self.enhetstyp = "beam"
 		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
 		self.cover_contact_points = []
-
-		self.timber_type = "Dressed Lumber"
-		self.cross_section = "95x220"
-		self.section = self.set_section(self.timber_type, self.cross_section)
 		#TODO refactor redundant variables
-		self.b, self.h = self.get_dimensions(self.section[1])
-
+		self.timber_type = "Dressed Lumber"
+		self.cross_section = "95x145"
+		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
+		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
 		self.start_point = [0,0,0]
 		self.end_point = [5,0,0]
 		self.koordinater = np.array([self.start_point, self.end_point])
@@ -890,19 +888,15 @@ class StructuralUnit(Sections):
 		                   pow(self.end_point[1] - self.start_point[1], 2) +
 		                   pow(self.end_point[2] - self.start_point[2], 2))
 
-		self.M_y = 1000 #Nm
-		self.M_z = 1000 #Nm
-		self.N = 1000 #N
-		self.V = 1000 #N
-		self.T = 1000 #Nm
-		#TODO, fixa en funktion till längsta ände
-		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2))
-
-		self.A = self.b * self.h
-		self.I_y = pow(self.b, 3) * self.h / 12
-		self.I_z = pow(self.h, 3) * self.b / 12
-
-		#TODO värden om typ, material osv måste matas in
+		self.M_y = 1000 # [Nm]
+		self.M_z = 1000 # [Nm]
+		self.N = 1000 # [N]
+		self.V = 1000 # [N]
+		self.T = 1000 # [Nm]
+		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
+		self.A = self.get_area(self.section_vertices)
+		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
+		#TODO values for type, material etc must be input
 
 		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
 		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
@@ -920,7 +914,6 @@ class StructuralUnit(Sections):
 		self.end_physical_eccentricity = (0, 0, 0)
 
 		self.results = None
-
 
 	def _prepare_for_xml(self, file_size="large"):
 		"""Returns .xml formatted string.
@@ -953,8 +946,8 @@ class StructuralUnit(Sections):
 			bar_part.set("material_type", str(self.type))
 			bar_part.set("service_class", str(self.service_class))
 			bar_part.set("load_duration_class", str(self.load_duration_class))
-			bar_part.set("cross_section_b", str(self.section[0][0]))
-			bar_part.set("cross_section_h", str(self.section[0][1]))
+			bar_part.set("cross_section_b", str(self.b))
+			bar_part.set("cross_section_h", str(self.h))
 			bar_part.set("cross_section_area", str(self.A))
 			bar_part.set("moment_of_inertia_y", str(self.I_y))
 			bar_part.set("moment_of_inertia_z", str(self.I_z))
@@ -1054,14 +1047,11 @@ class StructuralUnit(Sections):
 
 	def prepare_for_calculation(self):
 		"""Saves all changes made to the instances variables."""
-		self.section = self.set_section(self.timber_type, self.cross_section)
-		self.dimensioner = self.get_dimensions(self.section[1])
-		self.h = self.dimensioner[1]
-		self.b = self.dimensioner[0]
+		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
+		self.b, self.h = self.get_dimensions(self.section_vertices)
 		self.r = sqrt(pow(self.h,2) + pow(self.b,2))
-		self.A = self.dimensioner[0] * self.dimensioner[1]
-		self.I_y = pow(self.dimensioner[0], 3) * self.dimensioner[1] / 12
-		self.I_z = pow(self.dimensioner[1], 3) * self.dimensioner[0] / 12
+		self.A = self.get_area(self.section_vertices)
+		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
 
 		self.koordinater = array([self.start_point, self.end_point])
 		self.l = sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +

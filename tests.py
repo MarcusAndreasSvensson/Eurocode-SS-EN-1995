@@ -17,7 +17,7 @@ def define_unit(M_y=2000, M_z=2000, N=10000, V=10000, T=200000, material="C24", 
     data.members[data.id]["object_instance"].material = material
     data.members[data.id]["object_instance"].service_class = service_class
     data.members[data.id]["object_instance"].load_duration_class = load_duration_class
-    data.members[data.id]["object_instance"].section = data.members[data.id]["object_instance"].cross_section = section
+    data.members[data.id]["object_instance"].cross_section = section
     data.members[data.id]["object_instance"].start_point = start_point
     data.members[data.id]["object_instance"].end_point = end_point
 
@@ -89,4 +89,4 @@ def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=T
 
 if __name__ == "__main__":
     data = Database()
-    test_chooser(False, True, False, False)
+    test_chooser(False, True, True, False)
