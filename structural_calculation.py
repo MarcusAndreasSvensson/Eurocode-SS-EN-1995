@@ -878,42 +878,29 @@ class StructuralUnit(Sections):
 		#TODO refactor redundant variables
 		self.timber_type = "Dressed Lumber"
 		self.cross_section = "95x145"
-		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
-		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
 		self.start_point = [0,0,0]
 		self.end_point = [5,0,0]
-		self.koordinater = np.array([self.start_point, self.end_point])
-		#TODO förmodligen kommer längden läsas fel iom att den inte uppdateras vid skapandet av objektet
-		self.l = math.sqrt(pow(self.end_point[0] - self.start_point[0], 2) +
-		                   pow(self.end_point[1] - self.start_point[1], 2) +
-		                   pow(self.end_point[2] - self.start_point[2], 2))
+		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+		#TODO Add function for calculating the effective buckling lengths and store them here
+		self.buckling_type = "placeholder"
+		self.start_buckling_length = ("co_x", "co_y", "co_z")
+		self.end_buckling_length = ("co_x", "co_y", "co_z")
+		self.start_analytical_eccentricity = (0, 0, 0)
+		self.end_analytical_eccentricity = (0, 0, 0)
+		self.use_default_physical_alignment = False
+		self.start_physical_eccentricity = (0, 0, 0)
+		self.end_physical_eccentricity = (0, 0, 0)
 
 		self.M_y = 1000 # [Nm]
 		self.M_z = 1000 # [Nm]
 		self.N = 1000 # [N]
 		self.V = 1000 # [N]
 		self.T = 1000 # [Nm]
-		self.r = math.sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
-		self.A = self.get_area(self.section_vertices)
-		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
 		#TODO values for type, material etc must be input
-
-		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
-		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
-
-		#TODO Add function for calculating the effective buckling lengths and store them here
-		self.buckling_type = "placeholder"
-		self.start_buckling_length = ("co_x", "co_y", "co_z")
-		self.end_buckling_length = ("co_x", "co_y", "co_z")
-
-		self.start_analytical_eccentricity = (0, 0, 0)
-		self.end_analytical_eccentricity = (0, 0, 0)
-
-		self.use_default_physical_alignment = False
-		self.start_physical_eccentricity = (0, 0, 0)
-		self.end_physical_eccentricity = (0, 0, 0)
-
 		self.results = None
+
+		self.prepare_for_calculation()
 
 	def _prepare_for_xml(self, file_size="large"):
 		"""Returns .xml formatted string.
@@ -1046,14 +1033,15 @@ class StructuralUnit(Sections):
 
 
 	def prepare_for_calculation(self):
-		"""Saves all changes made to the instances variables."""
+		"""Saves all changes made to the instances dependent variables."""
 		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
-		self.b, self.h = self.get_dimensions(self.section_vertices)
-		self.r = sqrt(pow(self.h,2) + pow(self.b,2))
+		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
+		self.r = sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
 		self.A = self.get_area(self.section_vertices)
 		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
 
 		self.koordinater = array([self.start_point, self.end_point])
+		#TODO förmodligen kommer längden läsas fel iom att den inte uppdateras vid skapandet av objektet
 		self.l = sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
 		              pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
 		              pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
