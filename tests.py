@@ -53,7 +53,7 @@ def calc_func_test(i, random=True):
             data.ULS_timber.set_unit(data.members[data.id]["object_instance"])
             data.save_result(data.id, data.ULS_timber.start_calculation())
             # Space for additional tests
-            data.ULS_timber.ekv_6_11()
+            #data.ULS_timber.ekv_6_11()
             # ==========
         
     for member in data.members:

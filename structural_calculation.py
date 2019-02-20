@@ -1304,33 +1304,20 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.1.6 Bending ###
 	def ekv_6_11(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.h
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.k_m
+		The following expressions shall be satisfied:
+			sigma_m_y_d / f_m_y_d + k_m * sigma_m_z_d / f_m_z_d <= 1
+			and
+			ekv_6_12()
+
 		Output:
 			self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
-		#TODO slutkontroll
+		#TODO clean up
 		self.unit.k_h = self.ekv_3_1()
-		#TODO add k_sys (Explore what it means)
+		#TODO add k_sys (I don't understand excactly)
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
-		
+		#TODO find out why 10e2
 		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
 		#self.unit.sigma_m_z_d = self.navier_stress_distribution(N=0, )
 
@@ -1338,36 +1325,25 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_12(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.f_m_k
-			self.unit.gamma_M
-			self.unit.k_h
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.h
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.I_z
-			self.unit.k_m
+		The following expressions shall be satisfied:
+			k_m * sigma_m_y_d / f_m_y_d + sigma_m_z_d / f_m_z_d <= 1
+			and
+			ekv_6_11()
 		Output:
 			self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
-		#TODO slutkontroll
+		#TODO clean up
 		self.unit.k_h = self.ekv_3_1()
 		#TODO add k_sys (I don't understand excactly)
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		#TODO fattar inte varför 10e2 och inte 10e3
+		#TODO find out why 10e2 
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 
 		return self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
+	### 6.1.7 Shear ###
 	def ekv_6_13(self):
 		"""
 		Variables used:
@@ -1410,6 +1386,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.b_ef
 
+	### 6.1.8 Torsion ###
 	def ekv_6_14(self):
 		"""
 		Variables used:
@@ -1450,6 +1427,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.k_shape
 
+	### 6.2.2 Compression stresses at an angle to the grain ###
 	def ekv_6_16(self):
 		"""
 		Variables used:
@@ -1467,6 +1445,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		else:
 			return False
 
+	### 6.2.3 Combined bending and axial tension ###
 	def ekv_6_17(self):
 		"""
 		Variables used:
@@ -1539,6 +1518,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
+	### 6.2.4 Combined bending and axial compression ###
 	def ekv_6_19(self):
 		"""
 		Variables used:
@@ -1618,6 +1598,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
+	### 6.3.2 Columns subjected to either compression or combined compression and bending ###
 	def ekv_6_21(self):
 		"""
 		Variables used:
@@ -1798,6 +1779,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.beta_c
 
+	### 6.3.3 Beams subjected to either bending or combined bending and compression ###
 	def ekv_6_30(self):
 		"""
 		Variables used:
