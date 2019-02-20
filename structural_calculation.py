@@ -1055,8 +1055,10 @@ class ClassicalMechanics:
 		pass
 
 	def navier_stress_distribution(self, N, A, M_y, M_z, I_y, I_z, y, z):
-		"""Return the stress in the specified point."""
-		return N/A + (M_z/I_z)*y + (M_y/I_y)*z
+		"""Returns the stress in the specified point.
+		For correct stresses use right hand rule in the positive direction of the axes.
+		"""
+		return N/A + (M_z/I_z)*y - (M_y/I_y)*z
 
 
 class SS_EN_1995_1_1(ClassicalMechanics):
@@ -1299,6 +1301,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		return self.unit.sigma_c_90_d
 
 	#TODO Look for the missing equations (6.5-6.10)
+	### 6.1.6 Bending ###
 	def ekv_6_11(self):
 		"""
 		Variables used:
@@ -1324,11 +1327,12 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		#TODO slutkontroll
 		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag förstår inte riktigt)
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
+		#TODO add k_sys (Explore what it means)
+		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
+		
 		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
-		print("hej")
+		#self.unit.sigma_m_z_d = self.navier_stress_distribution(N=0, )
 
 		return self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
