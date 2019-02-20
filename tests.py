@@ -52,8 +52,9 @@ def calc_func_test(i, random=True):
             data.members[data.id]["object_instance"].prepare_for_calculation()
             data.ULS_timber.set_unit(data.members[data.id]["object_instance"])
             data.save_result(data.id, data.ULS_timber.start_calculation())
-        
-
+            # Space for additional tests
+            data.ULS_timber.ekv_6_11()
+            # ==========
         
     for member in data.members:
         print(data.members[member])
@@ -61,7 +62,6 @@ def calc_func_test(i, random=True):
 
 def create_xml_test():
     data.create_xml()
-
 
 def parse_xml_test():
     tree = ElementTree()

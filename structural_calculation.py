@@ -182,7 +182,6 @@ class Sections:
     def __init__(self):
         pass
 
-
     def get_dimensions(self, polygon):
         h = [0,0]
         b = [0,0]
@@ -202,7 +201,6 @@ class Sections:
             i += 1
 
         return b[1]-b[0], h[1]-h[0]
-
 
     def set_section(self, type, tvärsnitt):
         sections = {"Dressed Lumber": {"22x22": ([22,22], [[0,0],[0,22],[22,22],[22,0]]),
@@ -517,10 +515,9 @@ class Sections:
 
         return section
 
-
     def get_area(self, polygon):
+		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
         area = 0
-
 
         i = 0
         for _ in polygon:
@@ -532,11 +529,10 @@ class Sections:
                 break
 
         area = abs(area) / 2
-
         return area
 
-
     def get_centroid(self, polygon):
+		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
         centroid_x = 0
         centroid_y = 0
 
@@ -556,11 +552,10 @@ class Sections:
         centroid_y = abs(centroid_y) * 1/(6*area)
 
         centroids = [centroid_x, centroid_y]
-
         return centroids
 
-
     def get_moment_of_inertia(self, polygon):
+		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
         I_x = 0
         I_y = 0
         centroid = self.get_centroid(polygon)
@@ -592,12 +587,7 @@ class Sections:
         I_x = abs(I_x) / 12
         I_y = abs(I_y) / 12
 
-        #test_x = 2 * (100 * pow(10, 3) / 12) + 2 * 100 * 10 * pow(45, 2) + (20 * pow(80, 3) / 12)
-        #test_y = 2 * (10 * pow(100, 3) / 12) + (80 * pow(20, 3) / 12)
-
-        I = [I_x, I_y]
-
-        return I
+        return I_x, I_y
 
 
 class CoverUnit:
@@ -1031,7 +1021,6 @@ class StructuralUnit(Sections):
 		#TODO must add results to string
 		return bar
 
-
 	def prepare_for_calculation(self):
 		"""Saves all changes made to the instances dependent variables."""
 		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
@@ -1051,7 +1040,7 @@ class StructuralUnit(Sections):
 		self.f_t_0_k = self.table_values.material_values_timber(self.material, "f_t_0_k")
 		self.f_c_0_k = self.table_values.material_values_timber(self.material, "f_c_0_k")
 		self.f_c_90_k = self.table_values.material_values_timber(self.material, "f_c_90_k")
-		self.k_c_90_d = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood") #TODO skapa logik till detta val
+		self.k_c_90 = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood") #TODO skapa logik till detta val
 		self.A_ef = 100 * 100 # TODO placeholder. Lägg in geometri från anliggande element + logik
 		self.f_m_k = self.table_values.material_values_timber(self.material, "f_m_k")
 		self.k_m = self.table_values.avsnitt_6_1_6_2(self.tvärsnitt, self.type)
@@ -1061,10 +1050,21 @@ class StructuralUnit(Sections):
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
 
 
-class SS_EN_1995_1_1():
+class ClassicalMechanics:
+	def __init__(self):
+		pass
+
+	def navier_stress_distribution(self, N, A, M_y, M_z, I_y, I_z, y, z):
+		"""Return the stress in the specified point."""
+		return N/A + (M_z/I_z)*y + (M_y/I_y)*z
+
+
+class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def __init__(self):
+		super().__init__()
 		self.table_values = TableValues()
+		self.unit = StructuralUnit(000) # This is only for intelli-ref for variables
 
 	def ekv_2_1(self, K_u, K_ser):
 		K_u = 2/3 * K_ser
@@ -1095,7 +1095,7 @@ class SS_EN_1995_1_1():
 
 		return u_fin_Qi
 
-	def ekv_2_6(self, k_mod, k_mod_1, k_mod_2):
+	def ekv_2_6(self, k_mod_1, k_mod_2):
 		#TODO gäller om members har olika k_mod, ta hänsyn till detta
 		k_mod = math.sqrt(k_mod_1 * k_mod_2)
 
@@ -1137,26 +1137,24 @@ class SS_EN_1995_1_1():
 
 		return k_def
 
-	def ekv_2_14(self, k_mod, k_h, X_k, gamma_M):
-		X_d = k_h * k_mod * X_k / gamma_M
-
-		return X_d
+	def ekv_2_14(self, X_k, k_h=1):
+		"""Calculates X_d for a given X_k"""
+		return k_h * self.unit.k_mod * X_k / self.unit.gamma_M
 
 	def ekv_2_15(self):
-		self.E_d = self.E_mean / self.gamma_M
-
-		return self.E_d
+		"""E_d = E_mean / gamma_M"""
+		return self.unit.E_mean / self.unit.gamma_M
 
 	def ekv_2_16(self):
-		self.G_d = self.G_mean / self.gamma_M
-
-		return self.G_d
-
-	def ekv_2_17(self):
-		self.R_d = self.k_mod * self.R_k / self.gamma_M
+		"""G_d = G_mean / gamma_M"""
+		return self.unit.G_mean / self.unit.gamma_M
 	
 	def ekv_3_1(self):
 		"""
+		For rectangular solid timber with a characteristic timber density A 700 kg/m3, the reference
+		depth in bending or width (maximum cross-sectional dimension) in tension is 150 mm. For
+		depths in bending or widths in tension of solid timber less than 150 mm the characteristic values
+		for.fn,k and./t·,o.k may be increased by the factor kh , given by:
 		Input variables:
 			self.unit.rho_k
 			self.unit.h
@@ -1246,49 +1244,47 @@ class SS_EN_1995_1_1():
 
 		return self.unit.e
 
+	### 6.1.2 Tension parallel to the grain ###
 	def ekv_6_1(self):
 		"""
-		Input variables:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.gamma_M
-			self.unit.f_t_0_k
-			self.unit.sigma_t_0_d
+		The following expression shall be satisfied:
+			self.unit.sigma_t_0_d / self.unit.f_t_0_d <= 1
+
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d
 		"""
 		self.unit.sigma_t_0_d = self.ekv_6_36()
-		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_t_0_k / self.unit.gamma_M
+		self.unit.f_t_0_d = self.ekv_2_14(self.unit.f_t_0_k, self.unit.k_h)
 
 		return self.unit.sigma_t_0_d / self.unit.f_t_0_d
 
+	### 6.1.4 Compression parallel to the grain ###
 	def ekv_6_2(self):
 		"""
-		Input variables:
-			self.unit.k_mod
-			self.unit.gamma_M
-			self.unit.f_c_0_k
+		The following expression shall be satisfied:
+			self.unit.sigma_c_0_d / self.unit.f_c_0_d <= 1
+
 		Output:
-			-self.unit.sigma_c_0_d / self.unit.f_c_0_d
+			# The abs() is because compression forces is defined as negative
+			abs(self.unit.sigma_c_0_d / self.unit.f_c_0_d)
 		"""
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.f_c_0_k / self.unit.gamma_M
+		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k)
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
-		return -self.unit.sigma_c_0_d / self.unit.f_c_0_d
+		return abs(self.unit.sigma_c_0_d / self.unit.f_c_0_d)
 
+	### 6.1.5 Compression perpendicular to the grain ###
 	def ekv_6_3(self):
 		"""
-		Input variables:
-			self.unit.k_mod
-			self.unit.gamma_M
-			self.unit.f_c_90_k
+		The following expression shall be satisfied:
+			self.unit.sigma_c_90_d / (self.unit.k_c_90 * self.unit.f_c_90_d) <= 1
 		Output:
-			self.unit.sigma_c_90_d / (self.unit.k_c_90_d * self.unit.f_c_90_d)
+			self.unit.sigma_c_90_d / (self.unit.k_c_90 * self.unit.f_c_90_d)
 		"""
-		self.unit.f_c_90_d = self.unit.k_mod * self.unit.f_c_90_k / self.unit.gamma_M
+		self.unit.f_c_90_d = self.ekv_2_14(self.unit.f_c_90_k)
 		self.unit.sigma_c_90_d = self.ekv_6_4()
 		
-		return self.unit.sigma_c_90_d / (self.unit.k_c_90_d * self.unit.f_c_90_d)
+		return self.unit.sigma_c_90_d / (self.unit.k_c_90 * self.unit.f_c_90_d)
 
 	def ekv_6_4(self):
 		"""
@@ -1302,24 +1298,7 @@ class SS_EN_1995_1_1():
 
 		return self.unit.sigma_c_90_d
 
-	def ekv_6_5(self):
-		pass
-
-	def ekv_6_6(self):
-		pass
-
-	def ekv_6_7(self):
-		pass
-
-	def ekv_6_8(self):
-		pass
-
-	def ekv_6_9(self):
-		pass
-
-	def ekv_6_10(self):
-		pass
-
+	#TODO Look for the missing equations (6.5-6.10)
 	def ekv_6_11(self):
 		"""
 		Variables used:
@@ -1346,10 +1325,10 @@ class SS_EN_1995_1_1():
 		#TODO slutkontroll
 		self.unit.k_h = self.ekv_3_1()
 		#TODO lägga in k_sys (Jag förstår inte riktigt)
-		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
+		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
+		print("hej")
 
 		return self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
