@@ -1471,8 +1471,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO kontrollera ekvation
+		print("6.17")
 		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
+		#TODO Add k_sys 
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_t_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
