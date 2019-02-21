@@ -1049,7 +1049,7 @@ class StructuralUnit(Sections):
 		self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
 
-
+	
 class ClassicalMechanics:
 	def __init__(self):
 		pass
