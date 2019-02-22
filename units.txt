@@ -1,4 +1,4 @@
-table_values, 	, <structural_calculation.TableValues object at 0x05271A30>
+table_values, 	, <structural_calculation.TableValues object at 0x1045a7c88>
 A, 	, 9900.0
 A_ef, 	, 10000
 A_f, 	, 0.0
@@ -250,8 +250,8 @@ psi_2, 	, 0.0
 w, 	, 0.0
 x, 	, 0.0
 xi, 	, 0.0
-id, 	, 5bc90050-1387-4d25-a701-8069c7bc4a6c
-tv‰rsnitt, 	, rectangular
+id, 	, 9866b718-4ae6-4fa4-af24-d0cc45b6952f
+tv√§rsnitt, 	, rectangular
 material, 	, C24
 type, 	, solid timber
 service_class, 	, S2
