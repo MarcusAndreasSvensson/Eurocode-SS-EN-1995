@@ -1041,7 +1041,8 @@ class StructuralUnit(Sections):
 		self.f_c_0_k = self.table_values.material_values_timber(self.material, "f_c_0_k")
 		self.f_c_90_k = self.table_values.material_values_timber(self.material, "f_c_90_k")
 		self.k_c_90 = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood") #TODO skapa logik till detta val
-		self.A_ef = 100 * 100 # TODO placeholder. Lägg in geometri från anliggande element + logik
+		#TODO (A_ef) add units checker 
+		self.A_ef = 220 * 45 # TODO placeholder. Lägg in geometri från anliggande element + logik
 		self.f_m_k = self.table_values.material_values_timber(self.material, "f_m_k")
 		self.k_m = self.table_values.avsnitt_6_1_6_2(self.tvärsnitt, self.type)
 		self.f_v_k = self.table_values.material_values_timber(self.material, "f_v_k")
@@ -1368,6 +1369,13 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO seems to be different values for fvk in FEMDesign
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 		self.unit.b_ef = self.ekv_6_13_a()
+		
+		#delta_A = self.unit.b_ef * self.unit.h
+		#S_y = delta_A * y_0
+		#self.unit.tao_d = (self.unit.V * S_y) / (self.unit.I_z * self.unit.b_ef)
+
+
+
 		A_ef = self.unit.b_ef * self.unit.h
 		self.unit.tao_d = self.unit.V / A_ef
 		#TODO there's a clause (3) about support that's not in the Eurocode (I Guess it's in FEMDesign)
@@ -1617,8 +1625,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.lambda_rel_y
 		"""
-		self.i_y = math.sqrt(self.A / self.I_y)
-		self.lambda_y = self.l_c / self.i_y
+		#TODO fix calculation of i and lambda
+		self.unit.i_y = math.sqrt(self.unit.A / self.unit.I_y)
+		self.unit.lambda_y = self.unit.l_c / self.unit.i_y
 		self.unit.lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
 		return self.unit.lambda_rel_y
@@ -1676,7 +1685,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
-							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.sunit.sigma_m_z_d / self.unit.f_m_z_d
+							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_24(self):
 		"""
@@ -2901,6 +2910,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
+	#TODO maybe change this to call an @classmethod (easier for different codes)
 	def __init__(self):
 		super().__init__()
 
@@ -2912,14 +2922,18 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		Calculates the relevant equations and returns a namedtuple
 		"""
 		#TODO tryck_90
+		#TODO correct logic for which calculations to initialize e.g.  N==0 and M != 0
 		if self.unit.N == 0:
 			_B = self.böjning()
 		elif self.unit.N > 0:
 			_B  = self.böjning_och_drag()
 		elif self.unit.N < 0:
 			_B = self.böjning_och_tryck()
+			_FBZ = self.slankhet_pelare_kompression()
+			print("FBZ", _FBZ)
+			#_FBY = 
 
-		#TODO Correct result for negative values of V
+		#TODO Correct result for negative values of V (maybe it's already done)
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
 		else:
@@ -2991,18 +3005,20 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
 	# 6.3.2
 	def slankhet_pelare_kompression(self):
-		self.lambda_rel_y, self.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
+		self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
 
-		if self.lambda_rel_z <= 0.3 and self.lambda_rel_y <= 0.3:
+		#self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
+
+		if self.unit.lambda_rel_z <= 0.3 and self.unit.lambda_rel_y <= 0.3:
 			return self.ekv_6_19(), self.ekv_6_20()
 		else:
 			return self.ekv_6_23(), self.ekv_6_24()
 
 	# 6.3.3
 	def slankhet_balk_böj(self):
-		if self.M_z > 0 and self.N == 0 and self.M_y == 0: #TODO är det verkligen M_Y? inte bara N?
+		if self.unit.M_z > 0 and self.unit.N == 0 and self.unit.M_y == 0: #TODO är det verkligen M_Y? inte bara N?
 			return self.ekv_6_33() #TODO värde return
-		elif self.M_z > 0 and self.N < 0 and self.M_y == 0:
+		elif self.unit.M_z > 0 and self.unit.N < 0 and self.unit.M_y == 0:
 			return self.ekv_6_35()
 
 	# 4 Varying cross-section or curved shape
