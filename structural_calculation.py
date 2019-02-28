@@ -1055,7 +1055,7 @@ class ClassicalMechanics:
 	def __init__(self):
 		pass
 
-	def navier_stress_distribution(self, N=0, A=1, M_y=0, M_z=0, I_y=1, I_z=1, y=0, z=0, values=False):
+	def navier_stress_distribution(self, N=0, A=1, M_y=0, M_z=0, I_y=1, I_z=1, y=0, z=0):
 		"""Returns the stress in the specified point.
 		For correct stresses use right hand rule in the positive direction of the axes.
 		"""
@@ -1141,7 +1141,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		return k_def
 
 	def ekv_2_14(self, X_k, k_h=1):
-		"""Calculates X_d for a given X_k"""
+		"""Calculates X_d for a given X_k
+		Params:
+			X_k: characteristic value
+			k_h: when applicable, else k_h=1"""
 		return k_h * self.unit.k_mod * X_k / self.unit.gamma_M
 
 	def ekv_2_15(self):
@@ -1321,10 +1324,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO find out why 10e-7 and not 10e-6
 		#TODO it shouldn't be b/2 and h/2, but biggest general distance from centroid to edge
 		self.unit.sigma_m_y_d = 10e-7*self.navier_stress_distribution(
-			values=True, M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=self.unit.b/2*10e-3)
+			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=self.unit.b/2*10e-3)
 
 		self.unit.sigma_m_z_d = 10e-7*self.navier_stress_distribution(
-			values=True, M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
 		#TODO why is sigma_y bigger than sigma_z in FEMDesign?
 		return self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
@@ -1626,8 +1629,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.lambda_rel_y
 		"""
-		#TODO fix calculation of i and lambda
-		self.unit.i_y = math.sqrt(self.unit.A / self.unit.I_y)
+		#TODO general calculation of i
+		#TODO fix units
+		self.unit.i_y = self.unit.b*10e-6 / math.sqrt(12)
 		self.unit.lambda_y = self.unit.l_c / self.unit.i_y
 		self.unit.lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
@@ -1643,7 +1647,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.lambda_rel_z
 		"""
-		self.unit.i_z = math.sqrt(self.unit.A / self.unit.I_z)
+		#TODO general calculation of i
+		#TODO fix units
+		self.unit.i_z = self.unit.h*10e-6 / math.sqrt(12)
 		self.unit.lambda_z = self.unit.l_c / self.unit.i_z
 		self.unit.lambda_rel_z = self.unit.lambda_z / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
@@ -1651,43 +1657,32 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_23(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.k_c_y
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.sunit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
-		#TODO kontrollera ekvation
+		#TODO fix units
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.k_c_y = self.ekv_6_25()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		#TODO fattar inte varför 10e2 och inte 10e3
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
+		#TODO Add k_sys
+		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
+		#TODO why 10e-7 not -6?
+		#TODO check if the "max()" behaviour is suitable
+		self.unit.sigma_m_y_d = max(10e-7*self.navier_stress_distribution(
+			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=self.unit.b/2*10e-3),
+			10e-7*self.navier_stress_distribution(
+			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=-self.unit.b/2*10e-3))
+
+		self.unit.sigma_m_z_d = 10e-7*self.navier_stress_distribution(
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
+		
 		self.unit.sigma_c_0_d = self.ekv_6_36()
+		self.unit.f_m_y_d = 18.79
 
-		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
-							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
-
+		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_y * self.unit.f_c_0_d) + 
+				self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
+				self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d)
+		
 	def ekv_6_24(self):
 		"""
 		Variables used:
@@ -1720,12 +1715,14 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
+		#TODO fmyd in FEMdesign > this, why?
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
-		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
-							self.unit.sigma_m_z_d / self.unit.f_m_z_d
+		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_z * self.unit.f_c_0_d) + 
+				self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
+				self.unit.sigma_m_z_d / self.unit.f_m_z_d)
 
 	def ekv_6_25(self):
 		"""
@@ -3011,8 +3008,11 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		#self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
 
 		if self.unit.lambda_rel_z <= 0.3 and self.unit.lambda_rel_y <= 0.3:
+			print("ETTAN")
 			return self.ekv_6_19(), self.ekv_6_20()
+
 		else:
+			print("TVÅAN")
 			return self.ekv_6_23(), self.ekv_6_24()
 
 	# 6.3.3
