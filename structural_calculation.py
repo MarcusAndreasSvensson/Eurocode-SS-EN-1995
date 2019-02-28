@@ -126,19 +126,19 @@ class TableValues:
 
 	# TODO Make material values table for D-classes and Glulam
 	def material_values_timber(self, material, konst):
-		tabell = {#                N/mm2                                                                            kN/mm2                                                           kg/m3
-			"C14": {"f_m_k": 14, "f_t_0_k": 8, "f_t_90_k": 0.4, "f_c_0_k": 16, "f_c_90_k": 2.0, "f_v_k": 1.7, "E_0_mean": 7, "E_0_05": 4.7, "E_90_mean": 0.23, "G_mean": 0.44, "rho_k": 290, "rho_mean": 350},
-			"C16": {"f_m_k": 16, "f_t_0_k": 10, "f_t_90_k": 0.5, "f_c_0_k": 17, "f_c_90_k": 2.2, "f_v_k": 1.8, "E_0_mean": 8, "E_0_05": 5.4, "E_90_mean": 0.27, "G_mean": 0.5, "rho_k": 310, "rho_mean": 370},
-			"C18": {"f_m_k": 18, "f_t_0_k": 11, "f_t_90_k": 0.5, "f_c_0_k": 18, "f_c_90_k": 2.2, "f_v_k": 2.0, "E_0_mean": 9, "E_0_05": 6.0, "E_90_mean": 0.30, "G_mean": 0.56, "rho_k": 320, "rho_mean": 380},
-			"C20": {"f_m_k": 20, "f_t_0_k": 12, "f_t_90_k": 0.5, "f_c_0_k": 19, "f_c_90_k": 2.3, "f_v_k": 2.2, "E_0_mean": 9.5, "E_0_05": 6.4, "E_90_mean": 0.32, "G_mean": 0.59, "rho_k": 330, "rho_mean": 390},
-			"C22": {"f_m_k": 22, "f_t_0_k": 13, "f_t_90_k": 0.5, "f_c_0_k": 20, "f_c_90_k": 2.4, "f_v_k": 2.4, "E_0_mean": 10, "E_0_05": 6.7, "E_90_mean": 0.33, "G_mean": 0.63, "rho_k": 340, "rho_mean": 410},
-			"C24": {"f_m_k": 24, "f_t_0_k": 14, "f_t_90_k": 0.5, "f_c_0_k": 21, "f_c_90_k": 2.5, "f_v_k": 2.5, "E_0_mean": 11, "E_0_05": 7.4, "E_90_mean": 0.37, "G_mean": 0.69, "rho_k": 350, "rho_mean": 420},
-			"C27": {"f_m_k": 27, "f_t_0_k": 16, "f_t_90_k": 0.6, "f_c_0_k": 22, "f_c_90_k": 2.6, "f_v_k": 2.8, "E_0_mean": 11.5, "E_0_05": 7.7, "E_90_mean": 0.38, "G_mean": 0.72, "rho_k": 370, "rho_mean": 450},
-			"C30": {"f_m_k": 30, "f_t_0_k": 18, "f_t_90_k": 0.6, "f_c_0_k": 23, "f_c_90_k": 2.7, "f_v_k": 3.0, "E_0_mean": 12, "E_0_05": 8.0, "E_90_mean": 0.40, "G_mean": 0.75, "rho_k": 380, "rho_mean": 460},
-			"C35": {"f_m_k": 35, "f_t_0_k": 21, "f_t_90_k": 0.6, "f_c_0_k": 25, "f_c_90_k": 2.8, "f_v_k": 3.4, "E_0_mean": 13, "E_0_05": 8.7, "E_90_mean": 0.43, "G_mean": 0.81, "rho_k": 400, "rho_mean": 480},
-			"C40": {"f_m_k": 40, "f_t_0_k": 24, "f_t_90_k": 0.6, "f_c_0_k": 26, "f_c_90_k": 2.9, "f_v_k": 3.8, "E_0_mean": 14, "E_0_05": 9.4, "E_90_mean": 0.47, "G_mean": 0.88, "rho_k": 420, "rho_mean": 500},
-			"C45": {"f_m_k": 45, "f_t_0_k": 27, "f_t_90_k": 0.6, "f_c_0_k": 27, "f_c_90_k": 3.1, "f_v_k": 3.8, "E_0_mean": 15, "E_0_05": 10, "E_90_mean": 0.50, "G_mean": 0.94, "rho_k": 440, "rho_mean": 520},
-			"C50": {"f_m_k": 50, "f_t_0_k": 30, "f_t_90_k": 0.6, "f_c_0_k": 29, "f_c_90_k": 3.2, "f_v_k": 3.8, "E_0_mean": 16, "E_0_05": 10.7, "E_90_mean": 0.53, "G_mean": 1.0, "rho_k": 460, "rho_mean": 550}}
+		tabell = {#                N/mm2                                                                            N/mm2                                                           kg/m3
+			"C14": {"f_m_k": 14, "f_t_0_k": 8, "f_t_90_k": 0.4, "f_c_0_k": 16, "f_c_90_k": 2.0, "f_v_k": 1.7, "E_0_mean": 7000, "E_0_05": 4700, "E_90_mean": 230, "G_mean": 440, "rho_k": 290, "rho_mean": 350},
+			"C16": {"f_m_k": 16, "f_t_0_k": 10, "f_t_90_k": 0.5, "f_c_0_k": 17, "f_c_90_k": 2.2, "f_v_k": 1.8, "E_0_mean": 8000, "E_0_05": 5400, "E_90_mean": 270, "G_mean": 500, "rho_k": 310, "rho_mean": 370},
+			"C18": {"f_m_k": 18, "f_t_0_k": 11, "f_t_90_k": 0.5, "f_c_0_k": 18, "f_c_90_k": 2.2, "f_v_k": 2.0, "E_0_mean": 9000, "E_0_05": 6000, "E_90_mean": 300, "G_mean": 560, "rho_k": 320, "rho_mean": 380},
+			"C20": {"f_m_k": 20, "f_t_0_k": 12, "f_t_90_k": 0.5, "f_c_0_k": 19, "f_c_90_k": 2.3, "f_v_k": 2.2, "E_0_mean": 9500, "E_0_05": 6400, "E_90_mean": 320, "G_mean": 590, "rho_k": 330, "rho_mean": 390},
+			"C22": {"f_m_k": 22, "f_t_0_k": 13, "f_t_90_k": 0.5, "f_c_0_k": 20, "f_c_90_k": 2.4, "f_v_k": 2.4, "E_0_mean": 10000, "E_0_05": 6700, "E_90_mean": 330, "G_mean": 630, "rho_k": 340, "rho_mean": 410},
+			"C24": {"f_m_k": 24, "f_t_0_k": 14, "f_t_90_k": 0.5, "f_c_0_k": 21, "f_c_90_k": 2.5, "f_v_k": 2.5, "E_0_mean": 11000, "E_0_05": 7400, "E_90_mean": 370, "G_mean": 690, "rho_k": 350, "rho_mean": 420},
+			"C27": {"f_m_k": 27, "f_t_0_k": 16, "f_t_90_k": 0.6, "f_c_0_k": 22, "f_c_90_k": 2.6, "f_v_k": 2.8, "E_0_mean": 11500, "E_0_05": 7700, "E_90_mean": 380, "G_mean": 720, "rho_k": 370, "rho_mean": 450},
+			"C30": {"f_m_k": 30, "f_t_0_k": 18, "f_t_90_k": 0.6, "f_c_0_k": 23, "f_c_90_k": 2.7, "f_v_k": 3.0, "E_0_mean": 12000, "E_0_05": 8000, "E_90_mean": 400, "G_mean": 750, "rho_k": 380, "rho_mean": 460},
+			"C35": {"f_m_k": 35, "f_t_0_k": 21, "f_t_90_k": 0.6, "f_c_0_k": 25, "f_c_90_k": 2.8, "f_v_k": 3.4, "E_0_mean": 13000, "E_0_05": 8700, "E_90_mean": 430, "G_mean": 810, "rho_k": 400, "rho_mean": 480},
+			"C40": {"f_m_k": 40, "f_t_0_k": 24, "f_t_90_k": 0.6, "f_c_0_k": 26, "f_c_90_k": 2.9, "f_v_k": 3.8, "E_0_mean": 14000, "E_0_05": 9400, "E_90_mean": 470, "G_mean": 880, "rho_k": 420, "rho_mean": 500},
+			"C45": {"f_m_k": 45, "f_t_0_k": 27, "f_t_90_k": 0.6, "f_c_0_k": 27, "f_c_90_k": 3.1, "f_v_k": 3.8, "E_0_mean": 15000, "E_0_05": 10000, "E_90_mean": 500, "G_mean": 940, "rho_k": 440, "rho_mean": 520},
+			"C50": {"f_m_k": 50, "f_t_0_k": 30, "f_t_90_k": 0.6, "f_c_0_k": 29, "f_c_90_k": 3.2, "f_v_k": 3.8, "E_0_mean": 16000, "E_0_05": 10700, "E_90_mean": 530, "G_mean": 1000, "rho_k": 460, "rho_mean": 550}}
 
 		konstant = tabell.get(material).get(konst)
 
@@ -1041,7 +1041,8 @@ class StructuralUnit(Sections):
 		self.f_c_0_k = self.table_values.material_values_timber(self.material, "f_c_0_k")
 		self.f_c_90_k = self.table_values.material_values_timber(self.material, "f_c_90_k")
 		self.k_c_90 = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood") #TODO skapa logik till detta val
-		self.A_ef = 100 * 100 # TODO placeholder. Lägg in geometri från anliggande element + logik
+		#TODO (A_ef) add units checker 
+		self.A_ef = 220 * 45 # TODO placeholder. Lägg in geometri från anliggande element + logik
 		self.f_m_k = self.table_values.material_values_timber(self.material, "f_m_k")
 		self.k_m = self.table_values.avsnitt_6_1_6_2(self.tvärsnitt, self.type)
 		self.f_v_k = self.table_values.material_values_timber(self.material, "f_v_k")
@@ -1049,12 +1050,12 @@ class StructuralUnit(Sections):
 		self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
 
-
+	
 class ClassicalMechanics:
 	def __init__(self):
 		pass
 
-	def navier_stress_distribution(self, N, A, M_y, M_z, I_y, I_z, y, z):
+	def navier_stress_distribution(self, N=0, A=1, M_y=0, M_z=0, I_y=1, I_z=1, y=0, z=0, values=False):
 		"""Returns the stress in the specified point.
 		For correct stresses use right hand rule in the positive direction of the axes.
 		"""
@@ -1317,10 +1318,14 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO add k_sys (I don't understand excactly)
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
-		#TODO find out why 10e2
-		self.unit.sigma_m_z_d = self.unit.M_z * 10e2 * self.unit.h/2 / self.unit.I_z
-		#self.unit.sigma_m_z_d = self.navier_stress_distribution(N=0, )
+		#TODO find out why 10e-7 and not 10e-6
+		#TODO it shouldn't be b/2 and h/2, but biggest general distance from centroid to edge
+		self.unit.sigma_m_y_d = 10e-7*self.navier_stress_distribution(
+			values=True, M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=self.unit.b/2*10e-3)
 
+		self.unit.sigma_m_z_d = 10e-7*self.navier_stress_distribution(
+			values=True, M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
+		#TODO why is sigma_y bigger than sigma_z in FEMDesign?
 		return self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_12(self):
@@ -1337,10 +1342,12 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO add k_sys (I don't understand excactly)
 		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		#TODO find out why 10e2 
+		#TODO find out why 10e2
+		#TODO it shouldn't be b/2 and h/2, but biggest general distance from centroid to edge 
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 
+		#TODO why is sigma_y bigger than sigma_z in FEMDesign?
 		return self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	### 6.1.7 Shear ###
@@ -1362,6 +1369,13 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO seems to be different values for fvk in FEMDesign
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 		self.unit.b_ef = self.ekv_6_13_a()
+		
+		#delta_A = self.unit.b_ef * self.unit.h
+		#S_y = delta_A * y_0
+		#self.unit.tao_d = (self.unit.V * S_y) / (self.unit.I_z * self.unit.b_ef)
+
+
+
 		A_ef = self.unit.b_ef * self.unit.h
 		self.unit.tao_d = self.unit.V / A_ef
 		#TODO there's a clause (3) about support that's not in the Eurocode (I Guess it's in FEMDesign)
@@ -1612,8 +1626,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.lambda_rel_y
 		"""
-		self.i_y = math.sqrt(self.A / self.I_y)
-		self.lambda_y = self.l_c / self.i_y
+		#TODO fix calculation of i and lambda
+		self.unit.i_y = math.sqrt(self.unit.A / self.unit.I_y)
+		self.unit.lambda_y = self.unit.l_c / self.unit.i_y
 		self.unit.lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
 		return self.unit.lambda_rel_y
@@ -1671,7 +1686,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
-							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.sunit.sigma_m_z_d / self.unit.f_m_z_d
+							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_24(self):
 		"""
@@ -2896,6 +2911,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
+	#TODO maybe change this to call an @classmethod (easier for different codes)
 	def __init__(self):
 		super().__init__()
 
@@ -2907,14 +2923,18 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		Calculates the relevant equations and returns a namedtuple
 		"""
 		#TODO tryck_90
+		#TODO correct logic for which calculations to initialize e.g.  N==0 and M != 0
 		if self.unit.N == 0:
 			_B = self.böjning()
 		elif self.unit.N > 0:
 			_B  = self.böjning_och_drag()
 		elif self.unit.N < 0:
 			_B = self.böjning_och_tryck()
+			_FBZ = self.slankhet_pelare_kompression()
+			print("FBZ", _FBZ)
+			#_FBY = 
 
-		#TODO Correct result for negative values of V
+		#TODO Correct result for negative values of V (maybe it's already done)
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
 		else:
@@ -2986,18 +3006,20 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
 	# 6.3.2
 	def slankhet_pelare_kompression(self):
-		self.lambda_rel_y, self.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
+		self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
 
-		if self.lambda_rel_z <= 0.3 and self.lambda_rel_y <= 0.3:
+		#self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
+
+		if self.unit.lambda_rel_z <= 0.3 and self.unit.lambda_rel_y <= 0.3:
 			return self.ekv_6_19(), self.ekv_6_20()
 		else:
 			return self.ekv_6_23(), self.ekv_6_24()
 
 	# 6.3.3
 	def slankhet_balk_böj(self):
-		if self.M_z > 0 and self.N == 0 and self.M_y == 0: #TODO är det verkligen M_Y? inte bara N?
+		if self.unit.M_z > 0 and self.unit.N == 0 and self.unit.M_y == 0: #TODO är det verkligen M_Y? inte bara N?
 			return self.ekv_6_33() #TODO värde return
-		elif self.M_z > 0 and self.N < 0 and self.M_y == 0:
+		elif self.unit.M_z > 0 and self.unit.N < 0 and self.unit.M_y == 0:
 			return self.ekv_6_35()
 
 	# 4 Varying cross-section or curved shape

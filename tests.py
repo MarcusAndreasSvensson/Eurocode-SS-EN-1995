@@ -6,7 +6,8 @@ import xml.etree.ElementTree as ET
 from xml.dom.minidom import parseString
 import threading
 
-def define_unit(M_y=2000, M_z=2000, N=10000, V=10000, T=200000, material="C24", service_class="S2", 
+
+def define_unit(M_y=337.5, M_z=337.5, N=-10000, V=450, T=200, material="C24", service_class="S2", 
                 load_duration_class="medium", section="45x220", start_point=[0,0,0], end_point=[3,0,0]):
     """Defines a member."""
     data.members[data.id]["object_instance"].M_y = M_y
@@ -21,7 +22,7 @@ def define_unit(M_y=2000, M_z=2000, N=10000, V=10000, T=200000, material="C24", 
     data.members[data.id]["object_instance"].start_point = start_point
     data.members[data.id]["object_instance"].end_point = end_point
 
-def calc_func_test(i, random=True):
+def calc_func_test(i, random=True, debug_vars=False):
     """Creates i number of members and calculates."""
     if random == True:
         table_2_1 = ["permanent", "long", "medium", "instant"]
@@ -52,8 +53,17 @@ def calc_func_test(i, random=True):
             data.members[data.id]["object_instance"].prepare_for_calculation()
             data.ULS_timber.set_unit(data.members[data.id]["object_instance"])
             data.save_result(data.id, data.ULS_timber.start_calculation())
+
+            if debug_vars == True:
+                variables = [attr for attr in vars(data.members[data.id]["object_instance"])]
+
+                with open("units.txt", "w") as f:
+                    for attr in variables:
+                        f.write(f"{attr}, \t, {getattr(data.members[data.id]['object_instance'], attr)}\n")
+                        #print(attr, "\t", getattr(data.members[data.id]["object_instance"], attr))
+
             # Space for additional tests
-            #data.ULS_timber.ekv_6_11()
+            data.ULS_timber.ekv_6_11()
             # ==========
         
     for member in data.members:
@@ -74,12 +84,13 @@ def clear_database_test():
     if data.members == {}:
         print("Database is empty") #TODO add assert statement
 
+
 def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=True, clear_members=True):
     if random_memeber_calc == True:
         calc_func_test(1000, random=True)
 
     if specific_member_calc == True:
-        calc_func_test(1, random=False)
+        calc_func_test(1, random=False, debug_vars=True)
 
     if xml_test == True:
         create_xml_test()
