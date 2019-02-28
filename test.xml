@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <database country="SWE" end_time="time_placeholder" hash="hash_placeholder" source_software="placeholder" start_time="time_placeholder" uuid="uuid_placeholder" version="version_placeholder" xmlns="urn:placeholder" xmlns:xsd="placeholder" xmlns:xsi="placeholder">
 	<entities>
-		<bar action="value" last_change="value" type="beam" uuid="b229932f-4071-41bd-a64c-7a48b3d6c391">
+		<bar action="value" last_change="value" type="beam" uuid="34278b9c-bf91-4de0-bce5-c78d4aa4f1fe">
 			<bar_part action="value" cross_section_area="9900.0" cross_section_b="45" cross_section_h="220" cross_section_type="rectangular" ecc_calc="value" last_change="value" length="3.0" load_duration_class="medium" material="C24" material_type="solid timber" moment_of_inertia_y="1670625.0" moment_of_inertia_z="39930000.0" name="value" service_class="S2" uuid="value">
 				<curve type="placeholder">
 					<start_point x="0" y="0" z="0"/>
