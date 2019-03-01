@@ -57,11 +57,13 @@ def calc_func_test(i, random=True, debug_vars=False):
             if debug_vars == True:
                 variables = [attr for attr in vars(data.members[data.id]["object_instance"])]
 
-                for attr in variables:
-                    print(attr, "\t", getattr(data.members[data.id]["object_instance"], attr))
+                with open("units.txt", "w") as f:
+                    for attr in variables:
+                        f.write(f"{attr}, \t, {getattr(data.members[data.id]['object_instance'], attr)}\n")
+                        #print(attr, "\t", getattr(data.members[data.id]["object_instance"], attr))
 
             # Space for additional tests
-            #data.ULS_timber.ekv_6_11()
+            data.ULS_timber.ekv_6_11()
             # ==========
         
     for member in data.members:
