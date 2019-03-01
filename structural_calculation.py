@@ -557,11 +557,10 @@ class Sections:
 		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
 		I_x = 0
 		I_y = 0
-		I_zz = 0
+		I_xy = 0
 		centroid = self.get_centroid(polygon)
 
-		i = 0
-		for _ in polygon:
+		for i, _ in enumerate(polygon):
 			try:
 				area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
 
@@ -572,14 +571,26 @@ class Sections:
 				y = (pow((polygon[i][0] - centroid[0]), 2) + 
 						(polygon[i][0] - centroid[0]) * (polygon[i+1][0] - centroid[0]) + 
 						pow((polygon[i+1][0] - centroid[0]), 2))
-
-				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
+				"""
+				xy = (((polygon[i][1])*(polygon[i+1][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					(2*(polygon[i][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					(2*(polygon[i+1][1])*(polygon[i+1][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					((polygon[i+1][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)))
+				"""
+				
+				xy = (((polygon[i][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
+					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
+					(2*(polygon[i+1][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
+					((polygon[i+1][1]-centroid[1])*(polygon[i][0]-centroid[0])))
+					
 
 				I_x += x * area
 				I_y += y * area
-				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
+				I_xy += xy * area
+				print("ixy", I_xy)
 
-				i += 1
+				#(a^4)/(192)ncot(pi/n)[3cos^2(pi/n)+1]
+				#Ix2 += 
 
 			except IndexError:
 				area = polygon[i][0] * polygon[0][1] - polygon[0][0] * polygon[i][1]
@@ -592,26 +603,39 @@ class Sections:
 					(polygon[i][0] - centroid[0]) * (polygon[0][0] - centroid[0]) + 
 					pow((polygon[0][0] - centroid[0]), 2))
 
-				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
+				"""xy = (((polygon[i][1])*(polygon[0][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					(2*(polygon[i][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					(2*(polygon[0][1])*(polygon[0][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
+					((polygon[0][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)))"""
+
+				xy = (((polygon[i][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
+					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
+					(2*(polygon[0][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
+					((polygon[0][1]-centroid[1])*(polygon[i][0]-centroid[0])))
 
 				I_x += x * area
 				I_y += y * area
-				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
+				I_xy += xy * area
+				print("ixy", I_xy)
 
 				break
 
 		I_x = abs(I_x) / 12
 		I_y = abs(I_y) / 12
+		I_xy = abs(I_xy) / 24
+
 		#5.821e06
-		I_zz = abs(I_zz) / 12
-		print("ratio", I_zz / 5.821e06)
+		#I_zz = abs(I_zz) / 12
+		
+		print("ratio", I_xy / 5.821e06)
 		#TODO fix torsional intertia
 
 		#TODO torsional centrum is not always the same as the centroid, correct
 		#TODO add a full stiffness matrix
 		K = ReferenceFrame("K")
-		N = inertia(K, I_zz, I_y, I_x)
+		N = inertia(K, 0, I_y, I_x, iyz=I_xy)
 		print(N)
+		
 
 		return I_x, I_y
 	
