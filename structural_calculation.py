@@ -9,6 +9,7 @@ from uuid import uuid4
 from xml.etree.ElementTree import ElementTree, Element, tostring
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parseString
+from sympy.physics.mechanics import ReferenceFrame, inertia
 
 
 class TableValues:
@@ -114,14 +115,11 @@ class TableValues:
 			l_ef = tabell.get(stödtyp).get(lasttyp)
 
 			if load_side == "compression":
-				#TODO Correct this
-				l_ef = (l_ef + 2 * h*10e-3) * l
+				l_ef = l_ef*l + 2*h*1e-3
 			elif load_side == "tension":
-				l_ef = (l_ef - 0.5 * h*10e-3) * l
-
+				l_ef = l_ef*l - 0.5*h*1e-3
 		else:
 			l_ef = 1 * l
-
 
 		return l_ef
 
@@ -559,6 +557,7 @@ class Sections:
 		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
 		I_x = 0
 		I_y = 0
+		I_zz = 0
 		centroid = self.get_centroid(polygon)
 
 		i = 0
@@ -566,33 +565,80 @@ class Sections:
 			try:
 				area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
 
-				x = pow((polygon[i][1] - centroid[1]), 2) + (polygon[i][1] - centroid[1]) * (polygon[i+1][1] - centroid[1]) + pow((polygon[i+1][1] - centroid[1]), 2)
-				y = pow((polygon[i][0] - centroid[0]), 2) + (polygon[i][0] - centroid[0]) * (polygon[i+1][0] - centroid[0]) + pow((polygon[i+1][0] - centroid[0]), 2)
+				x = (pow((polygon[i][1] - centroid[1]), 2) + 
+						(polygon[i][1] - centroid[1]) * (polygon[i+1][1] - centroid[1]) + 
+						pow((polygon[i+1][1] - centroid[1]), 2))
+						
+				y = (pow((polygon[i][0] - centroid[0]), 2) + 
+						(polygon[i][0] - centroid[0]) * (polygon[i+1][0] - centroid[0]) + 
+						pow((polygon[i+1][0] - centroid[0]), 2))
+
+				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
 
 				I_x += x * area
 				I_y += y * area
+				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
 
 				i += 1
 
 			except IndexError:
 				area = polygon[i][0] * polygon[0][1] - polygon[0][0] * polygon[i][1]
 
-				x = pow((polygon[i][1] - centroid[1]), 2) + (polygon[i][1] - centroid[1]) * (polygon[0][1] - centroid[1]) + pow((polygon[0][1] - centroid[1]), 2)
-				y = pow((polygon[i][0] - centroid[0]), 2) + (polygon[i][0] - centroid[0]) * (polygon[0][0] - centroid[0]) + pow((polygon[0][0] - centroid[0]), 2)
+				x = (pow((polygon[i][1] - centroid[1]), 2) + 
+					(polygon[i][1] - centroid[1]) * (polygon[0][1] - centroid[1]) + 
+					pow((polygon[0][1] - centroid[1]), 2))
+
+				y = (pow((polygon[i][0] - centroid[0]), 2) + 
+					(polygon[i][0] - centroid[0]) * (polygon[0][0] - centroid[0]) + 
+					pow((polygon[0][0] - centroid[0]), 2))
+
+				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
 
 				I_x += x * area
 				I_y += y * area
+				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
 
 				break
 
 		I_x = abs(I_x) / 12
 		I_y = abs(I_y) / 12
+		#5.821e06
+		I_zz = abs(I_zz) / 12
+		print("ratio", I_zz / 5.821e06)
+		#TODO fix torsional intertia
+
+		#TODO torsional centrum is not always the same as the centroid, correct
+		#TODO add a full stiffness matrix
+		K = ReferenceFrame("K")
+		N = inertia(K, I_zz, I_y, I_x)
+		print(N)
 
 		return I_x, I_y
 	
-	def get_polar_moment_of_inertia(self, b, h):
+	def get_polar_moment_of_inertia(self, b, h, polygon):
 		"""Calculates the polar moment of inertia for a given polygon"""
 		#TODO general polygonial function
+		#TODO both frame and FEMdesign has lower Itor
+			#4.16e07 vs 5.821e06
+			# ratio = 7.147
+		#TODO they're right, correct!
+		"""
+		#=def - sum k=1, N(m_k * y_k * z_k)
+		I_yz = 0
+		centroid = self.get_centroid(polygon)
+
+		i = 0
+		for vertex in polygon:
+			area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
+			try:
+				pass
+			except IndexError:
+				print("indexerror")
+				break
+		"""
+
+		#sp.dy
+
 		return b*h*(b**2 + h**2) / 12
 
 
@@ -607,7 +653,46 @@ class StructuralUnit(Sections):
 
 	def __init__(self, uuid):
 		self.table_values = TableValues()
-		
+		self._init_vars()
+
+		#TODO the UUID should be generated when the instance is created, not assigned from database
+		self.id = uuid
+		self.tvärsnitt = "rectangular"
+		self.material = "C24"
+		self.type = "solid timber"
+		self.service_class = "S2"
+		self.load_duration_class = "medium"
+		self.enhetstyp = "beam"
+		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
+		self.cover_contact_points = []
+		#TODO refactor redundant variables
+		self.timber_type = "Dressed Lumber"
+		self.cross_section = "95x145"
+		self.start_point = [0,0,0]
+		self.end_point = [5,0,0]
+		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
+		#TODO Add function for calculating the effective buckling lengths and store them here
+		self.buckling_type = "placeholder"
+		self.start_buckling_length = ("co_x", "co_y", "co_z")
+		self.end_buckling_length = ("co_x", "co_y", "co_z")
+		self.start_analytical_eccentricity = (0, 0, 0)
+		self.end_analytical_eccentricity = (0, 0, 0)
+		self.use_default_physical_alignment = False
+		self.start_physical_eccentricity = (0, 0, 0)
+		self.end_physical_eccentricity = (0, 0, 0)
+
+		self.M_y = 1000 # [Nm]
+		self.M_z = 1000 # [Nm]
+		self.N = 1000 # [N]
+		self.V = 1000 # [N]
+		self.T = 1000 # [Nm]
+		#TODO values for type, material etc must be input
+		self.results = None
+
+		self.prepare_for_calculation()
+
+	def _init_vars(self):
 		self.A = float()
 		self.A_ef = float()
 		self.A_f = float()
@@ -785,7 +870,7 @@ class StructuralUnit(Sections):
 		self.l_a_min = float()
 		self.l = float()
 		self.l_A = float()
-		self.l_ef = float()
+		self.l_ef_LTB = float()
 		self.l_V = float()
 		self.l_Z = float()
 		self.m = float()
@@ -860,43 +945,6 @@ class StructuralUnit(Sections):
 		self.w = float()
 		self.x = float()
 		self.xi = float()
-
-		#TODO the UUID should be generated when the instance is created, not assigned from database
-		self.id = uuid
-		self.tvärsnitt = "rectangular"
-		self.material = "C24"
-		self.type = "solid timber"
-		self.service_class = "S2"
-		self.load_duration_class = "medium"
-		self.enhetstyp = "beam"
-		self.contact_points = [] # [id till angränsande, kontaktpunkt, vinkel till object, vinkel till världen]
-		self.cover_contact_points = []
-		#TODO refactor redundant variables
-		self.timber_type = "Dressed Lumber"
-		self.cross_section = "95x145"
-		self.start_point = [0,0,0]
-		self.end_point = [5,0,0]
-		self.start_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
-		self.end_connectivity = {"e_x": False, "e_y": False, "e_z": False, "phi_x": False, "phi_y": True, "phi_z": True}
-		#TODO Add function for calculating the effective buckling lengths and store them here
-		self.buckling_type = "placeholder"
-		self.start_buckling_length = ("co_x", "co_y", "co_z")
-		self.end_buckling_length = ("co_x", "co_y", "co_z")
-		self.start_analytical_eccentricity = (0, 0, 0)
-		self.end_analytical_eccentricity = (0, 0, 0)
-		self.use_default_physical_alignment = False
-		self.start_physical_eccentricity = (0, 0, 0)
-		self.end_physical_eccentricity = (0, 0, 0)
-
-		self.M_y = 1000 # [Nm]
-		self.M_z = 1000 # [Nm]
-		self.N = 1000 # [N]
-		self.V = 1000 # [N]
-		self.T = 1000 # [Nm]
-		#TODO values for type, material etc must be input
-		self.results = None
-
-		self.prepare_for_calculation()
 
 	def _prepare_for_xml(self, file_size="large"):
 		"""Returns .xml formatted string.
@@ -1034,7 +1082,7 @@ class StructuralUnit(Sections):
 		self.r = sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
 		self.A = self.get_area(self.section_vertices)
 		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
-		self.I_tor = self.get_polar_moment_of_inertia(self.b, self.h)
+		self.I_tor = self.get_polar_moment_of_inertia(self.b, self.h, self.section_vertices)
 
 		self.koordinater = array([self.start_point, self.end_point])
 		#TODO förmodligen kommer längden läsas fel iom att den inte uppdateras vid skapandet av objektet
@@ -1049,7 +1097,7 @@ class StructuralUnit(Sections):
 		self.f_c_90_k = self.table_values.material_values_timber(self.material, "f_c_90_k")
 		self.k_c_90 = self.table_values.avsnitt_6_1_5("continuous support", "Solid softwood") #TODO skapa logik till detta val
 		#TODO (A_ef) add units checker 
-		self.A_ef = 220 * 45 # TODO placeholder. Lägg in geometri från anliggande element + logik
+		self.A_ef = self.A / 2 # TODO placeholder. Lägg in geometri från anliggande element + logik
 		self.f_m_k = self.table_values.material_values_timber(self.material, "f_m_k")
 		self.k_m = self.table_values.avsnitt_6_1_6_2(self.tvärsnitt, self.type)
 		self.f_v_k = self.table_values.material_values_timber(self.material, "f_v_k")
@@ -1057,7 +1105,6 @@ class StructuralUnit(Sections):
 		#self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.G_0_05 = 463 #According to FEMDesign
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
-
 	
 class ClassicalMechanics:
 	def __init__(self):
@@ -1547,25 +1594,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.2.4 Combined bending and axial compression ###
 	def ekv_6_19(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1576,7 +1604,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
-		#TODO fattar inte varför 10e2 och inte 10e3
+		#TODO fattar inte varför 10e2 och inte 10e3: 1e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 		self.unit.sigma_c_0_d = self.ekv_6_36()
@@ -1816,23 +1844,21 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.sigma_m_crit
 		"""
+		#TODO fix units
 		#TODO function must be created to take in to account the different load sides (currently "compression")
-		l_ef = self.table_values.tabell_6_1(self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
-		print("lef", l_ef)
+		self.unit.l_ef_LTB = self.table_values.tabell_6_1(
+			self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
 		#TODO kontrollera ekvation
-		self.unit.M_z_crit = math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) / l_ef
-		self.unit.W_z = self.unit.I_z / self.unit.h
-		self.unit.sigma_m_crit = self.unit.M_z_crit / self.unit.W_z
+		self.unit.W_z = self.unit.I_z / self.unit.h * 2
+		self.unit.I_tor = 5.821e6
+		self.unit.l_ef_LTB = 3.04
+		self.unit.sigma_m_crit = (math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) 
+			/ (self.unit.l_ef_LTB*1e3 * self.unit.W_z))
 
 		return self.unit.sigma_m_crit
 
 	def ekv_6_32(self):
 		"""
-		Variables used:
-			self.unit.b
-			self.unit.h
-			self.unit.l_ef
-			self.unit.E_0_05
 		Output:
 			self.unit.sigma_m_crit
 		"""
@@ -1904,9 +1930,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		# max() to get highest tension
 		#TODO fix units
 		#TODO general 
-		#TODO why10e2 not 10e3?
-		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=10e2*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
-								self.navier_stress_distribution(M_z=10e2*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2))
+		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
+								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2))
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
