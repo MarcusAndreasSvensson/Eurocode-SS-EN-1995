@@ -61,13 +61,9 @@ def calc_func_test(i, random=True, debug_vars=False):
                     for attr in variables:
                         f.write(f"{attr}, \t, {getattr(data.members[data.id]['object_instance'], attr)}\n")
                         #print(attr, "\t", getattr(data.members[data.id]["object_instance"], attr))
-
-            # Space for additional tests
-            data.ULS_timber.ekv_6_11()
-            # ==========
         
     for member in data.members:
-        print(data.members[member])
+        print(data.members[member]["result"])
         
 
 def create_xml_test():
@@ -87,7 +83,7 @@ def clear_database_test():
 
 def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=True, clear_members=True):
     if random_memeber_calc == True:
-        calc_func_test(1000, random=True)
+        calc_func_test(10, random=True)
 
     if specific_member_calc == True:
         calc_func_test(1, random=False, debug_vars=True)
@@ -100,4 +96,4 @@ def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=T
 
 if __name__ == "__main__":
     data = Database()
-    test_chooser(False, True, True, False)
+    test_chooser(True, False, True, False)

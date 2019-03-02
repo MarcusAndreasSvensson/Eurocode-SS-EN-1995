@@ -1514,7 +1514,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO kontrollera ekvation
-		print("6.17")
 		self.unit.k_h = self.ekv_3_1()
 		#TODO Add k_sys 
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
@@ -1559,7 +1558,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO fattar inte varför 10e2 och inte 10e3: 1e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-		self.unit.sigma_c_0_d = self.ekv_6_36()
+		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1641,13 +1640,16 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			10e-7*self.navier_stress_distribution(
 			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=-self.unit.b/2*10e-3))
 
-		self.unit.sigma_m_z_d = 10e-7*self.navier_stress_distribution(
-			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
+		self.unit.sigma_m_z_d = max(10e-7*self.navier_stress_distribution(
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3),
+			10e-7*self.navier_stress_distribution(
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=-self.unit.h/2*10e-3))
 		
-		self.unit.sigma_c_0_d = self.ekv_6_36()
-		self.unit.f_m_y_d = 18.79
+		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
+		#TODO investigate strusofts highter fmweakd
+		#self.unit.f_m_y_d = 18.79
 
-		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_y * self.unit.f_c_0_d) + 
+		return (self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d) + 
 				self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
 				self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d)
 		
@@ -1657,16 +1659,16 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
-		#TODO kontrollera ekvation
+		#TODO verify equations
 		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
+		#TODO add k_sys
 		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
-		#TODO fattar inte varför 10e2 och inte 10e3
+		#TODO fix units
 		#TODO fmyd in FEMdesign > this, why?
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
+		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 1e3 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 1e3 / self.unit.I_y)
+		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_z * self.unit.f_c_0_d) + 
@@ -1764,7 +1766,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.sigma_m_crit
 		"""
-		#TODO kontrollera ekvation
+		#TODO verify
 		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef_LTB) * self.unit.E_0_05
 
 		return self.unit.sigma_m_crit
@@ -1811,7 +1813,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		#TODO kontrollera ekvation
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.k_crit = self.ekv_6_34()
@@ -1819,21 +1820,19 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO fix units
 		#TODO general 
 		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
-								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2))
+								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/-2))
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		self.unit.k_c_y = self.ekv_6_25()
+		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
-			self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d))
+			self.unit.sigma_c_0_d / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
 
 		return ratio
 
 	def ekv_6_36(self):
 		"""
-		Variables used:
-			self.unit.N
-			self.unit.A
 		Output:
 			self.unit.sigma_N
 		"""
@@ -1843,10 +1842,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_37(self):
 		"""
-		Variables used:
-			self.unit.M_d
-			self.unit.b
-			self.unit.h
 		Output:
 			self.unit.sigma_m_alpha_d or self.unit.sigma_m_0_d ((?) TODO)
 		"""
@@ -1856,10 +1851,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_38(self):
 		"""
-		Variables used:
-			self.unit.sigma_m_alpha_d
-			self.unit.k_m_alpha
-			self.unit.f_m_d
 		Output:
 			Bool
 		"""
@@ -1870,11 +1861,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_39(self):
 		"""
-		Variables used:
-			self.unit.f_m_d
-			self.unit.f_v_d
-			self.unit.alpha
-			self.unit.f_t_90_d
 		Output:
 			self.unit.k_m_alpha
 		"""
@@ -1886,11 +1872,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_40(self):
 		"""
-		Variables used:
-			self.unit.f_m_d
-			self.unit.f_v_d
-			self.unit.alpha
-			self.unit.f_t_90_d
 		Output:
 			self.unit.k_m_alpha
 		"""
@@ -1902,10 +1883,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_41(self):
 		"""
-		Variables used:
-			self.unit.sigma_m_d
-			self.unit.k_r
-			self.unit.f_m_d
 		Output:
 			Bool
 		"""
@@ -1916,11 +1893,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_42(self):
 		"""
-		Variables used:
-			self.unit.k_l
-			self.unit.M_ap_d
-			self.unit.b
-			self.unit.h_ap
 		Output:
 			self.unit.sigma_m_d
 		"""
@@ -1931,13 +1903,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_43(self):
 		"""
-		Variables used:
-			self.unit.k_1
-			self.unit.k_2
-			self.unit.k_3
-			self.unit.k_4
-			self.unit.h_ap
-			self.unit.r
 		Output:
 			self.unit.k_l
 		"""
@@ -2813,20 +2778,37 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		Calculates the relevant equations and returns a namedtuple
 		"""
 		#TODO tryck_90
-		#TODO correct logic for which calculations to initialize e.g.  N==0 and M != 0
+		#Add pure normal result
+		#TODO refactor/verify logic for which calculations to initialize
 		if self.unit.N == 0:
-			_B = self.böjning()
-			_LTB = self.slankhet_balk_böj()
-		elif self.unit.N > 0:
-			_B  = self.böjning_och_drag()
-		elif self.unit.N < 0:
-			_B = self.böjning_och_tryck()
-			_FB = self.slankhet_pelare_kompression()
-			_LTB = self.slankhet_balk_böj()
-			#TODO add new results to results when applicable
-			print("LTB", _LTB)
-			print("FB", _FB)
+			if self.unit.M_y !=0 or self.unit.M_y !=0:
+				_B = self.böjning()
+				_FB = (0, 0)
+				_LTB = self.slankhet_balk_böj()
+			else:
+				_B = (0, 0)
+				_FB = (0, 0)
+				_LTB = 0
 
+		elif self.unit.N > 0:
+			_N = "tension"
+			_B  = self.böjning_och_drag()
+			_FB = (0, 0)
+			if self.unit.M_y !=0 or self.unit.M_y !=0:
+				_LTB = self.slankhet_balk_böj()
+			else:
+				_LTB = 0
+			
+		elif self.unit.N < 0:
+			_N = "compression"
+			_B = self.böjning_och_tryck()
+			#TODO fix the negative case
+			_FB = self.slankhet_pelare_kompression()
+			if self.unit.M_y !=0 or self.unit.M_y !=0:
+				_LTB = self.slankhet_balk_böj()
+			else:
+				_LTB = 0
+			
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
 		else:
@@ -2900,8 +2882,6 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	def slankhet_pelare_kompression(self):
 		self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
 
-		#self.unit.lambda_rel_y, self.unit.lambda_rel_z = self.ekv_6_21(), self.ekv_6_22()
-
 		if self.unit.lambda_rel_z <= 0.3 and self.unit.lambda_rel_y <= 0.3:
 			#TODO this case shouldn't add a new result
 			return self.ekv_6_19(), self.ekv_6_20()
@@ -2913,9 +2893,9 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	# 6.3.3
 	def slankhet_balk_böj(self):
 		#Add case for not stabilized around the weak axis
-		if self.unit.M_z > 0 and self.unit.N == 0:
+		if self.unit.M_z != 0 and self.unit.N >= 0:
 			return self.ekv_6_33() #TODO värde return
-		elif self.unit.M_z > 0 and self.unit.N < 0== 0:
+		elif self.unit.M_z != 0 and self.unit.N < 0:
 			return self.ekv_6_35()
 
 	# 4 Varying cross-section or curved shape
@@ -3240,7 +3220,7 @@ class Database:
 		self.ULS_timber = UltimateLimitStateTimber()
 
 	def add_unit(self):
-		"""Creates structuralUnit instance and assigns an unique id to it."""
+		"""Creates structuralUnit instance and assigns a unique id to it."""
 		id = str(uuid4())
 		self.id = id
 		self.members[id] = {"object_instance": StructuralUnit(id), "result": None}
