@@ -557,11 +557,10 @@ class Sections:
 		#TODO I think it's industry standard to go counterclockwise, change that (alot of work)
 		I_x = 0
 		I_y = 0
-		I_zz = 0
+		I_xy = 0
 		centroid = self.get_centroid(polygon)
 
-		i = 0
-		for _ in polygon:
+		for i, _ in enumerate(polygon):
 			try:
 				area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
 
@@ -572,14 +571,18 @@ class Sections:
 				y = (pow((polygon[i][0] - centroid[0]), 2) + 
 						(polygon[i][0] - centroid[0]) * (polygon[i+1][0] - centroid[0]) + 
 						pow((polygon[i+1][0] - centroid[0]), 2))
-
-				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
-
+				
+				xy = (((polygon[i][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
+					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
+					(2*(polygon[i+1][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
+					((polygon[i+1][1]-centroid[1])*(polygon[i][0]-centroid[0])))
+					
 				I_x += x * area
 				I_y += y * area
-				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
+				I_xy += xy * area
 
-				i += 1
+				#(a^4)/(192)ncot(pi/n)[3cos^2(pi/n)+1]
+				#Ix2 += 
 
 			except IndexError:
 				area = polygon[i][0] * polygon[0][1] - polygon[0][0] * polygon[i][1]
@@ -592,26 +595,29 @@ class Sections:
 					(polygon[i][0] - centroid[0]) * (polygon[0][0] - centroid[0]) + 
 					pow((polygon[0][0] - centroid[0]), 2))
 
-				zz = sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2)
+				xy = (((polygon[i][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
+					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
+					(2*(polygon[0][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
+					((polygon[0][1]-centroid[1])*(polygon[i][0]-centroid[0])))
 
 				I_x += x * area
 				I_y += y * area
-				I_zz += sqrt((polygon[i][1] - centroid[1])**2 + (polygon[i][0] - centroid[0])**2) * area
+				I_xy += xy * area
 
 				break
 
 		I_x = abs(I_x) / 12
 		I_y = abs(I_y) / 12
-		#5.821e06
-		I_zz = abs(I_zz) / 12
-		print("ratio", I_zz / 5.821e06)
+		I_xy = abs(I_xy) / 24
+
 		#TODO fix torsional intertia
 
 		#TODO torsional centrum is not always the same as the centroid, correct
 		#TODO add a full stiffness matrix
 		K = ReferenceFrame("K")
-		N = inertia(K, I_zz, I_y, I_x)
-		print(N)
+		N = inertia(K, 0, I_y, I_x, iyz=I_xy)
+		#print(N)
+		
 
 		return I_x, I_y
 	
@@ -622,24 +628,25 @@ class Sections:
 			#4.16e07 vs 5.821e06
 			# ratio = 7.147
 		#TODO they're right, correct!
-		"""
-		#=def - sum k=1, N(m_k * y_k * z_k)
-		I_yz = 0
-		centroid = self.get_centroid(polygon)
+		#TODO needs FEM implementation
 
-		i = 0
-		for vertex in polygon:
-			area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
-			try:
-				pass
-			except IndexError:
-				print("indexerror")
-				break
-		"""
+		#Rectangular quick fix
+		hb = h / b
+		if hb <= 1:
+			c = 0.22
+		elif hb <= 2:
+			c = 0.24
+		elif hb <= 3:
+			c = 0.26
+		elif hb <= 4:
+			c = 0.28
+		elif hb <= 5:
+			c = 0.29
+		else:
+			c = 0.31
 
-		#sp.dy
-
-		return b*h*(b**2 + h**2) / 12
+		I_tor = (b**3 * h) * c
+		return I_tor
 
 
 class CoverUnit:
@@ -1105,7 +1112,8 @@ class StructuralUnit(Sections):
 		#self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.G_0_05 = 463 #According to FEMDesign
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
-	
+
+		
 class ClassicalMechanics:
 	def __init__(self):
 		pass
@@ -1411,16 +1419,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.1.7 Shear ###
 	def ekv_6_13(self):
 		"""
-		Variables used:
-			self.unit.f_v_k
-			self.unit.gamma_M
-			self.unit.k_mod
-			self.unit.f_v_d
-			self.unit.b_ef
-			A_ef
-			self.unit.h
-			self.unit.tao_d
-			self.unit.V
 		Output:
 			abs(self.unit.tao_d / self.unit.f_v_d)
 		"""
@@ -1461,24 +1459,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.1.8 Torsion ###
 	def ekv_6_14(self):
 		"""
-		Variables used:
-			self.unit.f_v_k
-			self.unit.gamma_M
-			self.unit.k_mod
-			self.unit.f_v_d
-			self.unit.k_shape
-			self.unit.I_tor
-			self.unit.I_y
-			self.unit.I_z
-			self.unit.tao_tor_d
-			self.unit.T
-			self.unit.r
 		Output:
 			abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 		"""
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 		self.unit.k_shape = self.ekv_6_15()
-		self.unit.I_tor = self.unit.I_y + self.unit.I_z
 		self.unit.tao_tor_d = self.unit.T * self.unit.r / self.unit.I_tor
 
 		return abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
@@ -1520,25 +1505,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.2.3 Combined bending and axial tension ###
 	def ekv_6_17(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.gamma_M
-			self.unit.f_m_k
-			self.unit.f_t_0_k
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_t_0_d
-			self.unit.sigma_t_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.k_m
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
@@ -1557,25 +1523,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	
 	def ekv_6_18(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_t_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_t_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.sigma_t_0_d
-			self.unit.k_m
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
@@ -1614,26 +1561,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_20(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.M_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1721,25 +1648,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		
 	def ekv_6_24(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.k_c_z
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.I_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1762,8 +1670,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_25(self):
 		"""
-		Variables used:
-			self.unit.k_y
 		Output:
 			self.unit.k_c_y
 		"""
@@ -1788,8 +1694,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_27(self):
 		"""
-		Variables used:
-			self.unit.beta_c
 		Output:
 			self.unit.k_y
 		"""
@@ -1801,9 +1705,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_28(self):
 		"""
-		Variables used:
-			self.unit.beta_c
-			self.unit.lambda_rel_z
 		Output:
 			self.unit.k_z
 		"""
@@ -1816,8 +1717,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_29(self):
 		"""
-		Variables used:
-			self.unit.type
 		Output:
 			self.unit.beta_c
 		"""
@@ -1850,8 +1749,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
 		#TODO kontrollera ekvation
 		self.unit.W_z = self.unit.I_z / self.unit.h * 2
-		self.unit.I_tor = 5.821e6
-		self.unit.l_ef_LTB = 3.04
 		self.unit.sigma_m_crit = (math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) 
 			/ (self.unit.l_ef_LTB*1e3 * self.unit.W_z))
 
@@ -1863,32 +1760,23 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_m_crit
 		"""
 		#TODO kontrollera ekvation
-		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef) * self.unit.E_0_05
+		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef_LTB) * self.unit.E_0_05
 
 		return self.unit.sigma_m_crit
 
 	def ekv_6_33(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.gamma_M
-			self.unit.f_m_z_d
-			self.unit.k_crit
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
 		Output:
 			self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		"""
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.k_crit = self.ekv_6_34()
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-
-		return self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
+		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, 
+			self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
+		ratio = self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
+		
+		return ratio
 
 	def ekv_6_34(self, supported = False):
 		"""
@@ -1922,7 +1810,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		print("ekv 6.35")
 		#TODO kontrollera ekvation
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
@@ -1936,7 +1823,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
-		return math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
+		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
+			self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d))
+
+		return ratio
 
 	def ekv_6_36(self):
 		"""
