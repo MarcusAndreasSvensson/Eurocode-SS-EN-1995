@@ -1086,7 +1086,7 @@ class StructuralUnit(Sections):
 		"""Saves all changes made to the instances dependent variables."""
 		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
 		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
-		self.r = sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
+		self.r = sqrt(pow(self.h/2,2) + pow(self.b/2,2)) #TODO add general geometry function
 		self.A = self.get_area(self.section_vertices)
 		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
 		self.I_tor = self.get_polar_moment_of_inertia(self.b, self.h, self.section_vertices)
@@ -1472,7 +1472,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		self.unit.f_v_d = self.ekv_2_14(self.unit.f_v_k)
 		self.unit.k_shape = self.ekv_6_15()
-		self.unit.tao_tor_d = self.unit.T * self.unit.r / self.unit.I_tor
+		self.unit.tao_tor_d = self.unit.T*1e03 * self.unit.r / self.unit.I_tor
 
 		return abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 
