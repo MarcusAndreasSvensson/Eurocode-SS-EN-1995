@@ -37,7 +37,7 @@ def calc_func_test(i, random=True, debug_vars=False):
         
         for _ in range(i):
             data.add_unit()
-            define_unit(M_y=uniform(-1, 1)*800, M_z=uniform(-1, 1)*800, N=uniform(-1, 1)*10000, V=uniform(-1, 1)*10000, T=uniform(-1, 1)*200000, 
+            define_unit(M_y=uniform(-1, 1)*500, M_z=uniform(-1, 1)*500, N=uniform(-1, 1)*15000, V=uniform(-1, 1)*600, T=uniform(-1, 1)*400, 
                         material=choice(material), service_class=choice(service_class), load_duration_class=choice(table_2_1), 
                         section=choice(section), start_point=[0,0,0], end_point=[uniform(0.2, 15),0,0])
             #Prepares and calculates the instances equations

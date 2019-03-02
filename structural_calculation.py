@@ -623,11 +623,6 @@ class Sections:
 	
 	def get_polar_moment_of_inertia(self, b, h, polygon):
 		"""Calculates the polar moment of inertia for a given polygon"""
-		#TODO general polygonial function
-		#TODO both frame and FEMdesign has lower Itor
-			#4.16e07 vs 5.821e06
-			# ratio = 7.147
-		#TODO they're right, correct!
 		#TODO needs FEM implementation
 
 		#Rectangular quick fix
@@ -667,6 +662,7 @@ class StructuralUnit(Sections):
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
 		self.type = "solid timber"
+		self.roof_beam_type = float()
 		self.service_class = "S2"
 		self.load_duration_class = "medium"
 		self.enhetstyp = "beam"
@@ -920,6 +916,8 @@ class StructuralUnit(Sections):
 		self.rho_a = float()
 		self.rho_k = float()
 		self.rho_m = float()
+		self.rho_m_1 = float()
+		self.rho_m_2 = float()
 		self.sigma_c_0_d = float()
 		self.sigma_c_90_d = float()
 		self.sigma_c_alpha_d = float()
@@ -938,6 +936,7 @@ class StructuralUnit(Sections):
 		self.sigma_m_z_d = float()
 		self.sigma_m_alpha_d = float()
 		self.sigma_N = float()
+		self.sigma_t = float()
 		self.sigma_t_0_d = float()
 		self.sigma_t_90_d = float()
 		self.sigma_w_c_d = float()
@@ -950,6 +949,8 @@ class StructuralUnit(Sections):
 		self.psi_0 = float()
 		self.psi_2 = float()
 		self.w = float()
+		self.w_creep = float()
+		self.w_inst = float()
 		self.x = float()
 		self.xi = float()
 
@@ -1077,6 +1078,9 @@ class StructuralUnit(Sections):
 		result_part.set("bending_2", str(self.results.bending[1]))
 		result_part.set("shear", str(self.results.shear))
 		result_part.set("torsion", str(self.results.torsion))
+		result_part.set("flexural_buckling_1", str(self.results.flexural_buckling[0]))
+		result_part.set("flexural_buckling_2", str(self.results.flexural_buckling[1]))
+		result_part.set("lateral_torsional_buckling", str(self.results.lateral_torsional_buckling))
 		result_part.set("uuid", "placeholder")
 
 		#TODO must add results to string
@@ -1494,12 +1498,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.2.2 Compression stresses at an angle to the grain ###
 	def ekv_6_16(self):
 		"""
-		Variables used:
-			self.unit.sigma_c_alpha_d
-			self.unit.f_c_0_d
-			self.unit.k_c_90
-			self.unit.f_c_90_d
-			self.unit.alpha
 		Output:
 			Bool
 		"""
@@ -1823,7 +1821,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
 								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2))
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
-		self.unit.k_c_z = self.ekv_6_26()
+		self.unit.k_c_y = self.ekv_6_25()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
@@ -2045,9 +2043,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.k_vol
 		"""
 		#TODO fixa wood_type()
-		if self.unit.wood_type() == "solid timber":
+		if self.unit.type == "solid timber":
 			self.unit.k_vol = 1
-		elif self.unit.wood_type() == "glued laminated timber" or "LVL":
+		elif self.unit.type == "glued laminated timber" or "LVL":
 			self.unit.k_vol = math.pow((self.unit.V_0 / self.unit.V), 0.2)
 
 		return self.unit.k_vol
@@ -2069,7 +2067,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.k_dis
 		"""
         #TODO fixa en funktion som avgör takstolens typ
-		if self.unit.roof_beam_type() == "double tapered" or "curved":
+		if self.unit.roof_beam_type == "double tapered" or "curved":
 			self.unit.k_dis = 1.4
 		elif self.roof_beam_type() == "pitched cambered":
 			self.unit.k_dis = 1.7
@@ -2078,13 +2076,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_53(self):
 		"""
-		Variables used:
-			self.unit.tao_d
-			self.unit.f_v_d
-			self.unit.sigma_t_90_d
-			self.unit.k_dis
-			self.unit.k_vol
-			self.unit.f_t_90_d
 		Output:
 			Bool
 		"""
@@ -2095,11 +2086,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_54(self):
 		"""
-		Variables used:
-			self.unit.k_p
-			self.unit.M_ap_d
-			self.unit.b
-			self.unit.h_ap
 		Output:
 			self.unit.sigma_t_90_d
 		"""
@@ -2242,11 +2228,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.k_n
 		"""
-		if self.unit.wood_type() == "LVL":
+		if self.unit.type == "LVL":
 			self.unit.k_n = 4.5
-		elif self.unit.wood_type() == "solid timber":
+		elif self.unit.type == "solid timber":
 			self.unit.k_n = 5
-		elif self.unit.wood_type() == "glued laminated timber":
+		elif self.unit.type == "glued laminated timber":
 			self.unit.k_n = 6.5
 
 		return self.unit.k_n
@@ -2274,8 +2260,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.w_net_fin
 		"""
 		#TODO Add logic
-		self.unit.w_net_fin = self.w_inst + self.w_creep - self.w_c 
-		self.unit.w_net_fin = self.w_inst - self.w_c
+		self.unit.w_net_fin = self.unit.w_inst + self.unit.w_creep - self.unit.w_c 
+		self.unit.w_net_fin = self.unit.w_inst - self.unit.w_c
 		self.unit.w_net_fin = self.unit.w_inst - self.unit.w_c
 
 		return self.unit.w_net_fin
@@ -2852,9 +2838,9 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_T = 0
 
 		#TODO kompression i vinkel
-		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
+		resultat_ntuple = namedtuple("result", "bending, shear, torsion, flexural_buckling, lateral_torsional_buckling")
 
-		return resultat_ntuple(_B, _V, _T)
+		return resultat_ntuple(_B, _V, _T, _FB, _LTB)
 
 	# 1 Stress one direction ===============
 
@@ -2963,7 +2949,7 @@ class plot:
 
 
     def add_object(self, vertex1, vertex2):
-        object = StructuralUnit()
+        object = StructuralUnit(000)
         object.id = self.id
         object.koordinater = np.array([vertex1,vertex2])
 
