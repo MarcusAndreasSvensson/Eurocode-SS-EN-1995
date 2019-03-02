@@ -1086,7 +1086,7 @@ class StructuralUnit(Sections):
 		"""Saves all changes made to the instances dependent variables."""
 		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
 		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
-		self.r = sqrt(pow(self.h,2) + pow(self.b,2)) #TODO add general geometry function
+		self.r = sqrt(pow(self.h/2,2) + pow(self.b/2,2)) #TODO add general geometry function
 		self.A = self.get_area(self.section_vertices)
 		self.I_z, self.I_y = self.get_moment_of_inertia(self.section_vertices)
 		self.I_tor = self.get_polar_moment_of_inertia(self.b, self.h, self.section_vertices)
@@ -1123,6 +1123,12 @@ class ClassicalMechanics:
 		For correct stresses use right hand rule in the positive direction of the axes.
 		"""
 		return N/A + (M_z/I_z)*y - (M_y/I_y)*z
+
+	def shear_stress(self, V, del_A, y, I, b):
+		S = del_A * y
+		tao = V*S / (I*b)
+
+		return tao		
 
 
 class SS_EN_1995_1_1(ClassicalMechanics):
@@ -1422,21 +1428,23 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			abs(self.unit.tao_d / self.unit.f_v_d)
 		"""
-		#TODO seems to be different values for fvk in FEMDesign
-		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
-		self.unit.b_ef = self.ekv_6_13_a()
-		
-		#delta_A = self.unit.b_ef * self.unit.h
-		#S_y = delta_A * y_0
-		#self.unit.tao_d = (self.unit.V * S_y) / (self.unit.I_z * self.unit.b_ef)
+		self.unit.f_v_d = self.ekv_2_14(self.unit.f_v_k)
+		#TODO verify fvd, it's higher in FEMDesign
 
+		#TODO the moment is 0 when the shear stress is at it's largest, where is the line?
+		if self.unit.M_z != 0 or self.unit.M_y != 0:
+			self.unit.b_ef = self.ekv_6_13_a()
+		else:
+			self.unit.b_ef = self.unit.b
 
+		#TODO change implementations when FEM module is deployed
+		self.unit.tao_d = self.shear_stress(self.unit.V, self.unit.h/2*self.unit.b, 
+			self.unit.h/4, self.unit.I_y, self.unit.b_ef)
 
-		A_ef = self.unit.b_ef * self.unit.h
-		self.unit.tao_d = self.unit.V / A_ef
-		#TODO there's a clause (3) about support that's not in the Eurocode (I Guess it's in FEMDesign)
+		#TODO implement clause (3)
+		ratio = abs(self.unit.tao_d / (self.unit.f_v_d))
 
-		return abs(self.unit.tao_d / self.unit.f_v_d)
+		return ratio
 
 	def ekv_6_13_a(self):
 		"""
@@ -1462,9 +1470,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 		"""
-		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
+		self.unit.f_v_d = self.ekv_2_14(self.unit.f_v_k)
 		self.unit.k_shape = self.ekv_6_15()
-		self.unit.tao_tor_d = self.unit.T * self.unit.r / self.unit.I_tor
+		self.unit.tao_tor_d = self.unit.T*1e03 * self.unit.r / self.unit.I_tor
 
 		return abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 
@@ -1475,8 +1483,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.k_shape
 		"""
-		#TODO gör en allmän formel för alla geometrier
-		#TODO lägg till self.crossection + funktion som kontrollerar detta
+		#TODO general polygon function
 		if self.unit.tvärsnitt == "rectangular":
 			self.unit.k_shape = min(1 + 0.15 * self.unit.h / self.unit.b, 2)
 		elif self.unit.tvärsnitt == "circular":
@@ -1791,14 +1798,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.lambda_rel_m = self.ekv_6_30()
 
 			if self.unit.lambda_rel_m <= 0.75:
-				print("case 1")
 				self.unit.k_crit = 1
-			#TODO verify syntax
 			elif 0.75 < self.unit.lambda_rel_m <= 1.4:
-				print("case 2")
 				self.unit.k_crit = 1.56 - 0.75 * self.unit.lambda_rel_m
 			elif 1.4 < self.unit.lambda_rel_m:
-				print("case 3")
 				self.unit.k_crit = 1 / math.pow(self.unit.lambda_rel_m, 2)
 		else:
 			self.unit.k_crit = 1
@@ -2834,11 +2837,10 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_B = self.böjning_och_tryck()
 			_FB = self.slankhet_pelare_kompression()
 			_LTB = self.slankhet_balk_böj()
-			#TODO add flexural buckling to results when applicable
+			#TODO add new results to results when applicable
 			print("LTB", _LTB)
 			print("FB", _FB)
 
-		#TODO Correct result for negative values of V (maybe it's already done)
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
 		else:

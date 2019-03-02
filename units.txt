@@ -1,4 +1,4 @@
-table_values, 	, <structural_calculation.TableValues object at 0x000001E84E370E48>
+table_values, 	, <structural_calculation.TableValues object at 0x0000025FD32B5128>
 A, 	, 9900.0
 A_ef, 	, 4950.0
 A_f, 	, 0.0
@@ -183,7 +183,7 @@ n_40, 	, 0.0
 n_ef, 	, 0.0
 p_d, 	, 0.0
 q_i, 	, 0.0
-r, 	, 224.5551157288562
+r, 	, 112.2775578644281
 s, 	, 0.0
 s_0, 	, 0.0
 r_in, 	, 0.0
@@ -240,17 +240,17 @@ sigma_t_0_d, 	, 0.0
 sigma_t_90_d, 	, 0.0
 sigma_w_c_d, 	, 0.0
 sigma_w_t_d, 	, 0.0
-tao_d, 	, 0.06784260515603799
+tao_d, 	, 2.4322830292979547
 tao_F_d, 	, 0.0
 tao_M_d, 	, 0.0
-tao_tor_d, 	, 0.007724933136519945
+tao_tor_d, 	, 3.8624665682599724
 theta, 	, 0.0
 psi_0, 	, 0.0
 psi_2, 	, 0.0
 w, 	, 0.0
 x, 	, 0.0
 xi, 	, 0.0
-id, 	, 4a386245-a60b-48b1-919f-dd7549647da9
+id, 	, fa748d3b-529d-4c16-bc4d-913d1eb78d23
 tvärsnitt, 	, rectangular
 material, 	, C24
 type, 	, solid timber
@@ -276,7 +276,7 @@ end_physical_eccentricity, 	, (0, 0, 0)
 M_y, 	, 337.5
 M_z, 	, 337.5
 T, 	, 200
-results, 	, result(bending=(0.3579409141071148, 0.2844969574955446), shear=0.044097693351424695, torsion=0.0028968499261949796)
+results, 	, result(bending=(0.3579409141071148, 0.2844969574955446), shear=1.5809839690436707, torsion=1.4484249630974897)
 section, 	, [45, 220]
 section_vertices, 	, [[0, 0], [0, 220], [45, 220], [45, 0]]
 I_y, 	, 1670625.0
