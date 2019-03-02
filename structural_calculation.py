@@ -1558,7 +1558,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO fattar inte varför 10e2 och inte 10e3: 1e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-		self.unit.sigma_c_0_d = self.ekv_6_36()
+		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1640,14 +1640,16 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			10e-7*self.navier_stress_distribution(
 			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=-self.unit.b/2*10e-3))
 
-		self.unit.sigma_m_z_d = 10e-7*self.navier_stress_distribution(
-			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3)
+		self.unit.sigma_m_z_d = max(10e-7*self.navier_stress_distribution(
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3),
+			10e-7*self.navier_stress_distribution(
+			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=-self.unit.h/2*10e-3))
 		
-		self.unit.sigma_c_0_d = self.ekv_6_36()
+		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		#TODO investigate strusofts highter fmweakd
 		#self.unit.f_m_y_d = 18.79
 
-		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_y * self.unit.f_c_0_d) + 
+		return (self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d) + 
 				self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
 				self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d)
 		
@@ -1657,13 +1659,13 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
-		#TODO kontrollera ekvation
+		#TODO verify equations
 		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
+		#TODO add k_sys
 		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
-		#TODO fattar inte varför 10e2 och inte 10e3
+		#TODO fix units
 		#TODO fmyd in FEMdesign > this, why?
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 1e3 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 1e3 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
@@ -1811,7 +1813,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		#TODO kontrollera ekvation
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.k_crit = self.ekv_6_34()
@@ -1822,10 +1823,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/-2))
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		self.unit.k_c_y = self.ekv_6_25()
+		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
-			self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d))
+			self.unit.sigma_c_0_d / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
 
 		return ratio
 
@@ -2783,12 +2785,10 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 				_B = self.böjning()
 				_FB = (0, 0)
 				_LTB = self.slankhet_balk_böj()
-				print("case 1")
 			else:
 				_B = (0, 0)
 				_FB = (0, 0)
 				_LTB = 0
-				print("case 2")
 
 		elif self.unit.N > 0:
 			_N = "tension"
@@ -2796,11 +2796,8 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_FB = (0, 0)
 			if self.unit.M_y !=0 or self.unit.M_y !=0:
 				_LTB = self.slankhet_balk_böj()
-				print("case 3")
-				print(_LTB)
 			else:
 				_LTB = 0
-				print("case 4")
 			
 		elif self.unit.N < 0:
 			_N = "compression"
@@ -2809,11 +2806,8 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_FB = self.slankhet_pelare_kompression()
 			if self.unit.M_y !=0 or self.unit.M_y !=0:
 				_LTB = self.slankhet_balk_böj()
-				print("case 5")
-				print(_LTB)
 			else:
 				_LTB = 0
-				print("case 6")
 			
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
@@ -2900,10 +2894,8 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	def slankhet_balk_böj(self):
 		#Add case for not stabilized around the weak axis
 		if self.unit.M_z != 0 and self.unit.N >= 0:
-			print("6.3.3, 1")
 			return self.ekv_6_33() #TODO värde return
 		elif self.unit.M_z != 0 and self.unit.N < 0:
-			print("6.3.3, 2")
 			return self.ekv_6_35()
 
 	# 4 Varying cross-section or curved shape
@@ -3243,19 +3235,6 @@ class Database:
 		id: String; Objects UUID
 		result: namedtuple; results of calculation
 		"""
-		if result.lateral_torsional_buckling == None:
-			print("NONE", "N", self.members[id]["object_instance"].N, "My", self.members[id]["object_instance"].M_y, 
-				"Mz", self.members[id]["object_instance"].M_z, "sigma_mz", self.members[id]["object_instance"].sigma_m_z_d, 
-				"sigma_c0", self.members[id]["object_instance"].sigma_c_0_d, "kcy", self.members[id]["object_instance"].k_c_y, 
-				"fc0d", self.members[id]["object_instance"].f_c_0_d)
-			print()
-		else:
-			print("COOL", "N", self.members[id]["object_instance"].N, "My", self.members[id]["object_instance"].M_y, 
-				"Mz", self.members[id]["object_instance"].M_z, "sigma_mz", self.members[id]["object_instance"].sigma_m_z_d, 
-				"sigma_c0", self.members[id]["object_instance"].sigma_c_0_d, "kcy", self.members[id]["object_instance"].k_c_y, 
-				"fc0d", self.members[id]["object_instance"].f_c_0_d)
-			print()
-
 		self.members[id]["result"] = result
 		self.members[id]["object_instance"].results = result
 
