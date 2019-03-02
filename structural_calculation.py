@@ -571,23 +571,15 @@ class Sections:
 				y = (pow((polygon[i][0] - centroid[0]), 2) + 
 						(polygon[i][0] - centroid[0]) * (polygon[i+1][0] - centroid[0]) + 
 						pow((polygon[i+1][0] - centroid[0]), 2))
-				"""
-				xy = (((polygon[i][1])*(polygon[i+1][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					(2*(polygon[i][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					(2*(polygon[i+1][1])*(polygon[i+1][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					((polygon[i+1][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)))
-				"""
 				
 				xy = (((polygon[i][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
 					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
 					(2*(polygon[i+1][1]-centroid[1])*(polygon[i+1][0]-centroid[0])) + 
 					((polygon[i+1][1]-centroid[1])*(polygon[i][0]-centroid[0])))
 					
-
 				I_x += x * area
 				I_y += y * area
 				I_xy += xy * area
-				print("ixy", I_xy)
 
 				#(a^4)/(192)ncot(pi/n)[3cos^2(pi/n)+1]
 				#Ix2 += 
@@ -603,11 +595,6 @@ class Sections:
 					(polygon[i][0] - centroid[0]) * (polygon[0][0] - centroid[0]) + 
 					pow((polygon[0][0] - centroid[0]), 2))
 
-				"""xy = (((polygon[i][1])*(polygon[0][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					(2*(polygon[i][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					(2*(polygon[0][1])*(polygon[0][0])-sqrt(centroid[1]**2*centroid[0]**2)) + 
-					((polygon[0][1])*(polygon[i][0])-sqrt(centroid[1]**2*centroid[0]**2)))"""
-
 				xy = (((polygon[i][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
 					(2*(polygon[i][1]-centroid[1])*(polygon[i][0]-centroid[0])) + 
 					(2*(polygon[0][1]-centroid[1])*(polygon[0][0]-centroid[0])) + 
@@ -616,7 +603,6 @@ class Sections:
 				I_x += x * area
 				I_y += y * area
 				I_xy += xy * area
-				print("ixy", I_xy)
 
 				break
 
@@ -624,17 +610,13 @@ class Sections:
 		I_y = abs(I_y) / 12
 		I_xy = abs(I_xy) / 24
 
-		#5.821e06
-		#I_zz = abs(I_zz) / 12
-		
-		print("ratio", I_xy / 5.821e06)
 		#TODO fix torsional intertia
 
 		#TODO torsional centrum is not always the same as the centroid, correct
 		#TODO add a full stiffness matrix
 		K = ReferenceFrame("K")
 		N = inertia(K, 0, I_y, I_x, iyz=I_xy)
-		print(N)
+		#print(N)
 		
 
 		return I_x, I_y
@@ -646,24 +628,25 @@ class Sections:
 			#4.16e07 vs 5.821e06
 			# ratio = 7.147
 		#TODO they're right, correct!
-		"""
-		#=def - sum k=1, N(m_k * y_k * z_k)
-		I_yz = 0
-		centroid = self.get_centroid(polygon)
+		#TODO needs FEM implementation
 
-		i = 0
-		for vertex in polygon:
-			area = polygon[i][0] * polygon[i+1][1] - polygon[i+1][0] * polygon[i][1]
-			try:
-				pass
-			except IndexError:
-				print("indexerror")
-				break
-		"""
+		#Rectangular quick fix
+		hb = h / b
+		if hb <= 1:
+			c = 0.22
+		elif hb <= 2:
+			c = 0.24
+		elif hb <= 3:
+			c = 0.26
+		elif hb <= 4:
+			c = 0.28
+		elif hb <= 5:
+			c = 0.29
+		else:
+			c = 0.31
 
-		#sp.dy
-
-		return b*h*(b**2 + h**2) / 12
+		I_tor = (b**3 * h) * c
+		return I_tor
 
 
 class CoverUnit:
@@ -1129,7 +1112,8 @@ class StructuralUnit(Sections):
 		#self.G_0_05 = self.table_values.material_values_timber(self.material, "G_mean") #TODO ändra till G,005 ist för gmean
 		self.G_0_05 = 463 #According to FEMDesign
 		self.l_c = self.table_values.effektiv_längd_placeholder("ledadx2", self.l) #TODO implementera funktion när den skapas
-	
+
+		
 class ClassicalMechanics:
 	def __init__(self):
 		pass
@@ -1745,25 +1729,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		
 	def ekv_6_24(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.k_c_z
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.I_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1786,8 +1751,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_25(self):
 		"""
-		Variables used:
-			self.unit.k_y
 		Output:
 			self.unit.k_c_y
 		"""
@@ -1812,8 +1775,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_27(self):
 		"""
-		Variables used:
-			self.unit.beta_c
 		Output:
 			self.unit.k_y
 		"""
@@ -1825,9 +1786,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_28(self):
 		"""
-		Variables used:
-			self.unit.beta_c
-			self.unit.lambda_rel_z
 		Output:
 			self.unit.k_z
 		"""
@@ -1840,8 +1798,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_29(self):
 		"""
-		Variables used:
-			self.unit.type
 		Output:
 			self.unit.beta_c
 		"""
