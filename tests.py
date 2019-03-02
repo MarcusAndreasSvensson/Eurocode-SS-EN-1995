@@ -100,4 +100,4 @@ def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=T
 
 if __name__ == "__main__":
     data = Database()
-    test_chooser(False, True, True, False)
+    test_chooser(True, False, True, False)
