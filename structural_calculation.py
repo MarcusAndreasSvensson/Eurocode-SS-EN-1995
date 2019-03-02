@@ -1766,26 +1766,17 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_33(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.gamma_M
-			self.unit.f_m_z_d
-			self.unit.k_crit
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
 		Output:
 			self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		"""
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.k_crit = self.ekv_6_34()
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-
-		return self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
+		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, 
+			self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
+		ratio = self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
+		
+		return ratio
 
 	def ekv_6_34(self, supported = False):
 		"""
@@ -1833,8 +1824,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
-			self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d))
-		print("ekv 6.35", ratio)
+			self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d))
 
 		return ratio
 
