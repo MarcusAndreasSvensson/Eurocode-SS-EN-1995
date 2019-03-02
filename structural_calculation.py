@@ -1419,16 +1419,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.1.7 Shear ###
 	def ekv_6_13(self):
 		"""
-		Variables used:
-			self.unit.f_v_k
-			self.unit.gamma_M
-			self.unit.k_mod
-			self.unit.f_v_d
-			self.unit.b_ef
-			A_ef
-			self.unit.h
-			self.unit.tao_d
-			self.unit.V
 		Output:
 			abs(self.unit.tao_d / self.unit.f_v_d)
 		"""
@@ -1469,18 +1459,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.1.8 Torsion ###
 	def ekv_6_14(self):
 		"""
-		Variables used:
-			self.unit.f_v_k
-			self.unit.gamma_M
-			self.unit.k_mod
-			self.unit.f_v_d
-			self.unit.k_shape
-			self.unit.I_tor
-			self.unit.I_y
-			self.unit.I_z
-			self.unit.tao_tor_d
-			self.unit.T
-			self.unit.r
 		Output:
 			abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 		"""
@@ -1528,25 +1506,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	### 6.2.3 Combined bending and axial tension ###
 	def ekv_6_17(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.gamma_M
-			self.unit.f_m_k
-			self.unit.f_t_0_k
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_t_0_d
-			self.unit.sigma_t_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.k_m
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
@@ -1565,25 +1524,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	
 	def ekv_6_18(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_t_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_t_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.sigma_t_0_d
-			self.unit.k_m
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
@@ -1622,26 +1562,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_20(self):
 		"""
-		Variables used:
-			self.unit.k_mod
-			self.unit.k_h
-			self.unit.f_m_k
-			self.unit.f_c_0_k
-			self.unit.gamma_M
-			self.unit.f_m_y_d
-			self.unit.f_m_z_d
-			self.unit.f_c_0_d
-			self.unit.sigma_m_y_d
-			self.unit.M_y
-			self.unit.b
-			self.unit.I_y
-			self.unit.sigma_m_z_d
-			self.unit.M_z
-			self.unit.h
-			self.unit.I_z
-			self.unit.M_z
-			self.unit.sigma_c_0_d
-			self.unit.k_m
 		Output:
 			math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
