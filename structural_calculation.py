@@ -1464,7 +1464,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		self.unit.f_v_d = self.unit.k_mod * self.unit.f_v_k / self.unit.gamma_M
 		self.unit.k_shape = self.ekv_6_15()
-		self.unit.I_tor = self.unit.I_y + self.unit.I_z
 		self.unit.tao_tor_d = self.unit.T * self.unit.r / self.unit.I_tor
 
 		return abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
@@ -1750,8 +1749,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
 		#TODO kontrollera ekvation
 		self.unit.W_z = self.unit.I_z / self.unit.h * 2
-		self.unit.I_tor = 5.821e6
-		self.unit.l_ef_LTB = 3.04
 		self.unit.sigma_m_crit = (math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) 
 			/ (self.unit.l_ef_LTB*1e3 * self.unit.W_z))
 
@@ -1763,7 +1760,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_m_crit
 		"""
 		#TODO kontrollera ekvation
-		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef) * self.unit.E_0_05
+		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef_LTB) * self.unit.E_0_05
 
 		return self.unit.sigma_m_crit
 
@@ -1822,7 +1819,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		print("ekv 6.35")
 		#TODO kontrollera ekvation
 		self.unit.k_h = self.ekv_3_1()
 		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
@@ -1836,7 +1832,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.k_c_z = self.ekv_6_26()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
-		return math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
+		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
+			self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d))
+		print("ekv 6.35", ratio)
+
+		return ratio
 
 	def ekv_6_36(self):
 		"""
