@@ -1665,8 +1665,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		#TODO fmyd in FEMdesign > this, why?
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
+		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 1e3 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 1e3 / self.unit.I_y)
+		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
 		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_z * self.unit.f_c_0_d) + 
@@ -2783,10 +2783,12 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 				_B = self.böjning()
 				_FB = (0, 0)
 				_LTB = self.slankhet_balk_böj()
+				print("case 1")
 			else:
 				_B = (0, 0)
 				_FB = (0, 0)
 				_LTB = 0
+				print("case 2")
 
 		elif self.unit.N > 0:
 			_N = "tension"
@@ -2794,8 +2796,11 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_FB = (0, 0)
 			if self.unit.M_y !=0 or self.unit.M_y !=0:
 				_LTB = self.slankhet_balk_böj()
+				print("case 3")
+				print(_LTB)
 			else:
 				_LTB = 0
+				print("case 4")
 			
 		elif self.unit.N < 0:
 			_N = "compression"
@@ -2804,9 +2809,11 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_FB = self.slankhet_pelare_kompression()
 			if self.unit.M_y !=0 or self.unit.M_y !=0:
 				_LTB = self.slankhet_balk_böj()
-
+				print("case 5")
+				print(_LTB)
 			else:
-				_LTB = (0, 0)
+				_LTB = 0
+				print("case 6")
 			
 		if self.unit.V != 0:
 			_V = self.tvärkraft()
@@ -2892,9 +2899,11 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	# 6.3.3
 	def slankhet_balk_böj(self):
 		#Add case for not stabilized around the weak axis
-		if self.unit.M_z > 0 and self.unit.N == 0:
+		if self.unit.M_z != 0 and self.unit.N >= 0:
+			print("6.3.3, 1")
 			return self.ekv_6_33() #TODO värde return
-		elif self.unit.M_z > 0 and self.unit.N < 0== 0:
+		elif self.unit.M_z != 0 and self.unit.N < 0:
+			print("6.3.3, 2")
 			return self.ekv_6_35()
 
 	# 4 Varying cross-section or curved shape
@@ -3234,6 +3243,19 @@ class Database:
 		id: String; Objects UUID
 		result: namedtuple; results of calculation
 		"""
+		if result.lateral_torsional_buckling == None:
+			print("NONE", "N", self.members[id]["object_instance"].N, "My", self.members[id]["object_instance"].M_y, 
+				"Mz", self.members[id]["object_instance"].M_z, "sigma_mz", self.members[id]["object_instance"].sigma_m_z_d, 
+				"sigma_c0", self.members[id]["object_instance"].sigma_c_0_d, "kcy", self.members[id]["object_instance"].k_c_y, 
+				"fc0d", self.members[id]["object_instance"].f_c_0_d)
+			print()
+		else:
+			print("COOL", "N", self.members[id]["object_instance"].N, "My", self.members[id]["object_instance"].M_y, 
+				"Mz", self.members[id]["object_instance"].M_z, "sigma_mz", self.members[id]["object_instance"].sigma_m_z_d, 
+				"sigma_c0", self.members[id]["object_instance"].sigma_c_0_d, "kcy", self.members[id]["object_instance"].k_c_y, 
+				"fc0d", self.members[id]["object_instance"].f_c_0_d)
+			print()
+
 		self.members[id]["result"] = result
 		self.members[id]["object_instance"].results = result
 
