@@ -1078,6 +1078,9 @@ class StructuralUnit(Sections):
 		result_part.set("bending_2", str(self.results.bending[1]))
 		result_part.set("shear", str(self.results.shear))
 		result_part.set("torsion", str(self.results.torsion))
+		result_part.set("flexural_buckling_1", str(self.results.flexural_buckling[0]))
+		result_part.set("flexural_buckling_2", str(self.results.flexural_buckling[1]))
+		result_part.set("lateral_torsional_buckling", str(self.results.lateral_torsional_buckling))
 		result_part.set("uuid", "placeholder")
 
 		#TODO must add results to string
@@ -1818,7 +1821,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
 								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2))
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
-		self.unit.k_c_z = self.ekv_6_26()
+		self.unit.k_c_y = self.ekv_6_25()
 		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
@@ -2835,9 +2838,9 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 			_T = 0
 
 		#TODO kompression i vinkel
-		resultat_ntuple = namedtuple("result", "bending, shear, torsion")
+		resultat_ntuple = namedtuple("result", "bending, shear, torsion, flexural_buckling, lateral_torsional_buckling")
 
-		return resultat_ntuple(_B, _V, _T)
+		return resultat_ntuple(_B, _V, _T, _FB, _LTB)
 
 	# 1 Stress one direction ===============
 
