@@ -3262,3 +3262,8 @@ class Database:
 				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
 				
 			f.write(parseString(tostring(root)).toprettyxml())
+
+
+class FEMCalculations:
+	def __init__(self):
+		pass
