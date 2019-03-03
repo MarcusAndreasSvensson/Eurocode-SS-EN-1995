@@ -23,3 +23,9 @@ test.xml
 .vscode\.ropeproject
 .vscode\.ropeproject\config.py
 .vscode\.ropeproject\objectdb
+
+.vscode/settings.json
+.vscode/launch.json
+.vscode/.ropeproject
+.vscode/.ropeproject/config.py
+.vscode/.ropeproject/objectdb
