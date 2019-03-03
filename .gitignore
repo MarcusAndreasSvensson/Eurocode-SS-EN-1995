@@ -4,7 +4,6 @@ enhet.cpython-37.pyc
 GUI.cpython-36.pyc
 skapa_laster.cpython-36.pyc
 structural_calculation.cpython-36.pyc
-test.xml
 editUnitWindow.cpython-36.pyc
 enhet.cpython-36.pyc
 enhet.cpython-37.pyc
@@ -14,5 +13,13 @@ MainWindow.cpython-36.pyc
 skapa_laster.cpython-36.pyc
 structural_calculation.cpython-37.pyc
 tests.cpython-37.pyc
+
+test.xml
+
 .vs
 .vscode
+.vscode\settings.json
+.vscode\launch.json
+.vscode\.ropeproject
+.vscode\.ropeproject\config.py
+.vscode\.ropeproject\objectdb
