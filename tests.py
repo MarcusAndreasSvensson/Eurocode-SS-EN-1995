@@ -81,19 +81,10 @@ def clear_database_test():
         print("Database is empty") #TODO add assert statement
 
 
-def test_chooser(random_memeber_calc=True, specific_member_calc=True, xml_test=True, clear_members=True):
-    if random_memeber_calc == True:
-        calc_func_test(10, random=True)
-
-    if specific_member_calc == True:
-        calc_func_test(1, random=False, debug_vars=True)
-
-    if xml_test == True:
-        create_xml_test()
-
-    if clear_members == True:
-        clear_database_test()
-
 if __name__ == "__main__":
     data = Database()
-    test_chooser(True, False, True, False)
+    #test_chooser(True, False, True, False)
+    calc_func_test(10, random=True)
+    #calc_func_test(1, random=False, debug_vars=True)
+    create_xml_test()
+    #clear_database_test()
