@@ -853,7 +853,8 @@ class StructuralUnit(Sections):
 		self.k_f_1 = float()
 		self.k_f_2 = float()
 		self.k_f_3 = float()
-		self.k_h = float()
+		self.k_h_y = float()
+		self.k_h_z = float()
 		self.k_i_q = float()
 		self.k_m = float()
 		self.k_m_alpha = float()
@@ -1140,7 +1141,18 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def __init__(self):
 		super().__init__()
 		self.table_values = TableValues()
-		self.unit = StructuralUnit(000) # This is only for intelli-ref for variables
+		self.unit = StructuralUnit(000) # This is only for intelli-ref for variables, 
+			#(seems to do something else. When moved to pre_calc the values are wrong)
+
+	def pre_calculations(self):
+		"""Caclulates values that is needed for all other equations."""
+		#add k_h for glulam and LVL
+		self.unit.k_h_z = self.ekv_3_1(self.unit.h)
+		self.unit.k_h_y = self.ekv_3_1(self.unit.b)
+		print("precalc", self.unit.b, self.unit.h)
+		print("precalc", self.unit.k_h_z, self.unit.k_h_y)
+		self.unit.f_m_y_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h_y)
+		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h_z)
 
 	def ekv_2_1(self, K_u, K_ser):
 		K_u = 2/3 * K_ser
@@ -1228,25 +1240,22 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""G_d = G_mean / gamma_M"""
 		return self.unit.G_mean / self.unit.gamma_M
 	
-	def ekv_3_1(self):
+	def ekv_3_1(self, d):
 		"""
 		For rectangular solid timber with a characteristic timber density A 700 kg/m3, the reference
 		depth in bending or width (maximum cross-sectional dimension) in tension is 150 mm. For
 		depths in bending or widths in tension of solid timber less than 150 mm the characteristic values
 		for.fn,k and./t·,o.k may be increased by the factor kh , given by:
-		Input variables:
-			self.unit.rho_k
-			self.unit.h
 		Output:
-			self.unit.k_h
+			k_h
 		"""
 		# Gäller solitt trä (f_m_k + f_t_0_k)
-		if self.unit.rho_k <= 700 and self.unit.h < 150:
-			self.unit.k_h = min(math.pow(150 / self.unit.h, 0.2), 1.3)
+		if self.unit.rho_k <= 700 and d < 150:
+			k_h = min((150 / d)**0.2, 1.3)
 		else:
-			self.unit.k_h = 1
+			k_h = 1
 
-		return self.unit.k_h
+		return k_h
 
 	def ekv_3_2(self):
 		"""
@@ -1333,7 +1342,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d
 		"""
 		self.unit.sigma_t_0_d = self.ekv_6_36()
-		self.unit.f_t_0_d = self.ekv_2_14(self.unit.f_t_0_k, self.unit.k_h)
+		self.unit.f_t_0_d = self.ekv_2_14(self.unit.f_t_0_k, self.unit.k_h_z)
 
 		return self.unit.sigma_t_0_d / self.unit.f_t_0_d
 
@@ -1390,11 +1399,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO clean up
-		self.unit.k_h = self.ekv_3_1()
-		#TODO add k_sys (I don't understand excactly)
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
-		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
-		#TODO find out why 10e-7 and not 10e-6
+		#TODO add cases for Glulam
+		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, 
+			self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
+		#TODO find out why 10e-7 and not 10e-6: e-06
 		#TODO it shouldn't be b/2 and h/2, but biggest general distance from centroid to edge
 		self.unit.sigma_m_y_d = 10e-7*self.navier_stress_distribution(
 			M_y=self.unit.M_y, I_y=self.unit.I_y*10e-12, z=self.unit.b/2*10e-3)
@@ -1414,10 +1422,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO clean up
-		self.unit.k_h = self.ekv_3_1()
-		#TODO add k_sys (I don't understand excactly)
-		self.unit.f_m_y_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		#TODO find out why 10e2
 		#TODO it shouldn't be b/2 and h/2, but biggest general distance from centroid to edge 
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.h/-2) * 10e2 / self.unit.I_y)
@@ -1514,10 +1518,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO kontrollera ekvation
-		self.unit.k_h = self.ekv_3_1()
 		#TODO Add k_sys 
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_t_0_k / self.unit.gamma_M
+		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_t_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		self.unit.sigma_t_0_d = self.ekv_6_36()
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
@@ -1531,10 +1533,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO kontrollera ekvation
-		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_t_0_k / self.unit.gamma_M
+		#TODO add ksys
+		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_t_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
@@ -1552,13 +1552,13 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
-		self.unit.k_h = self.ekv_3_1()
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
+		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3: 1e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
+
+		print("6.19", self.unit.sigma_c_0_d, self.unit.f_c_0_d, self.unit.sigma_m_y_d, self.unit.f_m_y_d, self.unit.k_m, self.unit.sigma_m_z_d, self.unit.f_m_z_d)
 
 		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
@@ -1571,10 +1571,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
-		self.unit.k_h = self.ekv_3_1()
-		#TODO lägga in k_sys (Jag försåtr inte riktigt)
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
+		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
@@ -1629,10 +1626,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.sunit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO fix units
-		self.unit.k_h = self.ekv_3_1()
 		self.unit.k_c_y = self.ekv_6_25()
 		#TODO Add k_sys
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		#TODO why 10e-7 not -6?
 		#TODO check if the "max()" behaviour is suitable
 		self.unit.sigma_m_y_d = max(10e-7*self.navier_stress_distribution(
@@ -1660,11 +1655,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
 		#TODO verify equations
-		self.unit.k_h = self.ekv_3_1()
 		#TODO add k_sys
 		self.unit.k_c_z = self.ekv_6_26()
-		self.unit.f_m_y_d = self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h * self.unit.f_c_0_k / self.unit.gamma_M
+		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fix units
 		#TODO fmyd in FEMdesign > this, why?
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 1e3 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 1e3 / self.unit.I_y)
@@ -1776,8 +1769,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		"""
-		self.unit.k_h = self.ekv_3_1()
-		self.unit.f_m_z_d = self.unit.k_mod * self.unit.k_h * self.unit.f_m_k / self.unit.gamma_M
 		self.unit.k_crit = self.ekv_6_34()
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, 
 			self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
@@ -1813,8 +1804,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
-		self.unit.k_h = self.ekv_3_1()
-		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h)
 		self.unit.k_crit = self.ekv_6_34()
 		# max() to get highest tension
 		#TODO fix units
@@ -1824,7 +1813,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		self.unit.k_c_y = self.ekv_6_25()
 		self.unit.k_c_z = self.ekv_6_26()
-		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h)
+		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h_z)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
 			self.unit.sigma_c_0_d / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
@@ -2777,6 +2766,7 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		"""
 		Calculates the relevant equations and returns a namedtuple
 		"""
+		self.pre_calculations()
 		#TODO tryck_90
 		#Add pure normal result
 		#TODO refactor/verify logic for which calculations to initialize
@@ -3262,8 +3252,3 @@ class Database:
 				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
 				
 			f.write(parseString(tostring(root)).toprettyxml())
-
-
-class FEMCalculations:
-	def __init__(self):
-		pass
