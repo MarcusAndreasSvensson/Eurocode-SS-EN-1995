@@ -1146,13 +1146,16 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def pre_calculations(self):
 		"""Caclulates values that is needed for all other equations."""
-		#add k_h for glulam and LVL
+		#add logic for k_h for glulam and LVL
 		self.unit.k_h_z = self.ekv_3_1(self.unit.h)
 		self.unit.k_h_y = self.ekv_3_1(self.unit.b)
-		print("precalc", self.unit.b, self.unit.h)
-		print("precalc", self.unit.k_h_z, self.unit.k_h_y)
 		self.unit.f_m_y_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h_y)
 		self.unit.f_m_z_d = self.ekv_2_14(self.unit.f_m_k, self.unit.k_h_z)
+		self.unit.f_t_0_d = self.ekv_2_14(self.unit.f_t_0_k, self.unit.k_h_z)
+		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k)
+
+		self.unit.sigma_t_0_d = self.ekv_6_36()
+		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 	def ekv_2_1(self, K_u, K_ser):
 		K_u = 2/3 * K_ser
@@ -1341,9 +1344,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.sigma_t_0_d / self.unit.f_t_0_d
 		"""
-		self.unit.sigma_t_0_d = self.ekv_6_36()
-		self.unit.f_t_0_d = self.ekv_2_14(self.unit.f_t_0_k, self.unit.k_h_z)
-
 		return self.unit.sigma_t_0_d / self.unit.f_t_0_d
 
 	### 6.1.4 Compression parallel to the grain ###
@@ -1356,10 +1356,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			# The abs() is because compression forces is defined as negative
 			abs(self.unit.sigma_c_0_d / self.unit.f_c_0_d)
 		"""
-		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k)
-		self.unit.sigma_c_0_d = self.ekv_6_36()
-
-		return abs(self.unit.sigma_c_0_d / self.unit.f_c_0_d)
+		return (self.unit.sigma_c_0_d) / self.unit.f_c_0_d
 
 	### 6.1.5 Compression perpendicular to the grain ###
 	def ekv_6_3(self):
@@ -1519,9 +1516,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		#TODO kontrollera ekvation
 		#TODO Add k_sys 
-		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_t_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
-		self.unit.sigma_t_0_d = self.ekv_6_36()
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
 
@@ -1534,11 +1529,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		#TODO kontrollera ekvation
 		#TODO add ksys
-		self.unit.f_t_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_t_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-		self.unit.sigma_t_0_d = self.ekv_6_36()
 
 		return self.unit.sigma_t_0_d / self.unit.f_t_0_d + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
@@ -1552,15 +1545,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
 		#TODO lägga in k_sys (Jag försåtr inte riktigt)
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3: 1e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 
-		print("6.19", self.unit.sigma_c_0_d, self.unit.f_c_0_d, self.unit.sigma_m_y_d, self.unit.f_m_y_d, self.unit.k_m, self.unit.sigma_m_z_d, self.unit.f_m_z_d)
-
-		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + \
+		return math.pow((abs(self.unit.sigma_c_0_d) / self.unit.f_c_0_d), 2) + \
 							self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	def ekv_6_20(self):
@@ -1571,13 +1560,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		#TODO kontrollera ekvation
 		#TODO Slutkontroll
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fattar inte varför 10e2 och inte 10e3
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 10e2 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 10e2 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 10e2 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 10e2 / self.unit.I_z)
-		self.unit.sigma_c_0_d = self.ekv_6_36()
 
-		return math.pow((self.unit.sigma_c_0_d / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
+		return math.pow((abs(self.unit.sigma_c_0_d) / self.unit.f_c_0_d), 2) + self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + \
 							self.unit.sigma_m_z_d / self.unit.f_m_z_d
 
 	### 6.3.2 Columns subjected to either compression or combined compression and bending ###
@@ -1639,12 +1626,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=self.unit.h/2*10e-3),
 			10e-7*self.navier_stress_distribution(
 			M_z=self.unit.M_z, I_z=self.unit.I_z*10e-12, y=-self.unit.h/2*10e-3))
-		
-		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
-		#TODO investigate strusofts highter fmweakd
-		#self.unit.f_m_y_d = 18.79
 
-		return (self.unit.sigma_c_0_d / (self.unit.k_c_y * self.unit.f_c_0_d) + 
+		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_y * self.unit.f_c_0_d) + 
 				self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
 				self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d)
 		
@@ -1657,12 +1640,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO verify equations
 		#TODO add k_sys
 		self.unit.k_c_z = self.ekv_6_26()
-		self.unit.f_c_0_d = self.unit.k_mod * self.unit.k_h_z * self.unit.f_c_0_k / self.unit.gamma_M
 		#TODO fix units
-		#TODO fmyd in FEMdesign > this, why?
 		self.unit.sigma_m_y_d = max(self.unit.M_y * self.unit.b/2 * 1e3 / self.unit.I_y, self.unit.M_y * (self.unit.b/-2) * 1e3 / self.unit.I_y)
 		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
-		self.unit.sigma_c_0_d = self.ekv_6_36()
 
 		return (abs(self.unit.sigma_c_0_d) / (self.unit.k_c_z * self.unit.f_c_0_d) + 
 				self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + 
@@ -1810,13 +1790,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		#TODO general 
 		self.unit.sigma_m_z_d = max(self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/2),
 								self.navier_stress_distribution(M_z=1e3*self.unit.M_z, I_z=self.unit.I_z, y=self.unit.h/-2))
-		self.unit.sigma_c_0_d = abs(self.ekv_6_36())
 		self.unit.k_c_y = self.ekv_6_25()
 		self.unit.k_c_z = self.ekv_6_26()
-		self.unit.f_c_0_d = self.ekv_2_14(self.unit.f_c_0_k, self.unit.k_h_z)
 
 		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
-			self.unit.sigma_c_0_d / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
+			abs(self.unit.sigma_c_0_d) / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
 
 		return ratio
 
