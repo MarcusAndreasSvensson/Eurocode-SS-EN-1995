@@ -55,7 +55,7 @@ def calc_func_test(i, random=True, debug_vars=False):
             data.save_result(data.id, data.ULS_timber.start_calculation())
 
             #Space for additional tests
-            #data.ULS_timber.ekv_6_18()
+            #data.ULS_timber.ekv_6_32()
 
             if debug_vars == True:
                 variables = [attr for attr in vars(data.members[data.id]["object_instance"])]

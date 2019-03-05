@@ -24,7 +24,7 @@ class TableValues:
 
 	def tabell_2_3(self, type):
 		#TODO add upper- or lowercase independency
-		tabell = {"solid timber" : 1.3,
+		table = {"solid timber" : 1.3,
 					"glued laminated timber" : 1.25,
 					"LVL" : 1.2,
 					"plywood" : 1.2,
@@ -38,7 +38,7 @@ class TableValues:
 					"punched metal plate fastener" : 1.25,
 					"accidental" : 1}
 
-		gamma_M = tabell.get(type)
+		gamma_M = table.get(type)
 
 		return gamma_M
 
@@ -644,13 +644,6 @@ class Sections:
 		return I_tor
 
 
-class CoverUnit:
-
-    def __init__(self):
-        self.id = int()
-        self.contact_points = [] # [id, unit type (e.g. beam), coordinates]
-
-
 class StructuralUnit(Sections):
 
 	def __init__(self, uuid):
@@ -1146,6 +1139,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def pre_calculations(self):
 		"""Caclulates values that is needed for all other equations."""
+		#TODO REALLY IMPORTANT!!!
+		#these calculations must be performed every time a value is updated!
+
 		#add logic for k_h for glulam and LVL
 		self.unit.k_h_z = self.ekv_3_1(self.unit.h)
 		self.unit.k_h_y = self.ekv_3_1(self.unit.b)
@@ -1234,7 +1230,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		return K_ser_fin
 
 	def ekv_2_13(self, k_def, k_def_1, k_def_2):
-		#TODO gäller om members har olika k_mod, ta hänsyn till detta
+		#TODO applicable when members have different k_mod
 		k_def = 2 * math.sqrt(k_def_1 * k_def_2)
 
 		return k_def
@@ -1256,14 +1252,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	
 	def ekv_3_1(self, d):
 		"""
-		For rectangular solid timber with a characteristic timber density A 700 kg/m3, the reference
-		depth in bending or width (maximum cross-sectional dimension) in tension is 150 mm. For
-		depths in bending or widths in tension of solid timber less than 150 mm the characteristic values
-		for.fn,k and./t·,o.k may be increased by the factor kh , given by:
+		Volume factor for solid timber with cross section measurements < 150mm and rho_k < 700kg/m3. 
+		Applicable for f_t_0_k and f_m_k.
 		Output:
 			k_h
 		"""
-		# Gäller solitt trä (f_m_k + f_t_0_k)
 		if self.unit.rho_k <= 700 and d < 150:
 			k_h = min((150 / d)**0.2, 1.3)
 		else:
@@ -1273,7 +1266,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_3_2(self, d):
 		"""
-		Volume factor for glue laminated timber (Glulam). Applicable for f_t_0_k and f_m_k.
+		Volume factor for glue laminated timber (Glulam) with cross section measurements < 600mm. 
+		Applicable for f_t_0_k and f_m_k.
 		Output:
 			k_h
 		"""
@@ -1286,7 +1280,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_3_3(self, d):
 		"""
-		Volume factor for laminated veneer timber (LVL). Applicable for f_t_0_k and f_m_k.
+		Volume factor for laminated veneer timber (LVL) with cross section measurements < 300mm. 
+		Applicable for f_t_0_k and f_m_k.
 		Output:
 			k_h
 		"""
@@ -1301,10 +1296,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_3_4(self):
 		"""
+		Length factor for laminated veneer timber (LVL) shorter than 3000mm. 
+		Applicable for f_t_0_k and f_m_k.
 		Output:
 			self.unit.k_l
 		"""
-		# LVL, längd (f_m_k + f_t_0_k)
 		if self.unit.l < 3000:
 			self.unit.k_l = min(math.pow(3000 / self.unit.l, (self.unit.s / 2)), 1.1)
 		else:
@@ -1317,7 +1313,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			self.unit.theta
 		"""
-		#TODO spåra upp var theta går in 
+		#TODO find out where theta i input
 		if self.unit.h <= 5:
 			self.unit.theta = 0.0005
 		elif self.unit.h > 5:
@@ -1389,8 +1385,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		The following expressions shall be satisfied:
 			sigma_m_y_d / f_m_y_d + k_m * sigma_m_z_d / f_m_z_d <= 1
-			and
-			ekv_6_12()
+			and ekv_6_12()
 		Output:
 			self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.k_m * self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""		
@@ -1400,8 +1395,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		"""
 		The following expressions shall be satisfied:
 			k_m * sigma_m_y_d / f_m_y_d + sigma_m_z_d / f_m_z_d <= 1
-			and
-			ekv_6_11()
+			and ekv_6_11()
 		Output:
 			self.unit.k_m * self.unit.sigma_m_y_d / self.unit.f_m_y_d + self.unit.sigma_m_z_d / self.unit.f_m_z_d
 		"""
@@ -1413,7 +1407,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			abs(self.unit.tao_d / self.unit.f_v_d)
 		"""
-		#TODO the moment is 0 when the shear stress is at it's largest, where is the line?
+		#TODO the moment is 0 when the shear stress is at it's largest, where is the line? Makes a big difference when b_ef is taken into account
 		if self.unit.M_z != 0 or self.unit.M_y != 0:
 			self.unit.b_ef = self.ekv_6_13_a()
 		else:
@@ -1452,7 +1446,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		Output:
 			abs(self.unit.tao_tor_d / (self.unit.k_shape * self.unit.f_v_d))
 		"""
-		self.unit.f_v_d = self.ekv_2_14(self.unit.f_v_k)
 		self.unit.k_shape = self.ekv_6_15()
 		self.unit.tao_tor_d = self.unit.T*1e03 * self.unit.r / self.unit.I_tor
 
@@ -1460,12 +1453,10 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_15(self):
 		"""
-		Variables used:
-			self.unit.tvärsnitt
 		Output:
 			self.unit.k_shape
 		"""
-		#TODO general polygon function
+		#TODO general polygonal function
 		if self.unit.tvärsnitt == "rectangular":
 			self.unit.k_shape = min(1 + 0.15 * self.unit.h / self.unit.b, 2)
 		elif self.unit.tvärsnitt == "circular":
@@ -1526,29 +1517,29 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_6_21(self):
 		"""
 		Output:
-			self.unit.lambda_rel_y
+			lambda_rel_y
 		"""
-		#TODO general calculation of i
+		#TODO general polygonal calculation of i, probably weakest direction if unsymmetric
 		#TODO fix units
 		self.unit.i_y = self.unit.b*10e-6 / math.sqrt(12)
 		self.unit.lambda_y = self.unit.l_c / self.unit.i_y
-		self.unit.lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
+		lambda_rel_y = self.unit.lambda_y / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
-		return self.unit.lambda_rel_y
+		return lambda_rel_y
 
 	def ekv_6_22(self):
 		"""
 
 		Output:
-			self.unit.lambda_rel_z
+			lambda_rel_z
 		"""
-		#TODO general calculation of i
+		#TODO general polygonal calculation of i, probably weakest direction if unsymmetric
 		#TODO fix units
 		self.unit.i_z = self.unit.h*10e-6 / math.sqrt(12)
 		self.unit.lambda_z = self.unit.l_c / self.unit.i_z
-		self.unit.lambda_rel_z = self.unit.lambda_z / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
+		lambda_rel_z = self.unit.lambda_z / math.pi * math.sqrt(self.unit.f_c_0_k / (self.unit.E_0_05*10e3))
 
-		return self.unit.lambda_rel_z
+		return lambda_rel_z
 
 	def ekv_6_23(self):
 		"""
@@ -1578,57 +1569,56 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_6_25(self):
 		"""
 		Output:
-			self.unit.k_c_y
+			k_c_y
 		"""
 		self.unit.k_y = self.ekv_6_27()
-		self.unit.k_c_y = 1 / (self.unit.k_y + math.sqrt(math.pow(self.unit.k_y, 2) - math.pow(self.unit.lambda_rel_y, 2)))
+		k_c_y = 1 / (self.unit.k_y + math.sqrt(math.pow(self.unit.k_y, 2) - math.pow(self.unit.lambda_rel_y, 2)))
 
-		return self.unit.k_c_y
+		return k_c_y
 
 	def ekv_6_26(self):
 		"""
-		Variables used:
-			self.unit.k_z
 		Output:
-			self.unit.k_c_z
+			k_c_z
 		"""
 		self.unit.k_z = self.ekv_6_28()
-		self.unit.k_c_z = 1 / (self.unit.k_z + math.sqrt(math.pow(self.unit.k_z, 2) - math.pow(self.unit.lambda_rel_z, 2)))
+		k_c_z = 1 / (self.unit.k_z + math.sqrt(math.pow(self.unit.k_z, 2) - math.pow(self.unit.lambda_rel_z, 2)))
 
-		return self.unit.k_c_z
+		return k_c_z
 
 	def ekv_6_27(self):
 		"""
 		Output:
-			self.unit.k_y
+			k_y
 		"""
 		self.unit.beta_c = self.ekv_6_29()
-		self.unit.k_y = 0.5 * (1 + self.unit.beta_c * (self.unit.lambda_rel_y - 0.3) + math.pow(self.unit.lambda_rel_y, 2))
+		self.unit.lambda_rel_y = self.ekv_6_21()
+		k_y = 0.5 * (1 + self.unit.beta_c * (self.unit.lambda_rel_y - 0.3) + math.pow(self.unit.lambda_rel_y, 2))
 
-		return self.unit.k_y
+		return k_y
 
 	def ekv_6_28(self):
 		"""
 		Output:
-			self.unit.k_z
+			k_z
 		"""
 		self.unit.beta_c = self.ekv_6_29()
 		self.unit.lambda_rel_z = self.ekv_6_22()
-		self.unit.k_z = 0.5 * (1 + self.unit.beta_c * (self.unit.lambda_rel_z - 0.3) + math.pow(self.unit.lambda_rel_z, 2))
+		k_z = 0.5 * (1 + self.unit.beta_c * (self.unit.lambda_rel_z - 0.3) + math.pow(self.unit.lambda_rel_z, 2))
 
-		return self.unit.k_z
+		return k_z
 
 	def ekv_6_29(self):
 		"""
 		Output:
-			self.unit.beta_c
+			beta_c
 		"""
 		if self.unit.type == "solid timber":
-			self.unit.beta_c = 0.2
+			beta_c = 0.2
 		elif self.unit.type == "glued laminated timber" or "LVL":
-			self.unit.beta_c = 0.1
+			beta_c = 0.1
 
-		return self.unit.beta_c
+		return beta_c
 
 	### 6.3.3 Beams subjected to either bending or combined bending and compression ###
 	def ekv_6_30(self):
@@ -1644,7 +1634,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_6_31(self):
 		"""
 		Output:
-			self.unit.sigma_m_crit
+			sigma_m_crit
 		"""
 		#TODO fix units
 		#TODO function must be created to take in to account the different load sides (currently "compression")
@@ -1652,18 +1642,19 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.l, "Simply supported", "Uniformly distributed load", True, True, "compression", self.unit.h)
 		#TODO kontrollera ekvation
 		self.unit.W_z = self.unit.I_z / self.unit.h * 2
-		self.unit.sigma_m_crit = (math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) 
+		sigma_m_crit = (math.pi * math.sqrt(self.unit.E_0_05 * self.unit.I_y * self.unit.G_0_05 * self.unit.I_tor) 
 			/ (self.unit.l_ef_LTB*1e3 * self.unit.W_z))
 
-		return self.unit.sigma_m_crit
+		return sigma_m_crit
 
 	def ekv_6_32(self):
 		"""
+		Simplified calculation of sigma_m_crit. Only applicable for solid conifer timber.
 		Output:
 			self.unit.sigma_m_crit
 		"""
 		#TODO verify
-		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef_LTB) * self.unit.E_0_05
+		self.unit.sigma_m_crit = 0.78 * math.pow(self.unit.b, 2) / (self.unit.h * self.unit.l_ef_LTB*1e3) * self.unit.E_0_05
 
 		return self.unit.sigma_m_crit
 
@@ -1673,11 +1664,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		"""
 		self.unit.k_crit = self.ekv_6_34()
-		self.unit.sigma_m_z_d = max(self.unit.M_z * self.unit.h/2 * 1e3 / self.unit.I_z, 
-			self.unit.M_z * self.unit.h/-2 * 1e3 / self.unit.I_z)
-		ratio = self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 		
-		return ratio
+		return self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)
 
 	def ekv_6_34(self, supported = False):
 		"""
@@ -1708,17 +1696,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + self.unit.sigma_c_0_d / (self.unit.k_c_z * self.unit.f_c_0_d)
 		"""
 		self.unit.k_crit = self.ekv_6_34()
-		# max() to get highest tension
-		#TODO fix units
-		#TODO general
-		print(6.35)
 		self.unit.k_c_y = self.ekv_6_25()
 		self.unit.k_c_z = self.ekv_6_26()
 
-		ratio = (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
+		return (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
 			abs(self.unit.sigma_c_0_d) / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
-
-		return ratio
 
 	def ekv_6_36(self):
 		"""
@@ -1735,7 +1717,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.sigma_m_alpha_d or self.unit.sigma_m_0_d ((?) TODO)
 		"""
 		self.unit.sigma_m_alpha_d = self.unit.sigma_m_0_d = 6 * self.unit.M_d / (self.unit.b * pow(self.unit.h, 2))
-		#TODO vilken ska returneras? logik
+		#TODO logic for what is to be returned
 		return self.unit.sigma_m_alpha_d
 
 	def ekv_6_38(self):
@@ -2798,14 +2780,6 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		pass
 
 
-class Load:
-
-    def __init__(self):
-        self.koordinater = []
-        self.type = "square"
-        self.id = 0
-
-
 class plot:
 
     def __init__(self):
@@ -3038,10 +3012,6 @@ class plot:
         :param surface: Surface defined by 4 points.
         :return:
         """
-        # Creates cover object and appends to cover object list.
-        cover = CoverUnit()
-        cover.id = self.id
-        self.covers.append([cover.id, cover])
 
         #TODO FUNKAR BARA OM DENNA GÖRS EFTER LINJERNA
         # Defining the planes equation in normal form.
