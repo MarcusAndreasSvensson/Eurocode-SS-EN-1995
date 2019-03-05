@@ -1624,12 +1624,12 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_6_30(self):
 		"""
 		Output:
-			self.unit.lambda_rel_m
+			lambda_rel_m
 		"""
 		self.unit.sigma_m_crit = self.ekv_6_31()
-		self.unit.lambda_rel_m = math.sqrt(self.unit.f_m_k / self.unit.sigma_m_crit)
+		lambda_rel_m = math.sqrt(self.unit.f_m_k / self.unit.sigma_m_crit)
 
-		return self.unit.lambda_rel_m
+		return lambda_rel_m
 
 	def ekv_6_31(self):
 		"""
@@ -1673,22 +1673,22 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			supported
 			self.unit.lambda_rel_m
 		Output:
-			self.unit.k_crit
+			k_crit
 		"""
 		#TODO logic for if supported beam
 		if supported == False:
 			self.unit.lambda_rel_m = self.ekv_6_30()
 
 			if self.unit.lambda_rel_m <= 0.75:
-				self.unit.k_crit = 1
+				k_crit = 1
 			elif 0.75 < self.unit.lambda_rel_m <= 1.4:
-				self.unit.k_crit = 1.56 - 0.75 * self.unit.lambda_rel_m
+				k_crit = 1.56 - 0.75 * self.unit.lambda_rel_m
 			elif 1.4 < self.unit.lambda_rel_m:
-				self.unit.k_crit = 1 / math.pow(self.unit.lambda_rel_m, 2)
+				k_crit = 1 / math.pow(self.unit.lambda_rel_m, 2)
 		else:
-			self.unit.k_crit = 1
+			k_crit = 1
 
-		return self.unit.k_crit
+		return k_crit
 
 	def ekv_6_35(self):
 		"""
@@ -1702,6 +1702,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		return (math.pow((self.unit.sigma_m_z_d / (self.unit.k_crit * self.unit.f_m_z_d)), 2) + 
 			abs(self.unit.sigma_c_0_d) / (min(self.unit.k_c_y, self.unit.k_c_z) * self.unit.f_c_0_d))
 
+	### 6.4 Design of cross-sections in members with varying cross-section or curved shape ###
+	### 6.4.1 General ###
 	def ekv_6_36(self):
 		"""
 		Output:
@@ -1711,6 +1713,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.sigma_N
 
+	### 6.4.2 Single tapered beams ###
 	def ekv_6_37(self):
 		"""
 		Output:
@@ -1752,6 +1755,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.k_m_alpha
 
+	### 6.4.3 Double tapered, curved and pitched cambered beams ###
 	def ekv_6_41(self):
 		"""
 		Output:
@@ -1998,6 +2002,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.k_7
 
+	### 6.5 Notched members ###
+	### 6.5.2 Beams with a notch at the support ###
 	def ekv_6_60(self):
 		"""
 		Variables used:
@@ -2059,8 +2065,6 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def ekv_6_63(self):
 		"""
-		Variables used:
-			self.unit.wood_type
 		Output:
 			self.unit.k_n
 		"""
@@ -2073,6 +2077,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.k_n
 
+	### 7 Serviceability limit states ###
+	### 7.1 Joint slip ###
 	def ekv_7_1(self):
 		"""
 		Variables used:
@@ -2086,6 +2092,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.rho_m
 
+	### 7.2 Limiting values for deflections of beams ###
 	def ekv_7_2(self):
 		"""
 		Variables used:
@@ -2102,6 +2109,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 
 		return self.unit.w_net_fin
 
+	### 7.3 Vibrations ###
+	### 7.3.3 Residential floors ###
 	def ekv_7_3(self):
 		"""
 		Variables used:
@@ -2173,13 +2182,16 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 			self.unit.n_40
 		"""
 		#TODO kontrollera ekvation
-		#TODO (EI)nedsänskt till l (?)
-		#TODO (EI)nedsänskt till b (?)
+		#TODO (EI)nedsänkt till l (?)
+		#TODO (EI)nedsänkt till b (?)
 		self.unit.n_40 = pow(((pow(40 / self.unit.f_1, 2) - 1) * pow((self.unit.b / self.unit.l), 4) * self.unit.E * self.unit.I / (self.unit.E * self.unit.I)), 0.25)
 
+	### Section 8 Connections with metal fasteners ###
+	### 8.1.2 Multiple fastener connections ###
 	def ekv_8_1(self):
 		pass
 
+	### 8.1.4 Connection forces at an angle to the grain ###
 	def ekv_8_2(self):
 		pass
 
@@ -2192,6 +2204,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_5(self):
 		pass
 
+	### 8.2 Lateral load-carrying capacity of metal dowel-type fasteners ###
+	### 8.2.2 Timber-to-timber and panel-to-timber connections ###
 	def ekv_8_6(self):
 		pass
 
@@ -2201,6 +2215,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_8(self):
 		pass
 
+	### 8.2.3 Steel-to-timber connections ###
 	def ekv_8_9(self):
 		pass
 
@@ -2216,6 +2231,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_13(self):
 		pass
 
+	### 8.3 Nailed connections ###
+	### 8.3.1 Laterally loaded nails ###
+	### 8.3.1.1 General ###
 	def ekv_8_14(self):
 		pass
 
@@ -2228,12 +2246,14 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_17(self):
 		pass
 
+	### 8.3.1.2 Nailed timber-to-timber connections ###
 	def ekv_8_18(self):
 		pass
 
 	def ekv_8_19(self):
 		pass
 
+	### 8.3.1.3 Nailed panel-to-timber connections ###
 	def ekv_8_20(self):
 		pass
 
@@ -2244,6 +2264,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		
 		pass
 
+	### 8.3.2 Axially loaded nails ###
 	def ekv_8_23(self):
 		pass
 
@@ -2256,15 +2277,20 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_26(self):
 		pass
 
+	### 8.3.3 Combined laterally and axially loaded nails ###
 	def ekv_8_27(self):
 		pass
 
 	def ekv_8_28(self):
 		pass
 
+	### 8.4 Stapled connections ###
 	def ekv_8_29(self):
 		pass
 
+	### 8.5 Bolted connections ###
+	### 8.5.1 Laterally loaded bolts ###
+	### 8.5.1.1 General and bolted timber-to-timber connections ###
 	def ekv_8_30(self):
 		pass
 
@@ -2283,12 +2309,15 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_35(self):
 		pass
 
+	### 8.5.1.2 Bolted panel-to-timber connections ###
 	def ekv_8_36(self):
 		pass
 
 	def ekv_8_37(self):
 		pass
 
+	### 8.7 Screwed connections ###
+	### 8.7.2 Axially loaded screws ###
 	def ekv_8_38(self):
 		pass
 
@@ -2301,6 +2330,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_41(self):
 		pass
 
+	### 8.8 Connections made with punched metal plate fasteners ###
+	### 8.8.4 Plate anchorage strengths ###
 	def ekv_8_42(self):
 		pass
 
@@ -2310,6 +2341,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_44(self):
 		pass
 
+	### 8.8.5 Connection strength verification ###
+	### 8.8.5.1 Plate anchorage capacity ###
 	def ekv_8_45(self):
 		pass
 
@@ -2334,6 +2367,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_52(self):
 		pass
 
+	### 8.8.5.2 Plate capacity ###
 	def ekv_8_53(self):
 		pass
 
@@ -2358,6 +2392,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_60(self):
 		pass
 
+	### 8.9 Split ring and shear plate connectors ###
 	def ekv_8_61(self):
 		pass
 
@@ -2391,6 +2426,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_71(self):
 		pass
 
+	### 8.10 Toothed-plate connectors ###
 	def ekv_8_72(self):
 		pass
 
@@ -2412,6 +2448,9 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_8_78(self):
 		pass
 
+	### Section 9 Components and assemblies ###
+	### 9.1 Components ###
+	### 9.1.1 Glued thin-webbed beams ###
 	def ekv_9_1(self):
 		pass
 
@@ -2445,6 +2484,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_9_11(self):
 		pass
 
+	### 9.1.2 Glued thin-flanged beams ###
 	def ekv_9_12(self):
 		pass
 
@@ -2460,15 +2500,21 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_9_16(self):
 		pass
 
+	### 9.1.3 Mechanically jointed beams ###
 	def ekv_9_17(self):
 		pass
 
+	### 9.2 Assemblies ###
+	### 9.2.1 Trusses ###
 	def ekv_9_18(self):
 		pass
 
+	### 9.2.2 Trusses with punched metal plate fasteners ###
 	def ekv_9_19(self):
 		pass
 
+	### 9.2.4 Wall diaphragms ###
+	### 9.2.4.2 Simplified analysis of wall diaphragms - Method A ###
 	def ekv_9_20(self):
 		pass
 
@@ -2481,6 +2527,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_9_23(self):
 		pass
 
+	### 9.2.4.3 Simplified analysis of wall diaphragms - Method B ###
+	### 9.2.4.3.2 Design procedure ###
 	def ekv_9_24(self):
 		pass
 
@@ -2511,6 +2559,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_9_33(self):
 		pass
 
+	### 9.2.5 Bracing ###
+	### 9.2.5.2 Single members in compression ###
 	def ekv_9_34(self):
 		pass
 
@@ -2520,12 +2570,15 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_9_36(self):
 		pass
 
+	### 9.2.5.3 Bracing of beam or truss systems ###
 	def ekv_9_37(self):
 		pass
 
 	def ekv_9_38(self):
 		pass
 
+	### Annex A (Informative): Block shear and plug shear failure at multiple ###
+	### dowel-type steel-to-timber connections###
 	def ekv_A_1(self):
 		pass
 
@@ -2547,6 +2600,8 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_A_7(self):
 		pass
 
+	### Annex B (Informative): Mechanically jointed beams ###
+	### B.2 Effective bending stiffness ###
 	def ekv_B_1(self):
 		pass
 
@@ -2565,33 +2620,44 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_B_6(self):
 		pass
 
+	### B.3 Normal stresses ###
 	def ekv_B_7(self):
 		pass
 
 	def ekv_B_8(self):
 		pass
 
+	### B.4 Maximum shear stress ###
 	def ekv_B_9(self):
 		pass
 
+	### 8.5 Fastener load ###
 	def ekv_B_10(self):
 		pass
 
+	### Annex C (Informative): Built-up columns ###
+	### C.1 General ###
+	### C.1.2 Load·carrying capacity ###
 	def ekv_C_1(self):
 		pass
 
 	def ekv_C_2(self):
 		pass
 
+	### C.2 Mechanically jointed columns ###
+	### C.2.1 Effective slenderness ratio ###
 	def ekv_C_3(self):
 		pass
 
 	def ekv_C_4(self):
 		pass
 
+	### C.2.2 Load on fasteners ###
 	def ekv_C_5(self):
 		pass
 
+	### C.3 Spaced columns with packs or gussets ###
+	### C.3.1 Assumptions ###
 	def ekv_C_6(self):
 		pass
 
@@ -2604,6 +2670,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_C_9(self):
 		pass
 
+	### C.3.2 Axial load-carrying capacity ###
 	def ekv_C_10(self):
 		pass
 
@@ -2613,9 +2680,11 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def ekv_C_12(self):
 		pass
 
+	### C.3.3 Load on fasteners, gussets or packs ###
 	def ekv_C_13(self):
 		pass
 
+	### C.4.2 Load-carrying capacity ###
 	def ekv_C_14(self):
 		pass
 
