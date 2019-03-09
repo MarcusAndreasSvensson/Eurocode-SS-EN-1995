@@ -63,7 +63,6 @@ def calc_func_test(i, random=True, debug_vars=False):
                 with open("units.txt", "w") as f:
                     for attr in variables:
                         f.write(f"{attr}, \t, {getattr(data.members[data.id]['object_instance'], attr)}\n")
-                        #print(attr, "\t", getattr(data.members[data.id]["object_instance"], attr))
         
     for member in data.members:
         print(data.members[member]["result"])

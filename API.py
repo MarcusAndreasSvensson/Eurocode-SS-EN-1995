@@ -2763,7 +2763,7 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		#TODO kompression i vinkel
 		resultat_ntuple = namedtuple("result", "bending, shear, torsion, flexural_buckling, lateral_torsional_buckling")
 
-		return resultat_ntuple(_B, _V, _T, _FB, _LTB)
+		self.unit.results = resultat_ntuple(_B, _V, _T, _FB, _LTB)
 
 	# 1 Stress one direction ===============
 
