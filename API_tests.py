@@ -18,6 +18,7 @@ class member:
         Creates a structural member.
         """
         self.member = API.StructuralUnit(str(uuid4()))
+        self.solver = API.UltimateLimitStateTimber()
 
     @staticmethod
     def add(name):
@@ -53,12 +54,22 @@ class member:
     @staticmethod
     def set_variables(self, **kwargs):
         if kwargs is not None:
-            print(self.member.M_y)
             allowed_keyes = ["M_y", "M_z", "N", "V", "T", "material", "service_class", 
                 "load_duration_class", "section", "start_point", "end_point"]
             for key, val in kwargs.items():
                 if key in allowed_keyes:
                     setattr(self.member, key, val)
+
+    @staticmethod
+    def set_solver_or_something(self, solver):
+        solver_list = []
+        if solver in solver_list:
+            self.solver = solver
+
+    @staticmethod
+    def start_calculation(self):
+        self.member.
+        #print(self.test_unit.results)
 
 
     class options:
@@ -83,10 +94,7 @@ class member:
                         f.write(f"{attr}, \t, {getattr(self.test_unit, attr)}\n")"""
             pass
         
-        @staticmethod
-        def start_calculation(self):
-            self.member.ULS.start_calculation()
-            #print(self.test_unit.results)
+        
 
 
 class logger:
@@ -105,4 +113,4 @@ if __name__ == "__main__":
         T=200, material="C24", service_class="S2", load_duration_class="medium", 
         section="45x220", start_point=[0,0,0], end_point=[3,0,0])
     #print(current_member.get_variables(current_member))
-    current_member.options.start_calculation(current_member)
+    current_member.start_calculation(current_member)
