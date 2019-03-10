@@ -7,18 +7,24 @@ from xml.dom.minidom import parseString
 import API
     
 
-class Timber:
+def initialize(debug_vars=False, M_y=337.5, M_z=337.5, N=-10000, V=450, T=200, material="C24", service_class="S2", 
+                load_duration_class="medium", section="45x220", start_point=[0,0,0], end_point=[3,0,0]):
+    """Defines a member."""
+    test_unit = API.StructuralUnit(000)
+    test_option = option(test_unit)
 
-    def __init__(self):
+class option:
+
+    def __init__(self, structural_unit):
+        self.unit = structural_unit
+
+    @staticmethod
+    def get_variables(self):
         pass
 
     @staticmethod
-    def init_unit(self, debug_vars=False, M_y=337.5, M_z=337.5, N=-10000, V=450, T=200, material="C24", service_class="S2", 
-                    load_duration_class="medium", section="45x220", start_point=[0,0,0], end_point=[3,0,0]):
-        """Defines a member."""
-        self.test_unit = API.StructuralUnit(000)
-
-        self.test_unit.M_y = M_y
+    def set_variables(self):
+        """self.test_unit.M_y = M_y
         self.test_unit.M_z = M_z
         self.test_unit.N = N
         self.test_unit.V = V
@@ -30,7 +36,7 @@ class Timber:
         self.test_unit.start_point = start_point
         self.test_unit.end_point = end_point
 
-        self.ULS = API.UltimateLimitStateTimber()
+        self.ULS = API.UltimateLimitStateoption()
         self.ULS.set_unit(self.test_unit)
         
         
@@ -41,9 +47,8 @@ class Timber:
 
             with open("units.txt", "w") as f:
                 for attr in variables:
-                    f.write(f"{attr}, \t, {getattr(self.test_unit, attr)}\n")
-
-        
+                    f.write(f"{attr}, \t, {getattr(self.test_unit, attr)}\n")"""
+        pass
     
     @staticmethod
     def start_calculation(self):
@@ -51,6 +56,4 @@ class Timber:
         print(self.test_unit.results)
 
 if __name__ == "__main__":
-    test = Timber()
-    Timber.init_unit(test)
-    Timber.start_calculation(test)
+    initialize()
