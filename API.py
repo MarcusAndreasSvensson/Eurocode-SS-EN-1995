@@ -2717,6 +2717,7 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		"""
 		Calculates the relevant equations and returns a namedtuple
 		"""
+		self.unit.prepare_for_calculation()
 		self.pre_calculations()
 		#TODO tryck_90
 		#Add pure normal result
@@ -2743,7 +2744,6 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 		elif self.unit.N < 0:
 			_N = "compression"
 			_B = self.böjning_och_tryck()
-			#TODO fix the negative case
 			_FB = self.slankhet_pelare_kompression()
 			if self.unit.M_y !=0 or self.unit.M_y !=0:
 				_LTB = self.slankhet_balk_böj()
