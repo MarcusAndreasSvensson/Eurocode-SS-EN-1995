@@ -10,7 +10,7 @@ from uuid import uuid4
 
 class member:
     """
-    Per-member functionns.
+    Per-member functions.
     """
 
     def __init__(self, debug_vars=False, M_y=337.5, M_z=337.5, N=-10000, V=450, T=200, material="C24", service_class="S2", 
@@ -19,7 +19,6 @@ class member:
         Creates a structural member.
         """
         self.member = API.StructuralUnit(str(uuid4()))
-        print(self.member)
 
     @staticmethod
     def add(name):
@@ -36,18 +35,21 @@ class member:
         pass
 
     @staticmethod
-    def set_current():
+    def set_current(self, name):
         """
-        Set the current model to the model with name `name'. If several models have
+        Set the current model to the model with name 'name'. If several models have
         the same name, select the one that was added first.
         """
-
+        self.member = name
 
     @staticmethod
-    def get_variables():
-        variables = [var for var in vars(self.unit)]
+    def get_variables(self):
+        var_dict = {}
+        for var in vars(self.member):
+            val = getattr(self.member, var)
+            var_dict[var] = val
 
-        return variables
+        return var_dict
 
 
     class options:
@@ -102,6 +104,5 @@ class logger:
 
 
 if __name__ == "__main__":
-    initialize()
-    
-    print(get_variables())
+    current_member = member()
+    print(current_member.get_variables(current_member))
