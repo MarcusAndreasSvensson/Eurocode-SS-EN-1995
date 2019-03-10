@@ -13,8 +13,7 @@ class member:
     Per-member functions.
     """
 
-    def __init__(self, debug_vars=False, M_y=337.5, M_z=337.5, N=-10000, V=450, T=200, material="C24", service_class="S2", 
-                    load_duration_class="medium", section="45x220", start_point=[0,0,0], end_point=[3,0,0]):
+    def __init__(self, debug_vars=False, ):
         """
         Creates a structural member.
         """
@@ -28,7 +27,7 @@ class member:
         pass
 
     @staticmethod
-    def remove():
+    def remove(name):
         """
         Remove the current member.
         """
@@ -51,28 +50,25 @@ class member:
 
         return var_dict
 
+    @staticmethod
+    def set_variables(self, **kwargs):
+        if kwargs is not None:
+            print(self.member.M_y)
+            allowed_keyes = ["M_y", "M_z", "N", "V", "T", "material", "service_class", 
+                "load_duration_class", "section", "start_point", "end_point"]
+            for key, val in kwargs.items():
+                if key in allowed_keyes:
+                    setattr(self.member, key, val)
+
 
     class options:
 
         def __init__(self):
             pass
 
-        
-
         @staticmethod
         def set_variables(self):
-            """self.test_unit.M_y = M_y
-            self.test_unit.M_z = M_z
-            self.test_unit.N = N
-            self.test_unit.V = V
-            self.test_unit.T = T
-            self.test_unit.material = material
-            self.test_unit.service_class = service_class
-            self.test_unit.load_duration_class = load_duration_class
-            self.test_unit.cross_section = section
-            self.test_unit.start_point = start_point
-            self.test_unit.end_point = end_point
-
+            """
             self.ULS = API.UltimateLimitStateoptions()
             self.ULS.set_unit(self.test_unit)
             
@@ -89,7 +85,7 @@ class member:
         
         @staticmethod
         def start_calculation(self):
-            self.ULS.start_calculation()
+            self.member.ULS.start_calculation()
             #print(self.test_unit.results)
 
 
@@ -105,4 +101,8 @@ class logger:
 
 if __name__ == "__main__":
     current_member = member()
-    print(current_member.get_variables(current_member))
+    current_member.set_variables(current_member, M_y=337.5, M_z=337.5, N=-10000, V=450, 
+        T=200, material="C24", service_class="S2", load_duration_class="medium", 
+        section="45x220", start_point=[0,0,0], end_point=[3,0,0])
+    #print(current_member.get_variables(current_member))
+    current_member.options.start_calculation(current_member)
