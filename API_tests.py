@@ -19,15 +19,17 @@ class member:
     Per-member functions.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, cli_prints=False):
         """
         Creates a structural member and sets it as current.
         """
+        self.cli_prints = cli_prints
         self.member = API.StructuralUnit(str(uuid4()), name)
         self.member.prepare_for_calculation()
         self.solver = API.UltimateLimitStateTimber()
         self.solver.set_unit(self.member)
-        #TODO add member to list function
+        self.file_handler = API.FileHandler()
+        self.file_handler.add_member(name, self.member)
 
     @staticmethod
     def add(self, name):
@@ -37,7 +39,7 @@ class member:
         self.member = API.StructuralUnit(str(uuid4()), name)
         self.member.prepare_for_calculation()
         self.solver.set_unit(self.member)
-        #TODO add member to list function
+        self.file_handler.add_member(name, self.member)
 
     @staticmethod
     def remove(name):
@@ -57,7 +59,7 @@ class member:
         self.solver.set_unit(self.member)
 
     @staticmethod
-    def get_variables(self):
+    def get_attributes(self):
         var_dict = {}
         for var in vars(self.member):
             val = getattr(self.member, var)
@@ -90,7 +92,8 @@ class member:
         self.solver.pre_calculations()
         self.solver.start_calculation()
 
-        print("Calculation was successfully computed!")
+        if self.cli_prints == True:
+            print(f"{self.member.name} was successfully computed!")
     
 
 class logger:
@@ -102,18 +105,28 @@ class logger:
     def __init__():
         pass
 
+    @staticmethod
+    def log_variables(self, member):
+        """
+        """
+        #TODO 
+        attributes = self.get_attributes(member)
+        with open("attributes.log", "w") as f:
+            for key, val in attributes.items():
+                f.write(f"{key} : \t\t{val}\n")
+
 
 if __name__ == "__main__":
-    current_member = member("HEJSAN")
+    current_member = member("NUMMER 1", cli_prints=True)
     current_member.set_variables(current_member, M_y=337.5, M_z=337.5, N=-10000, V=450, 
         T=200, material="C24", service_class="S2", load_duration_class="medium", 
         cross_section="45x220", start_point=[0,0,0], end_point=[3,0,0])
     current_member.start_calculation(current_member)
 
-    current_member.add(current_member, "NUMMER2")
+    current_member.add(current_member, "NUMMER 2")
     current_member.start_calculation(current_member)
 
-    units = current_member.get_variables(current_member)
+    units = current_member.get_attributes(current_member)
     with open("units.txt", "w") as f:
         for key, val in units.items():
             f.write(f"{key} : \t\t{val}\n")

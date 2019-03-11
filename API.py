@@ -1144,7 +1144,15 @@ class ClassicalMechanics:
 		return tao		
 
 
-class SS_EN_1995_1_1(ClassicalMechanics):
+class Solver(ClassicalMechanics):
+	"""
+	Parent class for all Eurocode solvers.
+	"""
+	def __init__(self):
+		pass
+
+
+class SS_EN_1995_1_1(Solver, ClassicalMechanics):
 
 	def __init__(self):
 		super().__init__()
@@ -2861,4 +2869,56 @@ class UltimateLimitStateTimber(SS_EN_1995_1_1):
 	# 6 System Strength =====================
 
 	def placeholder(self):
+		pass
+
+
+class FileHandler:
+
+	def __init__(self):
+		self.members_dict = {}
+
+	def add_member(self, name, member):
+		"""
+		Add a new member, with name 'name'.
+		"""
+		self.members_dict[name] = member
+
+	def remove_member(self, name):
+		"""
+		Removes member with name 'name' from dictionary.
+		"""
+		pass
+
+	def remove_all_members(self):
+		"""Removes every unit listed."""
+		self.members_dict.clear()
+
+	def create_xml(self):
+		"""Combines the .xml strings from each objects to an .xml file."""
+		root = Element("database")
+		tree = ElementTree(root)
+		root.set("xmlns:xsd", "placeholder")
+		root.set("xmlns:xsi", "placeholder")
+		root.set("version", "version_placeholder")
+		root.set("source_software", "placeholder")
+		root.set("start_time", "time_placeholder")
+		root.set("end_time", "time_placeholder")
+		root.set("uuid", "uuid_placeholder")
+		root.set("hash", "hash_placeholder")
+		root.set("country", "SWE")
+		root.set("xmlns", "urn:placeholder")
+
+		entities = Element("entities")
+		root.append(entities)
+
+		with open("test.xml", "w") as f:
+			for id in self.members:
+				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
+				
+			f.write(parseString(tostring(root)).toprettyxml())
+
+	def create_json(self):
+		"""
+		"""
+		#TODO add functionality
 		pass
