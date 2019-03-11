@@ -646,12 +646,13 @@ class Sections:
 
 class StructuralUnit(Sections):
 
-	def __init__(self, uuid):
+	def __init__(self, uuid, name):
 		self.table_values = TableValues()
 		self._init_vars()
 
 		#TODO the UUID should be generated when the instance is created, not assigned from database
 		self.id = uuid
+		self.name = name
 		self.tvärsnitt = "rectangular"
 		self.material = "C24"
 		self.type = "solid timber"
@@ -954,7 +955,7 @@ class StructuralUnit(Sections):
 		File_size: String; Whether complete information about the cross section 
 						   or a compressed representation is to be exported.
 
-		Return: String; 
+		Return: String 
 		"""
 		bar = Element("bar")
 		bar.set("uuid", str(self.id))
@@ -1080,9 +1081,22 @@ class StructuralUnit(Sections):
 		#TODO must add results to string
 		return bar
 
+	def _prepare_for_json(self, file_size="large"):
+		"""
+		Returns .json formatted string.
+
+		File_size: String; Whether complete information about the cross section 
+						   or a compressed representation is to be exported.
+
+		Return: String
+		"""
+		#TODO add functionality
+		pass
+
 	def prepare_for_calculation(self):
 		"""Saves all changes made to the instances dependent variables."""
-		self.section, self.section_vertices = self.set_section(self.timber_type, self.cross_section)
+		self.section, self.section_vertices = self.set_section(
+			self.timber_type, self.cross_section)
 		self.b, self.h = self.get_dimensions(self.section_vertices) #TODO only initialize when a new section type has been created
 		self.r = sqrt(pow(self.h/2,2) + pow(self.b/2,2)) #TODO add general geometry function
 		self.A = self.get_area(self.section_vertices)
@@ -1094,7 +1108,8 @@ class StructuralUnit(Sections):
 		self.l = sqrt(pow(self.koordinater[1][0] - self.koordinater[0][0], 2) +
 		              pow(self.koordinater[1][1] - self.koordinater[0][1], 2) +
 		              pow(self.koordinater[1][2] - self.koordinater[0][2], 2))
-		self.k_mod = self.table_values.tabell_3_1(self.type, self.service_class, self.load_duration_class)
+		self.k_mod = self.table_values.tabell_3_1(
+			self.type, self.service_class, self.load_duration_class)
 		self.rho_k = self.table_values.material_values_timber(self.material, "rho_k")
 		self.gamma_M = self.table_values.tabell_2_3(self.type)
 		self.f_t_0_k = self.table_values.material_values_timber(self.material, "f_t_0_k")
@@ -1134,7 +1149,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 	def __init__(self):
 		super().__init__()
 		self.table_values = TableValues()
-		self.unit = StructuralUnit(000) # This is only for intelli-ref for variables, 
+		self.unit = StructuralUnit(000, "SS_EN_1995_1_1") # This is only for intelli-ref for variables, 
 			#(seems to do something else. When moved to pre_calc the values are wrong)
 
 	def pre_calculations(self):
