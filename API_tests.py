@@ -80,9 +80,9 @@ class member:
 
     @staticmethod
     def set_solver(self, solver):
-        solver_list = ["UltimateLimitStateTimber", "ULSTimber"]
+        solver_list = ["UltimateLimitStateTimber", "ULS_Timber"]
         if solver in solver_list:
-            if solver == "UltimateLimitStateTimber" or "ULSTimber":
+            if solver == "UltimateLimitStateTimber" or "ULS_Timber":
                 self.solver = API.UltimateLimitStateTimber()
                 self.solver.set_unit(self.member)
 
