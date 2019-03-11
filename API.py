@@ -1144,7 +1144,7 @@ class ClassicalMechanics:
 		return tao		
 
 
-class Solver(ClassicalMechanics):
+class Solver:
 	"""
 	Parent class for all Eurocode solvers.
 	"""
@@ -2727,7 +2727,7 @@ class SS_EN_1995_1_1(ClassicalMechanics):
 		pass
 
 
-class UltimateLimitStateTimber(Solver, SS_EN_1995_1_1):
+class UltimateLimitStateTimber(SS_EN_1995_1_1):
 
 	#TODO maybe change this to call an @classmethod (easier for different codes)
 	def __init__(self):
@@ -2912,8 +2912,8 @@ class FileHandler:
 		root.append(entities)
 
 		with open("test.xml", "w") as f:
-			for id in self.members:
-				entities.append(self.members[id]["object_instance"]._prepare_for_xml())
+			for name, member in self.members_dict.items():
+				entities.append(member._prepare_for_xml())
 				
 			f.write(parseString(tostring(root)).toprettyxml())
 

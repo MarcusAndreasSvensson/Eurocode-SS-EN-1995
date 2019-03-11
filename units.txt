@@ -1,4 +1,4 @@
-table_values : 		<API.TableValues object at 0x0D665510>
+table_values : 		<API.TableValues object at 0x11f924a58>
 A : 		13775.0
 A_ef : 		6887.5
 A_f : 		0.0
@@ -254,9 +254,9 @@ psi_2 : 		0.0
 w : 		0.0
 x : 		0.0
 xi : 		0.0
-id : 		c5d6ae0d-7e7c-4b0f-8d70-e255ebf457e0
+id : 		72438948-797f-4b89-8cbe-e7995c34aee4
 name : 		NUMMER 2
-tv‰rsnitt : 		rectangular
+tv√§rsnitt : 		rectangular
 material : 		C24
 type : 		solid timber
 roof_beam_type : 		0.0
