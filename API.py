@@ -1152,7 +1152,7 @@ class Solver(ClassicalMechanics):
 		pass
 
 
-class SS_EN_1995_1_1(Solver, ClassicalMechanics):
+class SS_EN_1995_1_1(ClassicalMechanics):
 
 	def __init__(self):
 		super().__init__()
@@ -2727,7 +2727,7 @@ class SS_EN_1995_1_1(Solver, ClassicalMechanics):
 		pass
 
 
-class UltimateLimitStateTimber(SS_EN_1995_1_1):
+class UltimateLimitStateTimber(Solver, SS_EN_1995_1_1):
 
 	#TODO maybe change this to call an @classmethod (easier for different codes)
 	def __init__(self):
