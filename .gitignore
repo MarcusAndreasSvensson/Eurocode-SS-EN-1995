@@ -13,6 +13,7 @@ MainWindow.cpython-36.pyc
 skapa_laster.cpython-36.pyc
 structural_calculation.cpython-37.pyc
 tests.cpython-37.pyc
+API.cpython-37.pyc
 
 test.xml
 
@@ -29,3 +30,5 @@ test.xml
 .vscode/.ropeproject
 .vscode/.ropeproject/config.py
 .vscode/.ropeproject/objectdb
+
+units.txt
